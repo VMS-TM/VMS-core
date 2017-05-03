@@ -1,3 +1,4 @@
 /VMS-core/.idea
 /VMS-core/target
 /VMS-core/VMS.iml
+/VMS-core/resources/application.properties

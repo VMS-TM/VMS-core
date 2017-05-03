@@ -1,4 +1,4 @@
-package VMS.services;
+package VMS.services.abstr;
 
 import java.util.Map;
 

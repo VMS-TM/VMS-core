@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel="stylesheet"></link>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Properties</title>
+</head>
+<body>
+
+<div th:if="${not #lists.isEmpty(properties)}">
+    <table class="table table-striped">
+        <thead> … </thead>
+        <tbody>
+        <tr th:each="property : ${properties}">
+            <td th:text="${property.name}"></td>
+            <td th:text="${property.value}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>

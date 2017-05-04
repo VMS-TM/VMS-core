@@ -1,4 +1,4 @@
-package VMS.controllers;
+package VMS.controllers.rest;
 
 import VMS.model.Post;
 import VMS.services.abstr.VkPostService;
@@ -22,23 +22,24 @@ public class PostRestController {
     String nameGroup = "snyat_kvartiru_ekb";
     String query = "ботаническая";
 
+    //
     @RequestMapping(value = { "/req"}, method = RequestMethod.GET)
-    public String getPostsFromApi(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "query", required = false) String query ) {
+    public List<Post> getPostsFromApi(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "query", required = false) String query ) {
 
         if (name!=null)
             this.nameGroup = name;
         if (query!=null)
             this.query = query;
 
-        List<Post> posts = postService.getPostByGroupNameFromApi(this.nameGroup, this.query);
+        return postService.getPostByGroupNameFromApi(this.nameGroup, this.query);
 
-        return posts.toString();
+        //return posts.toString();
 
     }
     @RequestMapping(value = { "/get"}, method = RequestMethod.GET)
-    public String getPostsFromDb(){
+    public List<Post> getPostsFromDb(){
 
-        return postService.getAllPost().toString();
+        return postService.getAllPost();
 
     }
 
@@ -46,7 +47,7 @@ public class PostRestController {
     public String addPosts() {
         List<Post> posts = postService.getPostByGroupNameFromApi(nameGroup, query);
         postService.addPosts(posts);
-        return "sucefull";
+        return "sucessfull";
     }
 
 

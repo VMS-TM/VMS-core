@@ -5,8 +5,7 @@ import VMS.services.abstr.VkPropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Properties;
@@ -18,6 +17,8 @@ import java.util.Properties;
 @RequestMapping(value = "/property") // НАЧАЛО запроса
 public class PropertiesController {
 
+    private static String home = "redirect:/property/";
+
     @Autowired
     VkPropertyService propertyService;
 
@@ -25,13 +26,14 @@ public class PropertiesController {
     public String getAllProperty (Model model) {
         List<Property> properties = propertyService.getAllProperties();
         model.addAttribute("properties",propertyService.getAllProperties());
+        model.addAttribute(new Property());
         return "properties";
     }
 
-    @RequestMapping(value = { "/add"}, method = RequestMethod.GET)
-    public String addProperty (Model model) {
-        propertyService.addProperty(new Property("key","value"));
-        return "properties";
+    @RequestMapping(value = { "/add"}, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+    public String addProperty (@ModelAttribute Property property) {
+        propertyService.addProperty(property);
+        return home;
     }
 //
 //    @RequestMapping(value = { "/"}, method = RequestMethod.GET)

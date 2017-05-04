@@ -8,17 +8,33 @@
 <body>
 
 <div class="panel">
-<div th:if="${not #lists.isEmpty(properties)}">
-    <table class="table table-striped">
-        <thead> … </thead>
-        <tbody>
-        <tr th:each="property : ${properties}">
-            <td th:text="${property.name}"></td>
-            <td th:text="${property.value}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:if="${not #lists.isEmpty(properties)}">
+        <table class="table table-striped">
+            <thead> … </thead>
+            <tbody>
+            <tr th:each="property : ${properties}">
+                <td th:text="${property.name}"></td>
+                <td th:text="${property.value}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal Add Property -->
+    <!-- <div class="modal fade" id="addProperty" >
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header"></div>
+                 <div class="modal-body">-->
+                     <form action="#" th:action="@{/property/add}" th:object="${property}" method="post">
+                     <p>name: <input type="text" th:field="*{name}" /></p>
+                     <p>value: <input type="text" th:field="*{value}" /></p>
+                     <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+                     </form>
+    <!-- </div>
+ </div>
 </div>
+</div>-->
 </div>
 
 </body>

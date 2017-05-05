@@ -35,17 +35,17 @@ public class PropertiesController {
         propertyService.addProperty(property);
         return home;
     }
-//
-//    @RequestMapping(value = { "/"}, method = RequestMethod.GET)
-//    public String updateProperty (Model model) {
-//        model.addAttribute("properties",propertyService.updateProperty());
-//        return "properties";
-//    }
-//
-//    @RequestMapping(value = { "/"}, method = RequestMethod.GET)
-//    public String delProperty (Model model) {
-//        model.addAttribute("properties",propertyService.deleteProperty(););
-//        return "properties";
-//    }
+
+    @RequestMapping(value = { "/update"}, method = RequestMethod.POST)
+    public String updateProperty (@ModelAttribute Property property) {
+        propertyService.updateProperty(property);
+        return home;
+    }
+
+    @RequestMapping(value = { "/delete"}, method = RequestMethod.POST)
+    public String delProperty (@ModelAttribute Property property) {
+        propertyService.deleteProperty(property);
+        return home;
+    }
 
 }

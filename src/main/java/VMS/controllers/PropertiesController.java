@@ -17,14 +17,13 @@ import java.util.Properties;
 @RequestMapping(value = "/property") // НАЧАЛО запроса
 public class PropertiesController {
 
-    private static String home = "redirect:/property/";
+    private static final String home = "redirect:/property/";
 
     @Autowired
     VkPropertyService propertyService;
 
     @RequestMapping(value = { "/"}, method = RequestMethod.GET)
     public String getAllProperty (Model model) {
-        List<Property> properties = propertyService.getAllProperties();
         model.addAttribute("properties",propertyService.getAllProperties());
         model.addAttribute(new Property());
         return "properties";

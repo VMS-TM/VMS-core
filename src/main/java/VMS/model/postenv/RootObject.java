@@ -1,10 +1,13 @@
 package VMS.model.postenv;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RootObject
 {
-  private Response response;
+  @JsonProperty("response")
+  private PostResponse postResponse;
 
-  public Response getResponse() { return this.response; }
+  public PostResponse getPostResponse() { return this.postResponse; }
 
-  public void setResponse(Response response) { this.response = response; }
+  public void setPostResponse(PostResponse postResponse) { this.postResponse = postResponse; }
 }

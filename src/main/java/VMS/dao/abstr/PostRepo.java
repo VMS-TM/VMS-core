@@ -1,11 +1,11 @@
 package VMS.dao.abstr;
 
-import VMS.model.Post;
+import VMS.model.postenv.Post;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  * Created by Кирилл on 30.04.2017.
  */
-public interface PostRepository extends CrudRepository<Post,Long> {
+public interface PostRepo extends CrudRepository<Post,Long> {
 
 }

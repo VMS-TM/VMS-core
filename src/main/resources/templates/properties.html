@@ -15,7 +15,7 @@
                 <h4>New property</h4>
             </div>
             <div class="modal-body">
-                <form action="#" th:action="@{/property/add}" th:object="${property}" method="post">
+                <form th:action="@{/property/add}" th:object="${property}" method="post">
                     <table class="table table-striped">
                         <tbody>
                         <tr>
@@ -40,23 +40,23 @@
     <div class="col-md-2 sidebar">
         <ul class="nav nav-stacked">
             <li class="active">
-                <a href="#">list</a></li>
+                <a th:href="@{/group/}">Groups</a></li>
             <li>
-                <a href="#">list</a>
+                <a th:href="@{/post/}">Posts</a>
             </li><li>
-            <a href="#">list</a>
+            <a href="#">Search Groups</a>
         </li><li>
-            <a href="#">list</a>
+            <a th:href="@{/search/}">Search Posts</a>
         </li><li>
-            <a href="#">list</a>
+            <a th:href="@{/property/}">Properties</a>
         </li><li>
-            <a href="#">list</a>
+            <a href="#">future post</a>
         </li><li>
-            <a href="#">list</a>
+            <a href="#">future post</a>
         </li><li>
-            <a href="#">list</a>
+            <a href="#">future post</a>
         </li><li>
-            <a href="#">list</a>
+            <a href="#">future post</a>
         </li>
         </ul>
         <!-- End of class= col-md-2 -->
@@ -82,13 +82,13 @@
                             <th></th>
                         </tr>
                         <tr th:each="property : ${properties}">
-                            <form action="#" th:action="@{/property/update}" th:object="${property}" method="post">
+                            <form th:action="@{/property/update}" th:object="${property}" method="post">
                                 <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
                                 <td ><input type="text" name="name"  th:value="${property.name}"  /> </td>
                                 <td ><input type="text" name="value" th:value="${property.value}"   /> </td>
                                 <td><input type="submit" class="btn btn-default" value="update" /></td>
                             </form>
-                            <form action="#" th:action="@{/property/delete}" th:object="${property}" method="post">
+                            <form th:action="@{/property/delete}" th:object="${property}" method="post">
                                 <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
                                 <td><input type="submit" class="btn btn-default" value="delete" /></td>
                             </form>

@@ -6,8 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Photo implements Serializable
-{
+public class Photo implements Serializable {
   private int id;
 
   public int getId() { return this.id; }

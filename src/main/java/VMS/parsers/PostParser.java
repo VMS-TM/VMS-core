@@ -18,18 +18,18 @@ import java.util.List;
 
 @Service
 public class PostParser {
-    //константы
+    //constants for query
     final String ACCESS_TOKEN = "f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4";
     final String uri = "https://api.vk.com/method";
     final String version = "&v=5.63";
     private int count = 0;
 
     /**
-     * формирует один объект ответа из нескольких
+     * confirm one response object from any
      *
      * @param groups list of Groups
      * @param query keywords for search
-     * @return сущность PostResponse
+     * @return object PostResponse
      */
     public PostResponse getPostResponseByGroupsList(List<Group> groups, String query) {
         PostResponse postResponse = new PostResponse();
@@ -44,11 +44,9 @@ public class PostParser {
         postResponse.setCount(count);
         return postResponse;
     }
-    //написать свое исключение если нет имени группы или запроса
     public PostResponse getPostsByGroup(Group group, String query){
        return getPostResponseByGroupName(group.getName(), query);
     }
-    //написать свое исключение
     public PostResponse getPostResponseByGroupName(String nameGroup, String query){
 //
         RestTemplate restTemplate = new RestTemplate();
@@ -70,9 +68,7 @@ public class PostParser {
 
     private String getUriQueryWall(String domain, String query){
         StringBuilder sb =  new StringBuilder(uri);
-        sb.append("/wall.search");
-        sb.append("?");
-        sb.append("domain=");
+        sb.append("/wall.search?domain=");
         sb.append(domain);
         sb.append("&v=5.63");
         sb.append("&query=");

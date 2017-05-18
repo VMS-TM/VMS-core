@@ -2,8 +2,7 @@ package VMS.model.postenv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RootObject
-{
+public class RootObject {
   @JsonProperty("response")
   private PostResponse postResponse;
 

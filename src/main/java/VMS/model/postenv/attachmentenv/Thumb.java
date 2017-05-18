@@ -1,10 +1,11 @@
-package VMS.model.postenv.attachmentsenv;
+package VMS.model.postenv.attachmentenv;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Thumb
-{
+public class Thumb implements Serializable {
   private int id;
 
   public int getId() { return this.id; }

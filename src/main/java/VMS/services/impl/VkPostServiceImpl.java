@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by Кирилл on 25.04.2017.
- */
 @Service
 public class VkPostServiceImpl implements VkPostService {
 
@@ -26,17 +23,17 @@ public class VkPostServiceImpl implements VkPostService {
     @Autowired
     private VkGroupService vkGroupService;
 
-    //получение из АПИ
+    //getting data from Api
     public PostResponse getPostByGroupNameFromApi(String name, String keyWords){
         return postParser.getPostResponseByGroupName(name, keyWords);
     }
 
-    //добавление в БД
+    //adding to DataBase
     public void addPosts(List<Post> posts){
         postRepo.save(posts);
     }
 
-    //получение из БД
+    //getting from DateBase
     public List<Post> getAllPostFromDb(){
         return (List<Post>) postRepo.findAll();
     }

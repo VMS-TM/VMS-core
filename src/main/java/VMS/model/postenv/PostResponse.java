@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
-public class PostResponse
-{
+public class PostResponse {
 
   @JsonProperty("count")
   private int count;

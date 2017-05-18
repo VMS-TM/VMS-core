@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by Кирилл on 03.05.2017.
- */
 @Controller
 @RequestMapping(value = "/property") // НАЧАЛО запроса
 public class PropertiesController {
@@ -20,29 +17,29 @@ public class PropertiesController {
     private static final String home = "redirect:/property/";
 
     @Autowired
-    VkPropertyService propertyService;
+    private VkPropertyService propertyService;
 
-    @RequestMapping(value = { "/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String getAllProperty (Model model) {
         model.addAttribute("properties",propertyService.getAllProperties());
         model.addAttribute(new Property());
         return "properties";
     }
 
-    @RequestMapping(value = { "/add"}, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
-    public String addProperty (@ModelAttribute Property property) {
+    @RequestMapping(value = {"/add"}, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+    public String addProperty(@ModelAttribute Property property) {
         propertyService.addProperty(property);
         return home;
     }
 
-    @RequestMapping(value = { "/update"}, method = RequestMethod.POST)
-    public String updateProperty (@ModelAttribute Property property) {
+    @RequestMapping(value = {"/update"}, method = RequestMethod.POST)
+    public String updateProperty(@ModelAttribute Property property) {
         propertyService.updateProperty(property);
         return home;
     }
 
-    @RequestMapping(value = { "/delete"}, method = RequestMethod.POST)
-    public String delProperty (@ModelAttribute Property property) {
+    @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
+    public String delProperty(@ModelAttribute Property property) {
         propertyService.deleteProperty(property);
         return home;
     }

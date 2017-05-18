@@ -2,9 +2,6 @@ package VMS.model;
 
 import javax.persistence.*;
 
-/**
- * Created by Кирилл on 23.04.2017.
- */
 @Entity
 @Table(name = "groups")
 public class Group {
@@ -44,6 +41,9 @@ public class Group {
     @Column(name = "description")
     private String description;
 
+    public Group() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -63,7 +63,6 @@ public class Group {
     public String getName() {
         return name;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -131,10 +130,6 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-
-    public Group() {
     }
 
 }

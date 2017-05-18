@@ -9,12 +9,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Кирилл on 09.05.2017.
- */
 @Service
 public class GroupVkValidator {
-	//константы
+	//constants
 	final String ACCESS_TOKEN = "f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4";
 	final String uri = "https://api.vk.com/method";
 	final String version = "&v=5.63";

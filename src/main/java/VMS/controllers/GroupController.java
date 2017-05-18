@@ -13,21 +13,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 
-/**
- * Created by Кирилл on 09.05.2017.
- */
 @Controller
 @RequestMapping("/group")
-public class GroupsController {
-	private static GroupsController ourInstance = new GroupsController();
+public class GroupController {
+	private static GroupController ourInstance = new GroupController();
 
 	private static final String home = "redirect:/group/";
 
 	@Autowired
-	VkGroupService groupService;
+	private VkGroupService groupService;
 
 	@Autowired
-	GroupVkValidator groupVkValidator;
+	private GroupVkValidator groupVkValidator;
 
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public String getGroupsFromDb(Model model){

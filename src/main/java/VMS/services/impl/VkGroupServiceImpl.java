@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by Кирилл on 09.05.2017.
- */
 @Service
 public class VkGroupServiceImpl implements VkGroupService{
 

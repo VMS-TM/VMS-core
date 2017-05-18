@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<head>
+    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="#">VMS Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Groups for search </a></li>
+                <li><a href="/posts">Post from VK groups</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+            </ul>
+        </div>
+        <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
+            <h2 class="sub-header">Groups for search</h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#panel1">Groups</a></li>
+                <li><a data-toggle="tab" href="#panel2">Add group</a></li>
+            </ul>
+            <div class="tab-content boxShadow3 bg-tab">
+                <div id="panel1" class="tab-pane fade in active boxShadow3 bg-tab">
+                    <div class="table-responsive">
+                        <table class="table table-row-cell">
+                            <tr>
+                                <th>№</th>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Screen Name</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            <tr th:each="group,iterStat : ${groups}" th:id="'group-' + ${iterStat.count}" >
+                                <td th:text="${iterStat.count}">№</td>
+                                <td th:text="${group.id}">Id</td>
+                                <td th:text="${group.name}">Group Domain Name</td>
+                                <td th:text="${group.screen_name}">Group Link</td>
+                                <td><button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#myModal" th:attr="data-group-id=${iterStat.count}">Edit
+                                </button></td>
+                                <td><a th:href="${'/main/delete/' + group.id}">Delete</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="panel2" class="tab-pane fade boxShadow3 bg-tab">
+                    <div class="container text-center">
+                        <form class="form-horizontal" th:object="${newGroup}" th:action="@{/main}" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Group Id/name:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button type="submit" class="btn btn-default">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Group <label id="user-name"></label></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container text-center">
+                    <form class="form-horizontal" th:action="@{/main/edit}" method="post">
+                        <div class="form-group ">
+                            <label class="control-label" for="ID1">ID:</label>
+                            <div>
+                                <input type="text" class="form-control" id="ID1" name="id"/>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label" for="name">Name:</label>
+                            <div>
+                                <input type="text" class="form-control" id="name" name="name"/>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label" for="screen_name">Screen Name: </label>
+                            <div >
+                                <input type="text" class="form-control" id="screen_name" name="screen_name"/>
+                            </div>
+                        </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/modal.js"></script>
+</body>
+</html>

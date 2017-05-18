@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel="stylesheet"></link>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>VMS/Search Posts</title>
+
+</head>
+<body>
+
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <ul class="nav nav-stacked">
+            <li class="active">
+                <a th:href="@{/group/}">Groups</a></li>
+            <li>
+                <a th:href="@{/post/}">Posts</a>
+            </li><li>
+            <a href="#">Search Groups</a>
+        </li><li>
+            <a th:href="@{/search/}">Search Posts</a>
+        </li><li>
+            <a th:href="@{/property/}">Properties</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li>
+        </ul>
+        <!-- End of class= col-md-2 -->
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Search Posts in Groups</h3>
+            </div>
+            <div class="panel-body">
+                <form action="#" th:action="@{/search/post}"  method="get">
+                    <input type="text" name="query" />
+                    <input type="submit" class="btn btn-default" value="search" />
+                </form>
+                <div th:if="${not #lists.isEmpty(postsApi)}">
+                    <table class="table table-striped">
+                        <thead>  </thead>
+                        <tbody>
+                        <!-- начало строки -->
+                        <tr>
+                            <th></th>
+                            <th>date</th>
+                            <th>value</th>
+                            <th>actions</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr th:each="post : ${postsApi}">
+                            <form action="#" th:action="@{/post/add}" th:object="${post}" method="post">
+                                <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
+                                <td ><input type="text" name="date"  th:value="${post.date}"  /> </td>
+                                <td ><textarea class="form-control" rows="13" name="text" th:text="${post.text}"></textarea> </td>
+                                <td><input type="submit" class="btn btn-default" value="add" /></td>
+                            </form>
+                            <form action="#" th:action="@{/post/delete}" th:object="${post}" method="post">
+                                <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
+                                <td><input type="submit" class="btn btn-default" value="delete" /></td>
+                            </form>
+                            <!-- конец строки -->
+                        </tr>
+
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- Button EditPost modal trigger -->
+                </div>
+
+
+                <!-- End <div class="panel-body"> -->
+            </div>
+            <!-- End <div class="panel"> -->
+        </div>
+
+
+        <!-- End <div class="col-md-8"> -->
+    </div>
+
+
+    <!-- End <div class="row"> -->
+</div>
+
+<script type="application/javascript" th:src="@{/js/jquery-3.2.1.js}"></script>
+<script type="application/javascript" th:src="@{/js/bootstrap.js}"></script>
+</body>
+</html>

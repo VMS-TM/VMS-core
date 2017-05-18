@@ -1,21 +1,20 @@
-package VMS.services;
+package VMS.parsers;
 
 import VMS.model.Post;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 /**
  * Created by Кирилл on 23.04.2017.
  */
-public class TestParsingService {
+public class TestPostParsingService {
 
     public static void main(String[] args) {
-        ParsingService parsingService = new ParsingService();
+        PostParser postParser = new PostParser();
         String nameGroup = "snyat_kvartiru_ekb";
         String query = "ботаническая";
         List <Post> posts = null;
-        posts = parsingService.getPostsByGroupName(nameGroup, query);
+        posts = postParser.getPostsByGroupName(nameGroup, query);
         for (Post post: posts){
             System.out.println(post.toString());
             System.out.println("****************");

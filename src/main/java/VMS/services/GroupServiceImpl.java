@@ -6,15 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import vms.models.rawgroup.Group;
 import vms.repositories.GroupRepository;
 
-/**
- * Created by magic on 26.04.2017.
- */
+
 @Service
 @Transactional
 public class GroupServiceImpl implements GroupService {
 
     @Autowired
-    GroupRepository GroupRepository;
+    private GroupRepository GroupRepository;
 
     @Override
     public Iterable<Group> listAllVkGroups() {

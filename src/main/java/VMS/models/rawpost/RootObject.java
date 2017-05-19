@@ -2,9 +2,7 @@ package vms.models.rawpost;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-/**
- * Created by magic on 04.05.2017.
- */
+
 public class RootObject
 {
     @JsonProperty("response")

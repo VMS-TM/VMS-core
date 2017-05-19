@@ -5,9 +5,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.ArrayList;
 
-/**
- * Created by magic on 04.05.2017.
- */
+
 @JsonIgnoreProperties({"copy_history", "likes","views"})
 public class Item
 {

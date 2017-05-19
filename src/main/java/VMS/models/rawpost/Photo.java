@@ -5,9 +5,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.persistence.Entity;
 
-/**
- * Created by magic on 04.05.2017.
- */
 
 @JsonIgnoreProperties({"user_id", "photo_1280","photo_2560","lat","long"})
 public class Photo

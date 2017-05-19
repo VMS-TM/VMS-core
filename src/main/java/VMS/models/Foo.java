@@ -2,9 +2,7 @@ package vms.models;
 
 import java.util.List;
 
-/**
- * Created by magic on 16.05.2017.
- */
+
 public class Foo {
     private List<String> checkedItems;
 

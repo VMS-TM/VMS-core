@@ -11,9 +11,6 @@ import vms.models.rawgroup.Group;
 import vms.services.GroupService;
 import vms.services.GroupsSearchService;
 
-/**
- * Created by magic on 23.04.2017.
- */
 
 @Controller
 public class VkGroupController {

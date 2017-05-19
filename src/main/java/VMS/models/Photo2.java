@@ -2,9 +2,6 @@ package vms.models;
 
 import javax.persistence.*;
 
-/**
- * Created by magic on 12.05.2017.
- */
 @Entity
 public class Photo2 {
     @Id

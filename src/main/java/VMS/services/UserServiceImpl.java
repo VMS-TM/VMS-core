@@ -6,9 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vms.models.User;
 import vms.repositories.UserRepository;
 
-/**
- * Created by magic on 26.04.2017.
- */
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {

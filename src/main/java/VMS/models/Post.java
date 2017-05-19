@@ -6,9 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by magic on 12.05.2017.
- */
+
 @Entity
 @Table(name="post")
 public class Post {

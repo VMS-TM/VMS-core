@@ -7,10 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
-/**
- *GrantedAuthority отражает разрешения выданные пользователю в масштабе всего приложения,
- * такие разрешения (как правило называются «роли»), например  Role USER, Role ADMIN.
- */
+
 public class Role implements GrantedAuthority {
 	@Id
 	@Column(name = "id")

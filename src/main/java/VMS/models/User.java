@@ -7,9 +7,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
-/**
- * Created by magic on 06.04.2017.
- */
+
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {

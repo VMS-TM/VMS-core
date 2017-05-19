@@ -19,9 +19,7 @@ import vms.configs.security.service.AuthenticationService;
 import javax.servlet.http.HttpServletRequest;
 
 
-/**
- * Created by Skrezhet on 09.04.2017.
- */
+
 @Configuration
 @ComponentScan("spring.security.project")
 @EnableWebSecurity

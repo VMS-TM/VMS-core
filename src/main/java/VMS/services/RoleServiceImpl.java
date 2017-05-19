@@ -6,9 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vms.models.Role;
 import vms.repositories.RoleRepository;
 
-/**
- * Created by magic on 26.04.2017.
- */
+
 @Service
 @Transactional
 public class RoleServiceImpl implements RoleService {

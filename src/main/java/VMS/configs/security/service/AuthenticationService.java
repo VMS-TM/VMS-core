@@ -9,9 +9,7 @@ import vms.models.User;
 import vms.services.UserService;
 
 
-/**
- * Created by SKYNET on 07.04.2017.
- */
+
 @Service
 public class AuthenticationService implements UserDetailsService {
     @Autowired

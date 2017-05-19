@@ -3,9 +3,7 @@ package vms.models.rawpost;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-/**
- * Created by magic on 04.05.2017.
- */
+
 @JsonIgnoreProperties("link")
 public class Attachment
 {

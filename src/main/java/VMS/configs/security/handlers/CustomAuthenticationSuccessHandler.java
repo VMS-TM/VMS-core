@@ -17,9 +17,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
-/**
- * Created by SKYNET on 07.04.2017.
- */
 @Service
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();

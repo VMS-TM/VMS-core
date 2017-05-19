@@ -15,13 +15,11 @@ import org.springframework.ui.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by magic on 13.05.2017.
- */
+
 @Controller
 public class GroupController {
 
-    static public List<Group> resp;
+    private static List<Group> resp;
     @Autowired
     GroupsSearchService groupsSearchService;
     @Autowired

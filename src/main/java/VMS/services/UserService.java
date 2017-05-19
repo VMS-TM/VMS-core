@@ -2,9 +2,7 @@ package vms.services;
 
 import vms.models.User;
 
-/**
- * Created by magic on 26.04.2017.
- */
+
 public interface UserService {
     Iterable<User> listAllUsers();
 

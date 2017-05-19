@@ -12,9 +12,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by magic on 12.05.2017.
- */
+
 @Service
 public class GroupsSearchService{
 

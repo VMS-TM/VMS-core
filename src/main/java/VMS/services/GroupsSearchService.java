@@ -72,7 +72,7 @@ public class GroupsSearchService{
         return uri;
     }
 
-    public List<String> parseQuery (String first, String second) {
+    private List<String> parseQuery(String first, String second) {
 
         List<String> resultQuery = new ArrayList<String>();
         String [] firstSplit = first.split("[,;:.!?\\s]+");
@@ -89,6 +89,45 @@ public class GroupsSearchService{
         }
 
         return resultQuery;
+}
+
+    private URI getUriForValidate(String query){
+        StringBuilder sb =  new StringBuilder();
+        sb.append("https://api.vk.com/method/groups.getById?group_id=");
+        sb.append(query);
+        sb.append("&fields=members_count&v=5.64&access_token=f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4");
+
+        URI uri = null;
+        try {
+            uri = new URI(sb.toString());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return uri;
+    }
+
+    public Group validate(String query) {
+
+        Group group = null;
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(getUriForValidate(query), String.class);
+
+        if(result.contains("\"error_code\":100")|| result.contains("\"deactivated\":\"deleted\"")||result.contains("\"members_count\":0")) {
+            return group;
+        } else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RootObject rootObject = null;
+
+            try {
+                rootObject = objectMapper.readValue(result, RootObject.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return group = rootObject.getGroup().get(0);
+        }
+
     }
 
 }

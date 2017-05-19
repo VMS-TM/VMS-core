@@ -61,10 +61,12 @@ public class VkGroupController {
 
     }
 
-   @RequestMapping(value = "main", method = RequestMethod.POST)
-    public String saveProduct(Group group){
+   @RequestMapping(value = "addGroup", method = RequestMethod.POST)
+    public String saveProduct(@RequestParam("groupIdOrName") String groupIdOrName){
 
-        groupService.saveGroup(group);
+       if(groupsSearchService.validate(groupIdOrName)!= null) {
+           groupService.saveGroup(groupsSearchService.validate(groupIdOrName));
+       }
 
         return "redirect:/main";
     }

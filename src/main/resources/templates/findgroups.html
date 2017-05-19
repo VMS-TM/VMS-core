@@ -36,21 +36,22 @@
                 <div id="panel1" class="tab-pane fade in active boxShadow3 bg-tab">
                 <table class="table table-row-cell">
                     <tr>
-                        <th>Add:</th>
+
                         <th>№:</th>
                         <th>Id</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Размер группы</th>
+                        <th>Add:</th>
                     </tr>
                     <form action="#" th:action="@{/processForm}" th:object="${foo}" method="post">
                     <tr th:each="group, iterStat : ${groups}" th:id="'group-' + ${group.id}" >
-                        <td><input type="checkbox" th:field="*{checkedItems}" th:value="${iterStat.count}" /></td>
                         <td th:text="${iterStat.count}"><a href="/groups/${group.id}">№</a></td>
                         <td th:text="${group.id}">Screen name</td>
                         <td th:text="${group.screen_name}">Screen name</td>
                         <td th:text="${group.name}">Group name</td>
                         <td th:text="${group.members_count}">members_count</td>
+                        <td><input type="checkbox" th:field="*{checkedItems}" th:value="${iterStat.count}" /></td>
                     </tr>
                         <input type="submit" text="Add checked" />
                     </form>

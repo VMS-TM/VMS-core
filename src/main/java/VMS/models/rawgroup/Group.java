@@ -1,11 +1,8 @@
 package vms.models.rawgroup;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-
-
 import javax.persistence.*;
-import java.beans.Transient;
-import java.util.ArrayList;
+
 
 
 @Entity
@@ -26,11 +23,11 @@ public class Group
     public String screen_name;
 
     @JsonProperty("is_closed")
-    @javax.persistence.Transient
+    @Transient
     private int is_closed;
 
     @JsonProperty("type")
-    @javax.persistence.Transient
+    @Transient
     private String type;
 
     @JsonProperty("members_count")
@@ -38,15 +35,15 @@ public class Group
     public int members_count;
 
     @JsonProperty("photo_50")
-    @javax.persistence.Transient
+    @Transient
     private String photo_50;
 
     @JsonProperty("photo_100")
-    @javax.persistence.Transient
+    @Transient
     private String photo_100;
 
     @JsonProperty("photo_200")
-    @javax.persistence.Transient
+    @Transient
     private String photo_200;
 
     public String getName() { return this.name; }

@@ -11,6 +11,8 @@ import vms.models.rawgroup.Group;
 import vms.services.GroupService;
 import vms.services.GroupsSearchService;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Controller
 public class VkGroupController {
@@ -28,11 +30,19 @@ public class VkGroupController {
     }
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public String list(Model model){
+    public String list(Model model, HttpServletRequest request){
         model.addAttribute("groups", groupService.listAllVkGroups());
-        model.addAttribute("newGroup", new Group());
+        if(request.getSession().getAttribute("flag") != null && (Boolean) request.getSession().getAttribute("flag")==true ) {
+            int counter = 1;
+            model.addAttribute("counter", counter);
+            request.getSession().setAttribute("flag", false);
+        } else {
+            int counter = 0;
+            model.addAttribute("counter", counter);
+        }
         return "main";
 }
+
 
     @RequestMapping("groups/new")
     public String newProduct(Model model){
@@ -62,13 +72,15 @@ public class VkGroupController {
     }
 
    @RequestMapping(value = "addGroup", method = RequestMethod.POST)
-    public String saveProduct(@RequestParam("groupIdOrName") String groupIdOrName){
+    public String saveProduct(Model model,@RequestParam("groupIdOrName") String groupIdOrName , HttpServletRequest request){
 
        if(groupsSearchService.validate(groupIdOrName)!= null) {
            groupService.saveGroup(groupsSearchService.validate(groupIdOrName));
+           return "redirect:/main";
+       } else {
+           request.getSession().setAttribute("flag", new Boolean(true));
+           return"redirect:/main";
        }
-
-        return "redirect:/main";
     }
 
 
@@ -78,7 +90,7 @@ public class VkGroupController {
         groupService.deleteGroupById(id);
         return "redirect:/main";
     }
-
+    
     @RequestMapping("/posts")
     public String showPosts(Model model){
         return "posts";

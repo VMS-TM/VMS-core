@@ -35,6 +35,7 @@
             <div class="tab-content boxShadow3 bg-tab">
                 <div id="panel1" class="tab-pane fade in active boxShadow3 bg-tab">
                     <div class="table-responsive">
+                        <input type="hidden" class="btn btn-primary" id="notFoundFlag" name="notFoundFlag" th:value="${counter}"/>
                         <table class="table table-row-cell">
                             <tr>
                                 <th>№</th>
@@ -118,8 +119,10 @@
     </div>
 </div>
 
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="/js/bootstrap.js"></script>
+<script src="/js/groupNotFound.js"></script>
 <script src="/js/modal.js"></script>
 </body>
 </html>

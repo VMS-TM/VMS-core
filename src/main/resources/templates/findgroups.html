@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<head>
+    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="#">vms Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Groups for search </a></li>
+                <li><a href="/posts">Post from VK groups</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+            </ul>
+        </div>
+        <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
+            <h2 class="sub-header">Groups for search</h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#panel1">Найденные группы</a></li>
+                <li><a data-toggle="tab" href="#panel2">Найти группы</a></li>
+            </ul>
+            <div class="tab-content boxShadow3 bg-tab">
+                <div id="panel1" class="tab-pane fade in active boxShadow3 bg-tab">
+                <table class="table table-row-cell">
+                    <tr>
+
+                        <th>№:</th>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Размер группы</th>
+                        <th>Add:</th>
+                    </tr>
+                    <form action="#" th:action="@{/processForm}" th:object="${foo}" method="post">
+                    <tr th:each="group, iterStat : ${groups}" th:id="'group-' + ${group.id}" >
+                        <td th:text="${iterStat.count}"><a href="/groups/${group.id}">№</a></td>
+                        <td th:text="${group.id}">Screen name</td>
+                        <td th:text="${group.screen_name}">Screen name</td>
+                        <td th:text="${group.name}">Group name</td>
+                        <td th:text="${group.members_count}">members_count</td>
+                        <td><input type="checkbox" th:field="*{checkedItems}" th:value="${iterStat.count}" /></td>
+                    </tr>
+                        <input type="submit" text="Add checked" />
+                    </form>
+                </table>
+            </div>
+                <div id="panel2" class="tab-pane fade boxShadow3 bg-tab">
+                    <div class="container text-center">
+                        <form class="form-horizontal" th:action="@{/findgroups}" method="post">
+                            <div class="form-group ">
+                                <label class="control-label" for="first">Основной запрос:</label>
+                                <div>
+                                    <input type="text" class="form-control" id="first" name="first"/>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label" for="second">Связан с:</label>
+                                <div>
+                                    <input type="text" class="form-control" id="second" name="second"/>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label" for="memberscount">Минимальное пользователей в группе:</label>
+                                <div>
+                                    <input type="text" class="form-control" id="memberscount" name="memberscount" value="1"/>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Искать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/modal.js"></script>
+</body>
+</html>

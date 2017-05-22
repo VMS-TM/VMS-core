@@ -1,4 +1,4 @@
-package VMS;
+package vms;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

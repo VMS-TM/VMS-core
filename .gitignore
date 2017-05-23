@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 /VMS-core/.idea
 /VMS-core/target
 /VMS-core/VMS.iml
 /.idea/
 /target/
+=======
+.idea/
+target/
+VMS.iml
+src/main/java/VMS/services/impl/GroupSearchServiceImpl.java
+
+>>>>>>> postAndGroups

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel="stylesheet"></link>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>VMS/Properties</title>
+
+</head>
+<body>
+<!-- Modal Add Property -->
+<div class="modal fade" id="addProperty" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>New property</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/property/add}" th:object="${property}" method="post">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <td><input type="text" th:field="*{name}" /> </td>
+                            <td><input type="text" th:field="*{value}" /> </td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" class="btn btn-default" value="add" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <ul class="nav nav-stacked">
+            <li class="active">
+                <a th:href="@{/group/}">Groups</a></li>
+            <li>
+                <a th:href="@{/post/}">Posts</a>
+            </li><li>
+            <a href="#">Search Groups</a>
+        </li><li>
+            <a th:href="@{/search/}">Search Posts</a>
+        </li><li>
+            <a th:href="@{/property/}">Properties</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li><li>
+            <a href="#">future post</a>
+        </li>
+        </ul>
+        <!-- End of class= col-md-2 -->
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Properties</h3>
+            </div>
+            <div class="panel-body">
+                <div th:if="${not #lists.isEmpty(properties)}">
+                    <table class="table table-striped">
+                        <thead> … </thead>
+                        <tbody>
+                        <!-- начало строки -->
+                        <tr>
+                            <th></th>
+                            <th>key</th>
+                            <th>value</th>
+                            <th>actions</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr th:each="property : ${properties}">
+                            <form th:action="@{/property/update}" th:object="${property}" method="post">
+                                <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
+                                <td ><input type="text" name="name"  th:value="${property.name}"  /> </td>
+                                <td ><input type="text" name="value" th:value="${property.value}"   /> </td>
+                                <td><input type="submit" class="btn btn-default" value="update" /></td>
+                            </form>
+                            <form th:action="@{/property/delete}" th:object="${property}" method="post">
+                                <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
+                                <td><input type="submit" class="btn btn-default" value="delete" /></td>
+                            </form>
+                        <!-- конец строки -->
+                        </tr>
+
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- Button AddProperty modal trigger -->
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addProperty">add</button>
+                </div>
+                <!-- End <div class="panel-body"> -->
+            </div>
+            <!-- End <div class="panel"> -->
+        </div>
+        <!-- End <div class="col-md-8"> -->
+    </div>
+
+
+    <!-- End <div class="row"> -->
+</div>
+
+<script type="application/javascript" th:src="@{/js/jquery-3.2.1.js}"></script>
+<script type="application/javascript" th:src="@{/js/bootstrap.js}"></script>
+</body>
+</html>

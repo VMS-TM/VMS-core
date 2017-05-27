@@ -5,13 +5,8 @@
  */
 
 /*!
-<<<<<<< HEAD
  * Generated using the Bootstrap Customizer (http://bootstrap-3.ru/customize.php?id=245a099cc82124d94ff8dc35bd349f36)
  * Config saved to config.json and https://gist.github.com/245a099cc82124d94ff8dc35bd349f36
-=======
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=76a9c6e7e2d7ab18bfbb64d7eccec3a3)
- * Config saved to config.json and https://gist.github.com/76a9c6e7e2d7ab18bfbb64d7eccec3a3
->>>>>>> postAndGroups
  */
 if (typeof jQuery === 'undefined') {
   throw new Error('Bootstrap\'s JavaScript requires jQuery')
@@ -19,13 +14,8 @@ if (typeof jQuery === 'undefined') {
 +function ($) {
   'use strict';
   var version = $.fn.jquery.split(' ')[0].split('.')
-<<<<<<< HEAD
   if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1)) {
     throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher')
-=======
-  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 3)) {
-    throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4')
->>>>>>> postAndGroups
   }
 }(jQuery);
 
@@ -2363,12 +2353,8 @@ if (typeof jQuery === 'undefined') {
     return false // explicit for ie8 (  ._.)
   }
 
-<<<<<<< HEAD
 
     // http://blog.alexmaccaw.com/css-transitions
-=======
-  // http://blog.alexmaccaw.com/css-transitions
->>>>>>> postAndGroups
   $.fn.emulateTransitionEnd = function (duration) {
     var called = false
     var $el = this
@@ -2393,7 +2379,4 @@ if (typeof jQuery === 'undefined') {
   })
 
 }(jQuery);
-<<<<<<< HEAD
 
-=======
->>>>>>> postAndGroups

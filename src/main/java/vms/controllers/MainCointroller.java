@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
-public class VkGroupController {
+public class MainCointroller {
 
     @Autowired
     GroupService groupService;
@@ -74,13 +74,13 @@ public class VkGroupController {
    @RequestMapping(value = "addGroup", method = RequestMethod.POST)
     public String saveProduct(Model model,@RequestParam("groupIdOrName") String groupIdOrName , HttpServletRequest request){
 
-       if(groupsSearchService.validate(groupIdOrName)!= null) {
+
+      if(groupsSearchService.validate(groupIdOrName)!= null) {
            groupService.saveGroup(groupsSearchService.validate(groupIdOrName));
-           return "redirect:/main";
        } else {
            request.getSession().setAttribute("flag", new Boolean(true));
-           return"redirect:/main";
        }
+       return"redirect:/main";
     }
 
 
@@ -91,9 +91,6 @@ public class VkGroupController {
         return "redirect:/main";
     }
     
-    @RequestMapping("/posts")
-    public String showPosts(Model model){
-        return "posts";
-    }
+
 
 }

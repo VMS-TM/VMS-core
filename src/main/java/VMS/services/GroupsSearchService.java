@@ -83,13 +83,13 @@ public class GroupsSearchService{
         }
 
         for(String query1 : firstSplit) {
-                    for(String query2 : secondSplit) {
-                            resultQuery.add(query1+" " +query2);
-                    }
+            for(String query2 : secondSplit) {
+                resultQuery.add(query1+" " +query2);
+            }
         }
 
         return resultQuery;
-}
+    }
 
     private URI getUriForValidate(String query){
         StringBuilder sb =  new StringBuilder();

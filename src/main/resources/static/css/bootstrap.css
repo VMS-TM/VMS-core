@@ -5,13 +5,8 @@
  */
 
 /*!
-<<<<<<< HEAD
  * Generated using the Bootstrap Customizer (http://bootstrap-3.ru/customize.php?id=245a099cc82124d94ff8dc35bd349f36)
  * Config saved to config.json and https://gist.github.com/245a099cc82124d94ff8dc35bd349f36
-=======
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=76a9c6e7e2d7ab18bfbb64d7eccec3a3)
- * Config saved to config.json and https://gist.github.com/76a9c6e7e2d7ab18bfbb64d7eccec3a3
->>>>>>> postAndGroups
  */
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
@@ -254,11 +249,8 @@ th {
   }
   .navbar {
     display: none;
-<<<<<<< HEAD
     margin: 0;
     margin-bottom: 0;
-=======
->>>>>>> postAndGroups
   }
   .btn > .caret,
   .dropup > .btn > .caret {
@@ -1113,20 +1105,12 @@ textarea {
   line-height: inherit;
 }
 a {
-<<<<<<< HEAD
   color: #428bca;
-=======
-  color: #337ab7;
->>>>>>> postAndGroups
   text-decoration: none;
 }
 a:hover,
 a:focus {
-<<<<<<< HEAD
   color: #2a6496;
-=======
-  color: #23527c;
->>>>>>> postAndGroups
   text-decoration: underline;
 }
 a:focus {
@@ -1238,11 +1222,7 @@ h6 .small,
 .h6 .small {
   font-weight: normal;
   line-height: 1;
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
 }
 h1,
 .h1,
@@ -1362,7 +1342,6 @@ mark,
   text-transform: capitalize;
 }
 .text-muted {
-<<<<<<< HEAD
   color: #999999;
 }
 .text-primary {
@@ -1371,16 +1350,6 @@ mark,
 a.text-primary:hover,
 a.text-primary:focus {
   color: #3071a9;
-=======
-  color: #777777;
-}
-.text-primary {
-  color: #337ab7;
-}
-a.text-primary:hover,
-a.text-primary:focus {
-  color: #286090;
->>>>>>> postAndGroups
 }
 .text-success {
   color: #3c763d;
@@ -1411,20 +1380,11 @@ a.text-danger:focus {
   color: #843534;
 }
 .bg-primary {
-<<<<<<< HEAD
   background-color: #f1f1f1;
 }
 a.bg-primary:hover,
 a.bg-primary:focus {
   background-color: #3071a9;
-=======
-  color: #fff;
-  background-color: #337ab7;
-}
-a.bg-primary:hover,
-a.bg-primary:focus {
-  background-color: #286090;
->>>>>>> postAndGroups
 }
 .bg-success {
   background-color: #dff0d8;
@@ -1515,11 +1475,7 @@ dd {
 abbr[title],
 abbr[data-original-title] {
   cursor: help;
-<<<<<<< HEAD
   border-bottom: 1px dotted #999999;
-=======
-  border-bottom: 1px dotted #777777;
->>>>>>> postAndGroups
 }
 .initialism {
   font-size: 90%;
@@ -1542,11 +1498,7 @@ blockquote .small {
   display: block;
   font-size: 80%;
   line-height: 1.42857143;
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
 }
 blockquote footer:before,
 blockquote small:before,
@@ -1644,29 +1596,17 @@ pre code {
 }
 @media (min-width: 768px) {
   .container {
-<<<<<<< HEAD
     width: 250px;
-=======
-    width: 750px;
->>>>>>> postAndGroups
   }
 }
 @media (min-width: 992px) {
   .container {
-<<<<<<< HEAD
     width: 300px;
-=======
-    width: 970px;
->>>>>>> postAndGroups
   }
 }
 @media (min-width: 1200px) {
   .container {
-<<<<<<< HEAD
     width: 350px;
-=======
-    width: 1170px;
->>>>>>> postAndGroups
   }
 }
 .container-fluid {
@@ -1679,7 +1619,6 @@ pre code {
   margin-left: -15px;
   margin-right: -15px;
 }
-<<<<<<< HEAD
 .row-padded {
   padding: 35px;
   background-color: #C0C0C0;
@@ -1693,13 +1632,6 @@ pre code {
 .colxxx {
   padding-left: 0px;
   padding-right: 0px;
-=======
-.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
->>>>>>> postAndGroups
 }
 .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
   float: left;
@@ -2337,11 +2269,7 @@ table {
 caption {
   padding-top: 8px;
   padding-bottom: 8px;
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
   text-align: left;
 }
 th {
@@ -2832,11 +2760,7 @@ select[multiple].input-sm {
   height: 46px;
   padding: 10px 16px;
   font-size: 18px;
-<<<<<<< HEAD
   line-height: 1.33;
-=======
-  line-height: 1.3333333;
->>>>>>> postAndGroups
   border-radius: 6px;
 }
 select.input-lg {
@@ -2851,11 +2775,7 @@ select[multiple].input-lg {
   height: 46px;
   padding: 10px 16px;
   font-size: 18px;
-<<<<<<< HEAD
   line-height: 1.33;
-=======
-  line-height: 1.3333333;
->>>>>>> postAndGroups
   border-radius: 6px;
 }
 .form-group-lg select.form-control {
@@ -2871,11 +2791,7 @@ select[multiple].input-lg {
   min-height: 38px;
   padding: 11px 16px;
   font-size: 18px;
-<<<<<<< HEAD
   line-height: 1.33;
-=======
-  line-height: 1.3333333;
->>>>>>> postAndGroups
 }
 .has-feedback {
   position: relative;
@@ -3214,18 +3130,12 @@ fieldset[disabled] .btn-default.focus {
 }
 .btn-primary {
   color: #ffffff;
-<<<<<<< HEAD
   background-color: #428bca;
   border-color: #357ebd;
-=======
-  background-color: #337ab7;
-  border-color: #2e6da4;
->>>>>>> postAndGroups
 }
 .btn-primary:focus,
 .btn-primary.focus {
   color: #ffffff;
-<<<<<<< HEAD
   background-color: #3071a9;
   border-color: #193c5a;
 }
@@ -3233,27 +3143,13 @@ fieldset[disabled] .btn-default.focus {
   color: #ffffff;
   background-color: #3071a9;
   border-color: #285e8e;
-=======
-  background-color: #286090;
-  border-color: #122b40;
-}
-.btn-primary:hover {
-  color: #ffffff;
-  background-color: #286090;
-  border-color: #204d74;
->>>>>>> postAndGroups
 }
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   color: #ffffff;
-<<<<<<< HEAD
   background-color: #3071a9;
   border-color: #285e8e;
-=======
-  background-color: #286090;
-  border-color: #204d74;
->>>>>>> postAndGroups
 }
 .btn-primary:active:hover,
 .btn-primary.active:hover,
@@ -3265,13 +3161,8 @@ fieldset[disabled] .btn-default.focus {
 .btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {
   color: #ffffff;
-<<<<<<< HEAD
   background-color: #285e8e;
   border-color: #193c5a;
-=======
-  background-color: #204d74;
-  border-color: #122b40;
->>>>>>> postAndGroups
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -3287,19 +3178,11 @@ fieldset[disabled] .btn-primary:focus,
 .btn-primary.disabled.focus,
 .btn-primary[disabled].focus,
 fieldset[disabled] .btn-primary.focus {
-<<<<<<< HEAD
   background-color: #428bca;
   border-color: #357ebd;
 }
 .btn-primary .badge {
   color: #428bca;
-=======
-  background-color: #337ab7;
-  border-color: #2e6da4;
-}
-.btn-primary .badge {
-  color: #337ab7;
->>>>>>> postAndGroups
   background-color: #ffffff;
 }
 .btn-success {
@@ -3531,11 +3414,7 @@ fieldset[disabled] .btn-danger.focus {
   background-color: #ffffff;
 }
 .btn-link {
-<<<<<<< HEAD
   color: #428bca;
-=======
-  color: #337ab7;
->>>>>>> postAndGroups
   font-weight: normal;
   border-radius: 0;
 }
@@ -3556,11 +3435,7 @@ fieldset[disabled] .btn-link {
 }
 .btn-link:hover,
 .btn-link:focus {
-<<<<<<< HEAD
   color: #2a6496;
-=======
-  color: #23527c;
->>>>>>> postAndGroups
   text-decoration: underline;
   background-color: transparent;
 }
@@ -3568,22 +3443,14 @@ fieldset[disabled] .btn-link {
 fieldset[disabled] .btn-link:hover,
 .btn-link[disabled]:focus,
 fieldset[disabled] .btn-link:focus {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
   text-decoration: none;
 }
 .btn-lg,
 .btn-group-lg > .btn {
   padding: 10px 16px;
   font-size: 18px;
-<<<<<<< HEAD
   line-height: 1.33;
-=======
-  line-height: 1.3333333;
->>>>>>> postAndGroups
   border-radius: 6px;
 }
 .btn-sm,
@@ -3718,20 +3585,12 @@ tbody.collapse.in {
   color: #ffffff;
   text-decoration: none;
   outline: 0;
-<<<<<<< HEAD
   background-color: #428bca;
-=======
-  background-color: #337ab7;
->>>>>>> postAndGroups
 }
 .dropdown-menu > .disabled > a,
 .dropdown-menu > .disabled > a:hover,
 .dropdown-menu > .disabled > a:focus {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
 }
 .dropdown-menu > .disabled > a:hover,
 .dropdown-menu > .disabled > a:focus {
@@ -3760,11 +3619,7 @@ tbody.collapse.in {
   padding: 3px 20px;
   font-size: 12px;
   line-height: 1.42857143;
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
   white-space: nowrap;
 }
 .dropdown-backdrop {
@@ -3999,11 +3854,7 @@ tbody.collapse.in {
   height: 46px;
   padding: 10px 16px;
   font-size: 18px;
-<<<<<<< HEAD
   line-height: 1.33;
-=======
-  line-height: 1.3333333;
->>>>>>> postAndGroups
   border-radius: 6px;
 }
 select.input-group-lg > .form-control,
@@ -4155,19 +4006,11 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   background-color: #eeeeee;
 }
 .nav > li.disabled > a {
-<<<<<<< HEAD
   color: #999999;
 }
 .nav > li.disabled > a:hover,
 .nav > li.disabled > a:focus {
   color: #999999;
-=======
-  color: #777777;
-}
-.nav > li.disabled > a:hover,
-.nav > li.disabled > a:focus {
-  color: #777777;
->>>>>>> postAndGroups
   text-decoration: none;
   background-color: transparent;
   cursor: not-allowed;
@@ -4176,11 +4019,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a:hover,
 .nav .open > a:focus {
   background-color: #eeeeee;
-<<<<<<< HEAD
   border-color: #428bca;
-=======
-  border-color: #337ab7;
->>>>>>> postAndGroups
 }
 .nav .nav-divider {
   height: 1px;
@@ -4273,11 +4112,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
   color: #ffffff;
-<<<<<<< HEAD
   background-color: #428bca;
-=======
-  background-color: #337ab7;
->>>>>>> postAndGroups
 }
 .nav-stacked > li {
   float: none;
@@ -4356,10 +4191,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 @media (min-width: 768px) {
   .navbar-header {
-<<<<<<< HEAD
     margin: 0;
-=======
->>>>>>> postAndGroups
     float: left;
   }
 }
@@ -4775,17 +4607,11 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 .navbar-inverse {
   background-color: #222222;
   border-color: #080808;
-<<<<<<< HEAD
   margin-bottom: 0;
   margin: 0;
 }
 .navbar-inverse .navbar-brand {
   color: #999999;
-=======
-}
-.navbar-inverse .navbar-brand {
-  color: #9d9d9d;
->>>>>>> postAndGroups
 }
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
@@ -4793,17 +4619,10 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   background-color: transparent;
 }
 .navbar-inverse .navbar-text {
-<<<<<<< HEAD
   color: #999999;
 }
 .navbar-inverse .navbar-nav > li > a {
   color: #999999;
-=======
-  color: #9d9d9d;
-}
-.navbar-inverse .navbar-nav > li > a {
-  color: #9d9d9d;
->>>>>>> postAndGroups
 }
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
@@ -4850,11 +4669,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
     background-color: #080808;
   }
   .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
-<<<<<<< HEAD
     color: #999999;
-=======
-    color: #9d9d9d;
->>>>>>> postAndGroups
   }
   .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover,
   .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {
@@ -4875,21 +4690,13 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   }
 }
 .navbar-inverse .navbar-link {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #9d9d9d;
->>>>>>> postAndGroups
 }
 .navbar-inverse .navbar-link:hover {
   color: #ffffff;
 }
 .navbar-inverse .btn-link {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #9d9d9d;
->>>>>>> postAndGroups
 }
 .navbar-inverse .btn-link:hover,
 .navbar-inverse .btn-link:focus {
@@ -4917,11 +4724,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   color: #cccccc;
 }
 .breadcrumb > .active {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
 }
 .pagination {
   display: inline-block;
@@ -4939,11 +4742,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   padding: 6px 12px;
   line-height: 1.42857143;
   text-decoration: none;
-<<<<<<< HEAD
   color: #428bca;
-=======
-  color: #337ab7;
->>>>>>> postAndGroups
   background-color: #ffffff;
   border: 1px solid #dddddd;
   margin-left: -1px;
@@ -4964,11 +4763,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > a:focus,
 .pagination > li > span:focus {
   z-index: 2;
-<<<<<<< HEAD
   color: #2a6496;
-=======
-  color: #23527c;
->>>>>>> postAndGroups
   background-color: #eeeeee;
   border-color: #dddddd;
 }
@@ -4980,13 +4775,8 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > .active > span:focus {
   z-index: 3;
   color: #ffffff;
-<<<<<<< HEAD
   background-color: #428bca;
   border-color: #428bca;
-=======
-  background-color: #337ab7;
-  border-color: #337ab7;
->>>>>>> postAndGroups
   cursor: default;
 }
 .pagination > .disabled > span,
@@ -4995,11 +4785,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > .disabled > a,
 .pagination > .disabled > a:hover,
 .pagination > .disabled > a:focus {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
   background-color: #ffffff;
   border-color: #dddddd;
   cursor: not-allowed;
@@ -5008,11 +4794,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination-lg > li > span {
   padding: 10px 16px;
   font-size: 18px;
-<<<<<<< HEAD
   line-height: 1.33;
-=======
-  line-height: 1.3333333;
->>>>>>> postAndGroups
 }
 .pagination-lg > li:first-child > a,
 .pagination-lg > li:first-child > span {
@@ -5074,11 +4856,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pager .disabled > a:hover,
 .pager .disabled > a:focus,
 .pager .disabled > span {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
   background-color: #ffffff;
   cursor: not-allowed;
 }
@@ -5108,7 +4886,6 @@ a.label:focus {
   top: -1px;
 }
 .label-default {
-<<<<<<< HEAD
   background-color: #999999;
 }
 .label-default[href]:hover,
@@ -5121,20 +4898,6 @@ a.label:focus {
 .label-primary[href]:hover,
 .label-primary[href]:focus {
   background-color: #3071a9;
-=======
-  background-color: #777777;
-}
-.label-default[href]:hover,
-.label-default[href]:focus {
-  background-color: #5e5e5e;
-}
-.label-primary {
-  background-color: #337ab7;
-}
-.label-primary[href]:hover,
-.label-primary[href]:focus {
-  background-color: #286090;
->>>>>>> postAndGroups
 }
 .label-success {
   background-color: #5cb85c;
@@ -5151,19 +4914,11 @@ a.label:focus {
   background-color: #31b0d5;
 }
 .label-warning {
-<<<<<<< HEAD
   background-color: #f1f1f1;
 }
 .label-warning[href]:hover,
 .label-warning[href]:focus {
   background-color: #C0C0C0;
-=======
-  background-color: #f0ad4e;
-}
-.label-warning[href]:hover,
-.label-warning[href]:focus {
-  background-color: #ec971f;
->>>>>>> postAndGroups
 }
 .label-danger {
   background-color: #d9534f;
@@ -5183,11 +4938,7 @@ a.label:focus {
   vertical-align: middle;
   white-space: nowrap;
   text-align: center;
-<<<<<<< HEAD
   background-color: #999999;
-=======
-  background-color: #777777;
->>>>>>> postAndGroups
   border-radius: 10px;
 }
 .badge:empty {
@@ -5210,11 +4961,7 @@ a.badge:focus {
 }
 .list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
-<<<<<<< HEAD
   color: #428bca;
-=======
-  color: #337ab7;
->>>>>>> postAndGroups
   background-color: #ffffff;
 }
 .list-group-item > .badge {
@@ -5289,11 +5036,7 @@ a.badge:focus {
 a.thumbnail:hover,
 a.thumbnail:focus,
 a.thumbnail.active {
-<<<<<<< HEAD
   border-color: #428bca;
-=======
-  border-color: #337ab7;
->>>>>>> postAndGroups
 }
 .thumbnail .caption {
   padding: 9px;
@@ -5415,11 +5158,7 @@ a.thumbnail.active {
   line-height: 20px;
   color: #ffffff;
   text-align: center;
-<<<<<<< HEAD
   background-color: #428bca;
-=======
-  background-color: #337ab7;
->>>>>>> postAndGroups
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   -webkit-transition: width 0.6s ease;
@@ -5565,11 +5304,7 @@ button.list-group-item {
 .list-group-item.disabled:hover,
 .list-group-item.disabled:focus {
   background-color: #eeeeee;
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
   cursor: not-allowed;
 }
 .list-group-item.disabled .list-group-item-heading,
@@ -5580,24 +5315,15 @@ button.list-group-item {
 .list-group-item.disabled .list-group-item-text,
 .list-group-item.disabled:hover .list-group-item-text,
 .list-group-item.disabled:focus .list-group-item-text {
-<<<<<<< HEAD
   color: #999999;
-=======
-  color: #777777;
->>>>>>> postAndGroups
 }
 .list-group-item.active,
 .list-group-item.active:hover,
 .list-group-item.active:focus {
   z-index: 2;
   color: #ffffff;
-<<<<<<< HEAD
   background-color: #428bca;
   border-color: #428bca;
-=======
-  background-color: #337ab7;
-  border-color: #337ab7;
->>>>>>> postAndGroups
 }
 .list-group-item.active .list-group-item-heading,
 .list-group-item.active:hover .list-group-item-heading,
@@ -5613,11 +5339,7 @@ button.list-group-item {
 .list-group-item.active .list-group-item-text,
 .list-group-item.active:hover .list-group-item-text,
 .list-group-item.active:focus .list-group-item-text {
-<<<<<<< HEAD
   color: #e1edf7;
-=======
-  color: #c7ddef;
->>>>>>> postAndGroups
 }
 .list-group-item-success {
   color: #3c763d;
@@ -5997,7 +5719,6 @@ button.list-group-item-danger.active:focus {
   border-bottom-color: #dddddd;
 }
 .panel-primary {
-<<<<<<< HEAD
   border-color: #428bca;
 }
 .panel-primary > .panel-heading {
@@ -6014,24 +5735,6 @@ button.list-group-item-danger.active:focus {
 }
 .panel-primary > .panel-footer + .panel-collapse > .panel-body {
   border-bottom-color: #428bca;
-=======
-  border-color: #337ab7;
-}
-.panel-primary > .panel-heading {
-  color: #ffffff;
-  background-color: #337ab7;
-  border-color: #337ab7;
-}
-.panel-primary > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #337ab7;
-}
-.panel-primary > .panel-heading .badge {
-  color: #337ab7;
-  background-color: #ffffff;
-}
-.panel-primary > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #337ab7;
->>>>>>> postAndGroups
 }
 .panel-success {
   border-color: #d6e9c6;
@@ -6259,17 +5962,10 @@ button.close {
 }
 .modal-body {
   position: relative;
-<<<<<<< HEAD
   padding: 20px;
 }
 .modal-footer {
   padding: 20px;
-=======
-  padding: 15px;
-}
-.modal-footer {
-  padding: 15px;
->>>>>>> postAndGroups
   text-align: right;
   border-top: 1px solid #e5e5e5;
 }
@@ -7073,7 +6769,6 @@ button.close {
     display: none !important;
   }
 }
-<<<<<<< HEAD
 .fixed {
   height: 100vh;
 }
@@ -7088,5 +6783,3 @@ button.close {
 .bg-custom{
   background: #f1f1f1;
 }
-=======
->>>>>>> postAndGroups

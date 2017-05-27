@@ -3,8 +3,6 @@ package vms.models.rawgroup;
 import org.codehaus.jackson.annotate.JsonProperty;
 import javax.persistence.*;
 
-
-
 @Entity
 @Table(name = "groups")
 public class Group

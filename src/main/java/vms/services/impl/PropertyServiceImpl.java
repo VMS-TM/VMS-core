@@ -1,4 +1,4 @@
-package vms.services;
+package vms.services.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import vms.models.User;
-import vms.services.UserService;
+import vms.services.absr.UserService;
 
 
 

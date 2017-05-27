@@ -1,4 +1,4 @@
-package vms.services;
+package vms.services.impl;
 
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.PostResponse;

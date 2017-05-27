@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import vms.models.rawgroup.Group;
-import vms.services.GroupService;
+import vms.services.absr.GroupService;
 import vms.services.GroupsSearchService;
 
 import javax.servlet.http.HttpServletRequest;

@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import vms.models.Property;
 import vms.models.Role;
 import vms.models.User;
 import vms.models.rawgroup.Group;
-import vms.repositories.GroupRepository;
 import org.apache.log4j.Logger;
-import vms.services.GroupService;
-import vms.services.RoleService;
-import vms.services.UserService;
+import vms.services.absr.GroupService;
+import vms.services.absr.RoleService;
+import vms.services.absr.UserService;
 
 import java.util.HashSet;
 import java.util.Set;

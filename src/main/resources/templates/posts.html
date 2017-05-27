@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="#">vms Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Groups for search </a></li>
+                <li><a href="/posts">Post from VK groups</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+                <li><a href="/properties">Настройки</a></li>
+            </ul>
+        </div>
+        <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
+            <h2 class="sub-header">Посты из групп</h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#panel1">Посты</a></li>
+            </ul>
+            <div class="tab-content boxShadow3 bg-tab">
+                <form  th:action="@{/post/req}"  method="get">
+                    <td ><input required="required" type="text" name="query" /></td>
+                    <td><input type="submit"  class="btn btn-default" value="Запросить посты из группы сейчас" /></td>
+                </form>
+                <table class="table table-striped">
+                    <thead>  </thead>
+                    <tbody>
+                    <!-- начало строки -->
+                    <tr>
+                        <th></th>
+                        <th>date</th>
+                        <th>value</th>
+                        <th>actions</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr th:each="post : ${posts}">
+                        <form  th:action="@{/post/update}" th:object="${post}" method="post">
+                            <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
+                            <td ><input type="text" name="date"  th:value="${post.date}"  /> </td>
+                            <td ><textarea class="form-control" rows="13" name="text" th:text="${post.text}"></textarea> </td>
+                            <td><input type="submit" class="btn btn-default" value="update" /></td>
+                        </form>
+                        <form  th:action="@{/post/delete}" th:object="${post}" method="post">
+                            <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
+                            <td><input type="submit" class="btn btn-default" value="delete" /></td>
+                        </form>
+                        <!-- конец строки -->
+                    </tr>
+
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/modal.js"></script>
+</body>
+</html>

@@ -11,7 +11,6 @@ import vms.models.rawgroup.Group;
 import vms.repositories.GroupRepository;
 import org.apache.log4j.Logger;
 import vms.services.GroupService;
-import vms.services.PropertyService;
 import vms.services.RoleService;
 import vms.services.UserService;
 
@@ -28,8 +27,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
     private UserService userService;
     @Autowired
     private RoleService roleService;
-    @Autowired
-    private PropertyService propertyService;
+
 
     private Logger log = Logger.getLogger(OnBootLoader  .class);
 
@@ -39,7 +37,6 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
     public void onApplicationEvent(ContextRefreshedEvent event) {
         loadGroups();
         loadUsers();
-        loadProperties();
     }
 
     public void loadGroups() {
@@ -92,20 +89,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 
     }
-    private void loadProperties() {
-        Property prop1 = new Property();
-        prop1.setName("1");
-        prop1.setValue("on");
-        Property prop2 = new Property();
-        prop2.setName("2");
-        prop2.setValue("off");
 
-        propertyService.addProperty(prop1);
-        propertyService.addProperty(prop2);
-
-
-
-    }
 
 
 

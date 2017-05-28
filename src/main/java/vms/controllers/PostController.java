@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import vms.models.postenvironment.PostResponse;
 import vms.services.absr.GroupService;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.VkPostService;
@@ -55,11 +56,10 @@ public class PostController {
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.GET)
 	public String getNewPosts (@ModelAttribute Post post, @RequestParam(value = "query", required=false) String query) {
-		if (query==null){
-			query="";
+		PostResponse postResponse= postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(),query);
+		if (postResponse!=null){
+			postService.addPosts(postResponse.getPosts());
 		}
-		List<Post> posts = postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(),query).getPosts();
-		postService.addPosts(posts);
 		return home;
 	}
 

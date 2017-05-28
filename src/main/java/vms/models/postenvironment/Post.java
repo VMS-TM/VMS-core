@@ -46,7 +46,7 @@ public class Post implements Serializable {
     @JsonProperty("post_id")
     private int post_id;
 
-    @Column(name = "text",length=32536)
+    @Column(name = "text",length=16000)
     @JsonProperty("text")
     private String text;
 

@@ -21,7 +21,7 @@
         <div class="col-md-2 colxxx sidebar">
             <ul class="nav nav-tabs nav-stacked">
                 <li><a href="/main">Groups for search </a></li>
-                <li><a href="/posts">Post from VK groups</a></li>
+                <li><a href="/post/">Post from VK groups</a></li>
                 <li><a href="/showgroups">Поиск групп</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
@@ -43,15 +43,16 @@
                     <tr>
                         <th></th>
                         <th>date</th>
-                        <th>value</th>
+                        <th>source id</th>
+                        <th>text</th>
                         <th>actions</th>
-                        <th></th>
                         <th></th>
                     </tr>
                     <tr th:each="post : ${posts}">
                         <form  th:action="@{/post/update}" th:object="${post}" method="post">
                             <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
                             <td ><input type="text" name="date"  th:value="${post.date}"  /> </td>
+                            <td ><input type="text" name="date"  th:value="${post.ownerId}"  /> </td>
                             <td ><textarea class="form-control" rows="13" name="text" th:text="${post.text}"></textarea> </td>
                             <td><input type="submit" class="btn btn-default" value="update" /></td>
                         </form>

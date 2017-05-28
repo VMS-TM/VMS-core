@@ -14,13 +14,13 @@ import java.util.ArrayList;
 @Service
 public class PostSearchServiceImpl implements PostSearchService {
     //constants for query
-    final String ACCESS_TOKEN = "f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4";
+    final String ACCESS_TOKEN = "808bcfd51bd94b4d0593a2dda57037fc4fdc46cac46e20d1b260c1a90d88b4c23023dd977e9639f7f8279";
     final String uri = "https://api.vk.com/method";
     final String version = "&v=5.63";
     private int count = 0;
 
     /**
-     * confirm one response object from any
+     * confirm one PostResponse object from any PostResponse
      *
      * @param groups list of Groups
      * @param query keywords for search
@@ -32,12 +32,18 @@ public class PostSearchServiceImpl implements PostSearchService {
         int count = 0;
         ArrayList<Post> posts = new ArrayList<>();
         for (Group group : groups) {
-            postResponse = getPostResponseByGroupName(group.getName(),query);
-            posts.addAll(postResponse.getPosts());
-            count += postResponse.getCount();
+            postResponse = getPostResponseByGroupName(group.getId(),query);
+            //check when we don't have access to walls of groups
+            if (postResponse != null){
+                posts.addAll(postResponse.getPosts());
+                count += postResponse.getCount();
+            }
         }
-        postResponse.setPosts(posts);
-        postResponse.setCount(count);
+        //when we don't have access to all walls of groups
+        if (posts.size()>0){
+            postResponse.setPosts(posts);
+            postResponse.setCount(count);
+        }
         return postResponse;
     }
     @Override
@@ -48,10 +54,10 @@ public class PostSearchServiceImpl implements PostSearchService {
     }
 
 
-    private String getUriQueryWall(String domain, String query){
+    private String getUriQueryWall(String ownerId, String query){
         StringBuilder sb =  new StringBuilder(uri);
-        sb.append("/wall.search?domain=");
-        sb.append(domain);
+        sb.append("/wall.search?owner_id=-");
+        sb.append(ownerId);
         sb.append("&v=5.63");
         sb.append("&query=");
         sb.append(query);
@@ -60,10 +66,10 @@ public class PostSearchServiceImpl implements PostSearchService {
         return sb.toString();
     }
 
-    private String getUriQueryWall(String domain, String query, int count){
+    private String getUriQueryWall(String ownerId, String query, int count){
         StringBuilder sb =  new StringBuilder(uri);
-        sb.append("/wall.search").append("?").append("domain=");
-        sb.append(domain);
+        sb.append("/wall.search?owner_id=");
+        sb.append(ownerId);
         sb.append("&v=5.63");
         sb.append("&count=");
         sb.append(count);

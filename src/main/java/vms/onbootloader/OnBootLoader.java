@@ -40,22 +40,13 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
     public void loadGroups() {
 
         Group first = new Group();
-        first.setId("1111111");
-        first.setName("Тестовая Группа 1");
-        first.setScreenName("testgroup1");
+        first.setId("57466174");
+        first.setName("Уютное гнездышко / поиск жилья и соседей / СПБ");
+        first.setScreenName("yuytnoe_gnezdishko");
 
         groupService.saveGroup(first);
 
         log.info("Saved second - id: " + first.getId());
-
-        Group second = new Group();
-        second.setId("2222222");
-        second.setName("Тестовая Группа 2");
-        second.setScreenName("testgroup2");
-
-        groupService.saveGroup(second);
-
-        log.info("Saved second - id:" + second.getId());
     }
 
     private void loadUsers() {

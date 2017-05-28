@@ -46,7 +46,7 @@ public class Post implements Serializable {
     @JsonProperty("post_id")
     private int post_id;
 
-    @Column(name = "text",length=32536)
+    @Column(name = "text",length=16000)
     @JsonProperty("text")
     private String text;
 
@@ -94,5 +94,31 @@ public class Post implements Serializable {
         this.date = date;
         this.post_id = post_id;
         this.text = text;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post)) return false;
+
+        Post post = (Post) o;
+
+        if (id != post.id) return false;
+        if (from_id != post.from_id) return false;
+        if (owner_id != post.owner_id) return false;
+        if (post_id != post.post_id) return false;
+        if (!date.equals(post.date)) return false;
+        return text != null ? text.equals(post.text) : post.text == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + from_id;
+        result = 31 * result + owner_id;
+        result = 31 * result + date.hashCode();
+        result = 31 * result + post_id;
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        return result;
     }
 }

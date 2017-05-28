@@ -28,23 +28,24 @@ public class PostSearchServiceImpl implements PostSearchService {
      */
     @Override
     public PostResponse getPostResponseByGroupsList(Iterable<Group> groups, String query) {
-        PostResponse postResponse = new PostResponse();
+        PostResponse postResponseSum = new PostResponse();
+        PostResponse postResponseCurrent = new PostResponse();
         int count = 0;
         ArrayList<Post> posts = new ArrayList<>();
         for (Group group : groups) {
-            postResponse = getPostResponseByGroupName(group.getId(),query);
+            postResponseCurrent = getPostResponseByGroupName(group.getId(),query);
             //check when we don't have access to walls of groups
-            if (postResponse != null){
-                posts.addAll(postResponse.getPosts());
-                count += postResponse.getCount();
+            if (postResponseCurrent != null){
+                posts.addAll(postResponseCurrent.getPosts());
+                count += postResponseCurrent.getCount();
             }
         }
         //when we don't have access to all walls of groups
         if (posts.size()>0){
-            postResponse.setPosts(posts);
-            postResponse.setCount(count);
+            postResponseSum.setPosts(posts);
+            postResponseSum.setCount(count);
         }
-        return postResponse;
+        return postResponseSum;
     }
     @Override
     public PostResponse getPostResponseByGroupName(String nameGroup, String query){
@@ -61,6 +62,7 @@ public class PostSearchServiceImpl implements PostSearchService {
         sb.append("&v=5.63");
         sb.append("&query=");
         sb.append(query);
+        sb.append("&count=100");
         sb.append("&access_token=");
         sb.append(ACCESS_TOKEN);
         return sb.toString();

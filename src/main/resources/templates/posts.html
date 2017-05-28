@@ -36,6 +36,11 @@
                     <td ><input required="required" type="text" name="query" /></td>
                     <td><input type="submit"  class="btn btn-default" value="Запросить посты из группы сейчас" /></td>
                 </form>
+                <h3>
+                    <span class="label label-info">Found Posts<span class="badge" th:if="${FoundCount != null}" th:text="${FoundCount}"></span></span>
+                    <span class="label label-info">Getting Posts<span class="badge" th:if="${GettingCount != null}" th:text="${GettingCount}"></span></span>
+                    <span class="label label-info">All Posts<span class="badge" th:if="${AllPosts != null}" th:text="${AllPosts}"></span></span>
+                </h3>
                 <table class="table table-striped">
                     <thead>  </thead>
                     <tbody>

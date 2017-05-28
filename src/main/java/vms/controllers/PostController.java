@@ -32,7 +32,9 @@ public class PostController {
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model){
-		model.addAttribute("posts",postService.getAllPostFromDb());
+		List<Post> posts = postService.getAllPostFromDb();
+		model.addAttribute("posts",posts);
+		model.addAttribute("AllPosts",posts.size());
 		return "posts";
 	}
 
@@ -55,10 +57,16 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.GET)
-	public String getNewPosts (@ModelAttribute Post post, @RequestParam(value = "query", required=false) String query) {
+	public String getNewPosts (Model model, @ModelAttribute Post post, @RequestParam(value = "query", required=false) String query) {
 		PostResponse postResponse= postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(),query);
 		if (postResponse!=null){
 			postService.addPosts(postResponse.getPosts());
+			List<Post> posts = postService.getAllPostFromDb();
+			model.addAttribute("posts", posts);
+			model.addAttribute("AllPosts",posts.size());
+			model.addAttribute("FoundCount",postResponse.getCount());
+			model.addAttribute("GettingCount",postResponse.getPosts().size());
+			return "posts";
 		}
 		return home;
 	}

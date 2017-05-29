@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import vms.models.ProxyServer;
 import vms.models.Role;
 import vms.models.User;
 import vms.models.rawgroup.Group;
 import org.apache.log4j.Logger;
 import vms.services.absr.GroupService;
+import vms.services.absr.ProxyServerService;
 import vms.services.absr.RoleService;
 import vms.services.absr.UserService;
 
@@ -26,6 +28,8 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private ProxyServerService proxyServerService;
 
     private Logger log = Logger.getLogger(OnBootLoader  .class);
 
@@ -35,6 +39,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
     public void onApplicationEvent(ContextRefreshedEvent event) {
         loadGroups();
         loadUsers();
+        loadProxyServers();
     }
 
     public void loadGroups() {
@@ -75,12 +80,21 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
         user2.setPassword("admin");
         user2.setRoles(roleSet);
         userService.saveOrUpdateUser(user2);
-
-
     }
 
+    private void loadProxyServers(){
+        ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
+                "808bcfd51bd94b4d0593a2dda57037fc4fdc46cac46e20d1b260c1a90d88b4c23023dd977e9639f7f8279",
+                "49.86.143.1", 8090L);
 
+        ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
+                "5b9f338a526931a178f79a13c11bd0595b183532e4ad2da2e26caba388012ce21387c8322b715348e6df8",
+                "55.204.100.108", 13801L);
 
-
+        proxyServerService.addProxyServer(firstProxyServer);
+        log.info("Saved proxy server with ip:" + firstProxyServer.getIp());
+        proxyServerService.addProxyServer(secondProxyServer);
+        log.info("Saved proxy server with ip:" + secondProxyServer.getIp());
+    }
 }
 

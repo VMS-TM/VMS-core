@@ -1,0 +1,42 @@
+/* Файл стилей, для изменения стандартных бутстраповских */
+
+/* Делает btn-primary чёрного цвета */
+.dark-button-primary{
+    background-color: #222222;
+    border-color: #000000;
+}
+
+.dark-button-primary:focus,
+.dark-button-primary.focus {
+    color: #ffffff;
+    background-color: #101010;
+    border-color: #000000;
+}
+
+.dark-button-primary:hover {
+    color: #ffffff;
+    background-color: #101010;
+    border-color: #000000;
+}
+
+.dark-button-primary:active,
+.dark-button-primary.active,
+.open > .dropdown-toggle.btn-primary {
+    color: #ffffff;
+    background-color: #101010;
+    border-color: #000000;
+}
+
+.dark-button-primary:active:hover,
+.dark-button-primary.active:hover,
+.open > .dropdown-toggle.dark-button-primary:hover,
+.dark-button-primary:active:focus,
+.dark-button-primary.active:focus,
+.open > .dropdown-toggle.dark-button-primary:focus,
+.dark-button-primary:active.focus,
+.dark-button-primary.active.focus,
+.open > .dropdown-toggle.dark-button-primary.focus {
+    color: #ffffff;
+    background-color: #000000;
+    border-color: #000000;
+}

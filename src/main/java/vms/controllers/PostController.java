@@ -13,10 +13,7 @@ import vms.services.absr.GroupService;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.VkPostService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/post")
@@ -63,8 +60,14 @@ public class PostController {
 	public String getNewPosts (Model model, @ModelAttribute Post post, @RequestParam(value = "query", required=false) String query) {
 		PostResponse postResponse= postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(),query);
 		if (postResponse!=null){
-			ArrayList listPosts = postResponse.getPosts();
+			ArrayList<Post> listPosts = postResponse.getPosts();
 			Collections.sort(listPosts, Comparator.comparing(Post::getDate).reversed());
+
+			for (Iterator<Post> iter = listPosts.listIterator(); iter.hasNext(); ) {
+				Post postCurrent = iter.next();
+				postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
+			}
+
 			postService.addPosts(listPosts);
 			List<Post> posts = postService.getAllPostFromDb();
 			model.addAttribute("posts", posts);

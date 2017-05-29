@@ -38,8 +38,7 @@ public class ProxyPropertiesController {
 	}
 
 	@RequestMapping(value = "/properties/proxy/add", method = RequestMethod.POST)
-	public String addProxyServers(ModelMap modelMap,
-								  @Validated ProxyServer proxyServer,
+	public String addProxyServers(@Validated ProxyServer proxyServer,
 								  BindingResult bindingResult,
 								  @RequestParam(value = "login") String login,
 								  @RequestParam(value = "password") String password,
@@ -62,13 +61,17 @@ public class ProxyPropertiesController {
 	}
 
 	@RequestMapping(value = "/properties/proxy/edit", method = RequestMethod.POST)
-	public String editProxyServers(ModelMap modelMap,
+	public String editProxyServers(@Validated ProxyServer proxyServer,
+								   BindingResult bindingResult,
 								   @RequestParam(value = "id") Long id,
 								   @RequestParam(value = "login") String login,
 								   @RequestParam(value = "password") String password,
 								   @RequestParam(value = "token") String token,
 								   @RequestParam(value = "ip") String ip,
 								   @RequestParam(value = "port") Long port) {
+		if(bindingResult.hasErrors()){
+			return "redirect:/properties/proxy?hasNull";
+		}
 
 		ProxyServer server = new ProxyServer(id, login, password, token, ip, port);
 

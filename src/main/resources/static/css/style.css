@@ -1,6 +1,6 @@
-/* Файл стилей, для изменения стандартных бутстраповских */
+/* File for changing standard styles of bootstrap */
 
-/* Делает btn-primary чёрного цвета */
+/* btn-primary black color */
 .dark-button-primary{
     background-color: #222222;
     border-color: #000000;
@@ -39,4 +39,12 @@
     color: #ffffff;
     background-color: #000000;
     border-color: #000000;
+}
+
+/* adds elders if the field is too long */
+.cut-text{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 150px;
 }

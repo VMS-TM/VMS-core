@@ -26,15 +26,14 @@ public class ProxyPropertiesController {
 	}
 
 	@RequestMapping(value = "/properties/proxy", method = RequestMethod.POST)
-	public String delProxyServers(ModelMap modelMap, @RequestParam(value = "id") Long id) {
+	public String delProxyServers(@RequestParam(value = "id") Long id) {
 		proxyServerService.deleteProxyServer(id);
 
 		return "redirect:/properties/proxy";
 	}
 
 	@RequestMapping(value = "/properties/proxy/add", method = RequestMethod.GET)
-	public String pageProxyServersAdd(ModelMap modelMap) {
-
+	public String pageProxyServersAdd() {
 		return "addProxy";
 	}
 

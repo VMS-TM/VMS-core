@@ -10,7 +10,6 @@ import vms.services.absr.ProxyServerService;
 import java.util.List;
 
 @Service
-@Transactional
 public class ProxyServerServiceImpl implements ProxyServerService {
 
 	@Autowired

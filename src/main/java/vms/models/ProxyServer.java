@@ -61,32 +61,6 @@ public class ProxyServer {
 		this.port = port;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		ProxyServer that = (ProxyServer) o;
-
-		if (id != null ? !id.equals(that.id) : that.id != null) return false;
-		if (login != null ? !login.equals(that.login) : that.login != null) return false;
-		if (password != null ? !password.equals(that.password) : that.password != null) return false;
-		if (token != null ? !token.equals(that.token) : that.token != null) return false;
-		if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
-		return port != null ? port.equals(that.port) : that.port == null;
-	}
-
-	@Override
-	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (login != null ? login.hashCode() : 0);
-		result = 31 * result + (password != null ? password.hashCode() : 0);
-		result = 31 * result + (token != null ? token.hashCode() : 0);
-		result = 31 * result + (ip != null ? ip.hashCode() : 0);
-		result = 31 * result + (port != null ? port.hashCode() : 0);
-		return result;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -133,5 +107,31 @@ public class ProxyServer {
 
 	public void setPort(Long port) {
 		this.port = port;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ProxyServer that = (ProxyServer) o;
+
+		if (id != null ? !id.equals(that.id) : that.id != null) return false;
+		if (login != null ? !login.equals(that.login) : that.login != null) return false;
+		if (password != null ? !password.equals(that.password) : that.password != null) return false;
+		if (token != null ? !token.equals(that.token) : that.token != null) return false;
+		if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
+		return port != null ? port.equals(that.port) : that.port == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (login != null ? login.hashCode() : 0);
+		result = 31 * result + (password != null ? password.hashCode() : 0);
+		result = 31 * result + (token != null ? token.hashCode() : 0);
+		result = 31 * result + (ip != null ? ip.hashCode() : 0);
+		result = 31 * result + (port != null ? port.hashCode() : 0);
+		return result;
 	}
 }

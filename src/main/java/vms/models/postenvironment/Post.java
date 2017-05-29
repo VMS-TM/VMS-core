@@ -53,6 +53,13 @@ public class Post implements Serializable {
     @JsonProperty("attachmentContainers")
     private ArrayList<AttachmentContainer> attachmentContainers;
 
+    @JsonProperty("marked_as_ads")
+    private int marked_as_ads;
+
+    public int getMarkedAsAds() { return this.marked_as_ads; }
+
+    public void setMarkedAsAds(int marked_as_ads) { this.marked_as_ads = marked_as_ads; }
+
     public int getFromId() { return this.from_id; }
 
     public void setFromId(int from_id) { this.from_id = from_id; }

@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import vms.services.absr.PostSearchService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -18,6 +19,9 @@ public class PostSearchServiceImpl implements PostSearchService {
     final String uri = "https://api.vk.com/method";
     final String version = "&v=5.63";
     private int count = 0;
+
+
+    private List<RootObject> rootObjectList = new ArrayList<>();
 
     /**
      * confirm one PostResponse object from any PostResponse
@@ -51,6 +55,9 @@ public class PostSearchServiceImpl implements PostSearchService {
     public PostResponse getPostResponseByGroupName(String nameGroup, String query){
         RestTemplate restTemplate = new RestTemplate();
         RootObject rootObject  = restTemplate.getForObject(getUriQueryWall(nameGroup, query),RootObject.class);
+
+        rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
+
         return rootObject.getPostResponse();
     }
 

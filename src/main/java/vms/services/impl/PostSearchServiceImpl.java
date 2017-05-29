@@ -20,9 +20,6 @@ public class PostSearchServiceImpl implements PostSearchService {
     final String version = "&v=5.63";
     private int count = 0;
 
-
-    private List<RootObject> rootObjectList = new ArrayList<>();
-
     /**
      * confirm one PostResponse object from any PostResponse
      *
@@ -56,9 +53,15 @@ public class PostSearchServiceImpl implements PostSearchService {
         RestTemplate restTemplate = new RestTemplate();
         RootObject rootObject  = restTemplate.getForObject(getUriQueryWall(nameGroup, query),RootObject.class);
 
-        rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
+        if (rootObject.getPostResponse() != null) {
 
-        return rootObject.getPostResponse();
+            rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
+
+            return rootObject.getPostResponse();
+
+        }
+
+        return null;
     }
 
 

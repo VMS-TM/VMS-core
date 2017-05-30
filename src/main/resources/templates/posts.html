@@ -47,10 +47,11 @@
                     <tbody>
                     <!-- начало строки -->
                     <tr>
-                        <th></th>
                         <th>group</th>
+                        <th></th>
                         <th>date</th>
                         <th>text</th>
+                        <th></th>
                         <th>actions</th>
                         <th></th>
                     </tr>
@@ -58,8 +59,8 @@
                         <form  th:action="@{/post/update}" th:object="${post}" method="post">
                             <td th:text="'https://vk.com/club'+${post.ownerId}">group</td>
                             <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
-                            <td th:text="${post.date}">date</td>
-                            <td ><textarea class="form-control" rows="13" name="text" th:text="${post.text}"></textarea> </td>
+                            <td width="100" th:text="${post.date}">date</td>
+                            <td width="400"><textarea class="form-control"  rows="13" name="text" th:text="${post.text}"></textarea> </td>
                             <td><input type="submit" class="btn btn-default" value="update" /></td>
                         </form>
                         <form  th:action="@{/post/delete}" th:object="${post}" method="post">

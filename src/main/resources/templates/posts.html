@@ -57,7 +57,7 @@
                     </tr>
                     <tr th:each="post : ${posts}">
                         <form  th:action="@{/post/update}" th:object="${post}" method="post">
-                            <td th:text="'https://vk.com/club'+${post.ownerId}">group</td>
+                            <td><a th:href="@{'https://vk.com/club'+${post.ownerId}}">view</a></td>
                             <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
                             <td width="100" th:text="${post.date}">date</td>
                             <td width="400"><textarea class="form-control"  rows="13" name="text" th:text="${post.text}"></textarea> </td>

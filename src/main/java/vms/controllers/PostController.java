@@ -1,5 +1,6 @@
 package vms.controllers;
 
+import com.vdurmont.emoji.EmojiParser;
 import org.springframework.web.bind.annotation.RequestParam;
 import vms.models.postenvironment.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,8 @@ public class PostController {
 
 	 for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
 		 Post postCurrent = iter.next();
+		 String removedNoTag = postCurrent.getText().replaceAll("[id+\\d+|]","");
+		 postCurrent.setText(EmojiParser.removeAllEmojis(removedNoTag));
 		 postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
 	 }
  }

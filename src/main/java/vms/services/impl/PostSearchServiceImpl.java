@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import vms.services.absr.PostSearchService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
@@ -52,15 +51,10 @@ public class PostSearchServiceImpl implements PostSearchService {
     public PostResponse getPostResponseByGroupName(String nameGroup, String query){
         RestTemplate restTemplate = new RestTemplate();
         RootObject rootObject  = restTemplate.getForObject(getUriQueryWall(nameGroup, query),RootObject.class);
-
         if (rootObject.getPostResponse() != null) {
-
             rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
-
             return rootObject.getPostResponse();
-
         }
-
         return null;
     }
 

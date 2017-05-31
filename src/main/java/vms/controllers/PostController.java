@@ -61,15 +61,10 @@ public class PostController {
 		PostResponse postResponse= postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(),query);
 		if (postResponse!=null){
 			ArrayList<Post> listPosts = postResponse.getPosts();
-			Collections.sort(listPosts, Comparator.comparing(Post::getDate).reversed());
-
-			for (Iterator<Post> iter = listPosts.listIterator(); iter.hasNext(); ) {
-				Post postCurrent = iter.next();
-				postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
-			}
-
 			postService.addPosts(listPosts);
 			List<Post> posts = postService.getAllPostFromDb();
+			Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
+			preparationPost(posts);
 			model.addAttribute("posts", posts);
 			model.addAttribute("AllPosts",posts.size());
 			model.addAttribute("FoundCount",postResponse.getCount());
@@ -78,6 +73,12 @@ public class PostController {
 		}
 		return home;
 	}
+  void preparationPost (List<Post> posts){
 
+	 for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
+		 Post postCurrent = iter.next();
+		 postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
+	 }
+ }
 
 }

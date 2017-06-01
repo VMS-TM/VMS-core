@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import vms.models.Property;
 import vms.models.ProxyServer;
 import vms.models.Role;
 import vms.models.User;
 import vms.models.rawgroup.Group;
 import org.apache.log4j.Logger;
-import vms.services.absr.GroupService;
-import vms.services.absr.ProxyServerService;
-import vms.services.absr.RoleService;
-import vms.services.absr.UserService;
+import vms.services.absr.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +25,8 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private PropertyService propertyService;
 
     @Autowired
     private ProxyServerService proxyServerService;
@@ -40,6 +40,17 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
         loadGroups();
         loadUsers();
         loadProxyServers();
+        loadProperty();
+    }
+
+    private void loadProperty() {
+        Property RateProperty = new Property();
+
+        RateProperty.setName("rate");
+        RateProperty.setValue("30000");
+
+        propertyService.addProperty(RateProperty);
+
     }
 
     public void loadGroups() {

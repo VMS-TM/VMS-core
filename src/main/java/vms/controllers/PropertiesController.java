@@ -21,8 +21,8 @@ public class PropertiesController {
     private PropertyService propertyService;
 
     @RequestMapping(value = {"/properties"}, method = RequestMethod.GET)
-    public String getAllProperty (Model model) {
-        model.addAttribute("properties",propertyService.getAllProperties());
+    public String getAllProperty(Model model) {
+        model.addAttribute("properties", propertyService.getAllProperties());
         model.addAttribute(new Property());
         return "properties";
     }
@@ -30,13 +30,13 @@ public class PropertiesController {
     @RequestMapping(value = {"/properties/add"}, method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
     public String addProperty(@ModelAttribute @Validated Property property, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "redirect:/properties?hasNull";
         }
 
         try {
             propertyService.addProperty(property);
-        }catch (Exception exp){
+        } catch (Exception exp) {
             return "redirect:/properties?duplicate";
         }
         return home;
@@ -45,13 +45,13 @@ public class PropertiesController {
     @RequestMapping(value = {"/properties/update"}, method = RequestMethod.POST)
     public String updateProperty(@ModelAttribute @Validated Property property, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "redirect:/properties?hasNull";
         }
 
         try {
             propertyService.updateProperty(property);
-        }catch (Exception exp){
+        } catch (Exception exp) {
             return "redirect:/properties?duplicate";
         }
 
@@ -60,7 +60,7 @@ public class PropertiesController {
     }
 
     @RequestMapping(value = {"/properties/delete"}, method = RequestMethod.POST)
-    public String delProperty(@ModelAttribute  Property property) {
+    public String delProperty(@ModelAttribute Property property) {
         propertyService.deleteProperty(property);
         return home;
     }

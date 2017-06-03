@@ -52,26 +52,26 @@
                     <tr>
                         <th>группа</th>
                         <th></th>
-                        <th>дата</th>
-                        <th>текст</th>
-                        <th></th>
                         <th>действия</th>
+                        <th></th>
+                        <th>текст</th>
+                        <th>дата</th>
                         <th></th>
                     </tr>
                     <tr th:each="post : ${posts}">
                         <form th:action="@{/post/update}" th:object="${post}" method="post">
                             <td><a class="btn btn-primary"
-                                   th:href="@{'https://vk.com/public' + ${post.ownerId} + '?w=wall-' + ${post.ownerId} + '_' + ${post.id}}">view</a>
+                                   th:href="@{'https://vk.com/public' + ${post.ownerId} + '?w=wall-' + ${post.ownerId} + '_' + ${post.id}}">Посмотреть</a>
                             </td>
-                            <td><input type="hidden" name="id" th:value="${post.id}"/></td>
-                            <td width="100" th:text="${post.date}">date</td>
+                            <td><input type="submit" class="btn btn-default" value="Объявление"/></td>
+                            <form th:action="@{/post/delete}" th:object="${post}" method="post">
+                                <td><input type="hidden" name="id" th:value="${post.id}"/></td>
+                                <td><input type="submit" class="btn btn-default" value="удалить"/></td>
+                            </form>
                             <td width="400"><textarea class="form-control" rows="13" name="text" th:text="${post.text}"></textarea></td>
-                            <td><input type="submit" class="btn btn-default" value="Изменить"/></td>
+                            <td width="100" th:text="${post.date}">Дата</td>
                         </form>
-                        <form th:action="@{/post/delete}" th:object="${post}" method="post">
-                            <td><input type="hidden" name="id" th:value="${post.id}"/></td>
-                            <td><input type="submit" class="btn btn-default" value="удалить"/></td>
-                        </form>
+
                     </tr>
                     <tr>
                     </tr>

@@ -17,7 +17,6 @@ import java.util.Date;
 public class Post implements Serializable {
 
 	@Id
-	@GeneratedValue
 	@Column(name = "id")
 	@JsonProperty("id")
 	public int id;
@@ -120,9 +119,14 @@ public class Post implements Serializable {
 	@Override
 	public String toString() {
 		return "Post{" +
-				"date=" + date +
+				"id=" + id +
+				", from_id=" + from_id +
+				", owner_id=" + owner_id +
+				", date=" + date +
 				", post_id=" + post_id +
 				", text='" + text + '\'' +
+				", attachmentContainers=" + attachmentContainers +
+				", marked_as_ads=" + marked_as_ads +
 				'}';
 	}
 

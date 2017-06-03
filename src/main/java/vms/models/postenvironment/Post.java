@@ -16,116 +16,147 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Post implements Serializable {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    @JsonProperty("id")
-    public int id;
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
+	@JsonProperty("id")
+	public int id;
 
-    //id of users
-    @Column(name = "from_id")
-    @JsonProperty("from_id")
-    private int from_id;
-    public Post() {
-    }
+	//id of users
+	@Column(name = "from_id")
+	@JsonProperty("from_id")
+	private int from_id;
 
-    public int getId() { return this.id; }
+	public Post() {
+	}
 
-    public void setId(int id) { this.id = id; }
+	public int getId() {
+		return this.id;
+	}
 
-    //id of groups(source)
-    @Column(name = "owner_id")
-    @JsonProperty("owner_id")
-    private int owner_id;
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    @Column(name = "date")
-    @JsonProperty("date")
-    private Date date;
+	//id of groups(source)
+	@Column(name = "owner_id")
+	@JsonProperty("owner_id")
+	private int owner_id;
 
-    @Column(name = "post_id")
-    @JsonProperty("post_id")
-    private int post_id;
+	@Column(name = "date")
+	@JsonProperty("date")
+	private Date date;
 
-    @Column(name = "text",length=16000)
-    @JsonProperty("text")
-    private String text;
+	@Column(name = "post_id")
+	@JsonProperty("post_id")
+	private int post_id;
 
-    @JsonProperty("attachmentContainers")
-    private ArrayList<AttachmentContainer> attachmentContainers;
+	@Column(name = "text", length = 16000)
+	@JsonProperty("text")
+	private String text;
 
-    @JsonProperty("marked_as_ads")
-    private int marked_as_ads;
+	@JsonProperty("attachmentContainers")
+	private ArrayList<AttachmentContainer> attachmentContainers;
 
-    public int getMarkedAsAds() { return this.marked_as_ads; }
+	@JsonProperty("marked_as_ads")
+	private int marked_as_ads;
 
-    public void setMarkedAsAds(int marked_as_ads) { this.marked_as_ads = marked_as_ads; }
+	public int getMarkedAsAds() {
+		return this.marked_as_ads;
+	}
 
-    public int getFromId() { return this.from_id; }
+	public void setMarkedAsAds(int marked_as_ads) {
+		this.marked_as_ads = marked_as_ads;
+	}
 
-    public void setFromId(int from_id) { this.from_id = from_id; }
+	public int getFromId() {
+		return this.from_id;
+	}
 
-    public int getOwnerId() { return this.owner_id; }
+	public void setFromId(int from_id) {
+		this.from_id = from_id;
+	}
 
-    public void setOwnerId(int owner_id) { this.owner_id = owner_id; }
+	public int getOwnerId() {
+		return this.owner_id;
+	}
 
-    public Date getDate() { return this.date; }
+	public void setOwnerId(int owner_id) {
+		this.owner_id = owner_id;
+	}
 
-    public void setDate(int date) {
-        this.date = Date.from(Instant.ofEpochSecond((date))) ;
-    }
+	public Date getDate() {
+		return this.date;
+	}
 
-    public int getPostId() { return this.post_id; }
+	public void setDate(int date) {
+		this.date = Date.from(Instant.ofEpochSecond((date)));
+	}
 
-    public void setPostId(int post_id) { this.post_id = post_id; }
+	public int getPostId() {
+		return this.post_id;
+	}
 
-    public String getText() { return this.text; }
+	public void setPostId(int post_id) {
+		this.post_id = post_id;
+	}
 
-    public void setText(String text) { this.text = text; }
+	public String getText() {
+		return this.text;
+	}
 
-    public ArrayList<AttachmentContainer> getAttachmentContainers() { return this.attachmentContainers; }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public void setAttachmentContainers(ArrayList<AttachmentContainer> attachmentContainers) { this.attachmentContainers = attachmentContainers; }
+	public ArrayList<AttachmentContainer> getAttachmentContainers() {
+		return this.attachmentContainers;
+	}
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "date=" + date +
-                ", post_id=" + post_id +
-                ", text='" + text + '\'' +
-                '}';
-    }
+	public void setAttachmentContainers(ArrayList<AttachmentContainer> attachmentContainers) {
+		this.attachmentContainers = attachmentContainers;
+	}
 
-    public Post(int from_id, int owner_id, int Date, int post_id, String text) {
-        this.from_id = from_id;
-        this.owner_id = owner_id;
-        this.date = date;
-        this.post_id = post_id;
-        this.text = text;
-    }
+	@Override
+	public String toString() {
+		return "Post{" +
+				"date=" + date +
+				", post_id=" + post_id +
+				", text='" + text + '\'' +
+				'}';
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Post)) return false;
+	public Post(int from_id, int owner_id, int Date, int post_id, String text) {
+		this.from_id = from_id;
+		this.owner_id = owner_id;
+		this.date = date;
+		this.post_id = post_id;
+		this.text = text;
+	}
 
-        Post post = (Post) o;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Post)) return false;
 
-        if (id != post.id) return false;
-        if (from_id != post.from_id) return false;
-        if (owner_id != post.owner_id) return false;
-        if (post_id != post.post_id) return false;
-        if (!date.equals(post.date)) return false;
-        return text != null ? text.equals(post.text) : post.text == null;
-    }
+		Post post = (Post) o;
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + from_id;
-        result = 31 * result + owner_id;
-        result = 31 * result + date.hashCode();
-        result = 31 * result + post_id;
-        result = 31 * result + (text != null ? text.hashCode() : 0);
-        return result;
-    }
+		if (id != post.id) return false;
+		if (from_id != post.from_id) return false;
+		if (owner_id != post.owner_id) return false;
+		if (post_id != post.post_id) return false;
+		if (!date.equals(post.date)) return false;
+		return text != null ? text.equals(post.text) : post.text == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + from_id;
+		result = 31 * result + owner_id;
+		result = 31 * result + date.hashCode();
+		result = 31 * result + post_id;
+		result = 31 * result + (text != null ? text.hashCode() : 0);
+		return result;
+	}
 }

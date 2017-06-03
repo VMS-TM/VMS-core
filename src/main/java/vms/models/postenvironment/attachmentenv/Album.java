@@ -7,58 +7,90 @@ import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Album implements Serializable {
-  private String id;
+	private String id;
 
-  @JsonProperty("thumb")
-  private Thumb thumb;
+	@JsonProperty("thumb")
+	private Thumb thumb;
 
-  @JsonProperty("owner_id")
-  private int owner_id;
+	@JsonProperty("owner_id")
+	private int owner_id;
 
-  @JsonProperty("title")
-  private String title;
+	@JsonProperty("title")
+	private String title;
 
-  @JsonProperty("description")
-  private String description;
+	@JsonProperty("description")
+	private String description;
 
-  @JsonProperty("created")
-  private int created;
+	@JsonProperty("created")
+	private int created;
 
-  @JsonProperty("updated")
-  private int updated;
+	@JsonProperty("updated")
+	private int updated;
 
-  @JsonProperty("size")
-  private int size;
+	@JsonProperty("size")
+	private int size;
 
-  public String getId() { return this.id; }
+	public String getId() {
+		return this.id;
+	}
 
-  public void setId(String id) { this.id = id; }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-  public Thumb getThumb() { return this.thumb; }
+	public Thumb getThumb() {
+		return this.thumb;
+	}
 
-  public void setThumb(Thumb thumb) { this.thumb = thumb; }
+	public void setThumb(Thumb thumb) {
+		this.thumb = thumb;
+	}
 
-  public int getOwnerId() { return this.owner_id; }
+	public int getOwnerId() {
+		return this.owner_id;
+	}
 
-  public void setOwnerId(int owner_id) { this.owner_id = owner_id; }
+	public void setOwnerId(int owner_id) {
+		this.owner_id = owner_id;
+	}
 
-  public String getTitle() { return this.title; }
+	public String getTitle() {
+		return this.title;
+	}
 
-  public void setTitle(String title) { this.title = title; }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public String getDescription() { return this.description; }
+	public String getDescription() {
+		return this.description;
+	}
 
-  public void setDescription(String description) { this.description = description; }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-  public int getCreated() { return this.created; }
+	public int getCreated() {
+		return this.created;
+	}
 
-  public void setCreated(int created) { this.created = created; }
+	public void setCreated(int created) {
+		this.created = created;
+	}
 
-  public int getUpdated() { return this.updated; }
+	public int getUpdated() {
+		return this.updated;
+	}
 
-  public void setUpdated(int updated) { this.updated = updated; }
+	public void setUpdated(int updated) {
+		this.updated = updated;
+	}
 
-  public int getSize() { return this.size; }
+	public int getSize() {
+		return this.size;
+	}
 
-  public void setSize(int size) { this.size = size; }
+	public void setSize(int size) {
+		this.size = size;
+	}
 }

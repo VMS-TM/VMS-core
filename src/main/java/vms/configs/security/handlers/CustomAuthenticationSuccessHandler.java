@@ -19,54 +19,54 @@ import java.util.Collection;
 
 @Service
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-    //Вызывается когда пользователь удачно аутентифицировался
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        handle(httpServletRequest, httpServletResponse, authentication);
-        clearAuthenticationAttributes(httpServletRequest);
-    }
+	//Вызывается когда пользователь удачно аутентифицировался
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+		handle(httpServletRequest, httpServletResponse, authentication);
+		clearAuthenticationAttributes(httpServletRequest);
+	}
 
-    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        String targetUrl = determineTargetUrl(authentication);
-        //Проверяет, не был ли уже отправлен ответ с сервера
-        if(response.isCommitted()){
-            System.out.println("Response has already been committed. Unable to redirect to" + targetUrl);
-        }
+	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+		String targetUrl = determineTargetUrl(authentication);
+		//Проверяет, не был ли уже отправлен ответ с сервера
+		if (response.isCommitted()) {
+			System.out.println("Response has already been committed. Unable to redirect to" + targetUrl);
+		}
 
-        redirectStrategy.sendRedirect(request, response, targetUrl);
-    }
+		redirectStrategy.sendRedirect(request, response, targetUrl);
+	}
 
-    protected String determineTargetUrl(Authentication authentication) {
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+	protected String determineTargetUrl(Authentication authentication) {
+		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
 
-        if(authorities.contains(new Role("ADMIN"))){
-            return "/main";
-        }else if(authorities.contains(new Role("USER"))){
-            return "/user";
-        }else {
-            //.......
-            return "/access_denied";
-        }
-    }
+		if (authorities.contains(new Role("ADMIN"))) {
+			return "/main";
+		} else if (authorities.contains(new Role("USER"))) {
+			return "/user";
+		} else {
+			//.......
+			return "/access_denied";
+		}
+	}
 
-    protected void clearAuthenticationAttributes (HttpServletRequest request){
-        //Возвращает сессию. Если текущего сеанса нет, то метод не будет создавать новый
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            return;
-        }
-        //Отключает кеширование исключительных ситуаций
-        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-    }
+	protected void clearAuthenticationAttributes(HttpServletRequest request) {
+		//Возвращает сессию. Если текущего сеанса нет, то метод не будет создавать новый
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return;
+		}
+		//Отключает кеширование исключительных ситуаций
+		session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+	}
 
-    public RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
+	public RedirectStrategy getRedirectStrategy() {
+		return redirectStrategy;
+	}
 
-    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
+	public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
+		this.redirectStrategy = redirectStrategy;
+	}
 }

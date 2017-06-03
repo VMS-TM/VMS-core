@@ -5,11 +5,11 @@ import vms.models.rawgroup.Group;
 
 public interface GroupService {
 
-    Iterable<Group> listAllVkGroups();
+	Iterable<Group> listAllVkGroups();
 
-    Group getGroupById(String id);
+	Group getGroupById(String id);
 
-    void saveGroup(Group user);
+	void saveGroup(Group user);
 
-    void deleteGroupById(String id);
+	void deleteGroupById(String id);
 }

@@ -19,40 +19,40 @@ import java.util.List;
 @Controller
 public class GroupController {
 
-    private static List<Group> resp;
-    @Autowired
-    GroupsSearchService groupsSearchService;
-    @Autowired
-    GroupRepository groupRepository;
+	private static List<Group> resp;
+	@Autowired
+	GroupsSearchService groupsSearchService;
+	@Autowired
+	GroupRepository groupRepository;
 
-    @RequestMapping(value = "/showgroups", method = RequestMethod.GET)
-    public String findGroups(Model model){
+	@RequestMapping(value = "/showgroups", method = RequestMethod.GET)
+	public String findGroups(Model model) {
 
-        Foo foo = new Foo();
-        List<String> checkedItems = new ArrayList<String>();
-        foo.setCheckedItems(checkedItems);
-        model.addAttribute("foo", foo);
-        return "findgroups";
-    }
+		Foo foo = new Foo();
+		List<String> checkedItems = new ArrayList<String>();
+		foo.setCheckedItems(checkedItems);
+		model.addAttribute("foo", foo);
+		return "findgroups";
+	}
 
-    @RequestMapping(value = "findgroups", method = RequestMethod.POST)
-    public String saveUser(Model model, @RequestParam("memberscount") String count,@RequestParam("first") String first, @RequestParam("second") String second) throws Exception {
+	@RequestMapping(value = "findgroups", method = RequestMethod.POST)
+	public String saveUser(Model model, @RequestParam("memberscount") String count, @RequestParam("first") String first, @RequestParam("second") String second) throws Exception {
 
-        resp = groupsSearchService.getPostsByGroupName(first, second, Integer.parseInt(count));
-        model.addAttribute("groups",resp );
-        Foo foo = new Foo();
-        model.addAttribute("foo", foo);
-        return "findgroups";
-    }
+		resp = groupsSearchService.getPostsByGroupName(first, second, Integer.parseInt(count));
+		model.addAttribute("groups", resp);
+		Foo foo = new Foo();
+		model.addAttribute("foo", foo);
+		return "findgroups";
+	}
 
-    @RequestMapping(value = "/processForm", method=RequestMethod.POST)
-    public String processForm(@ModelAttribute(value="foo") Foo foo) {
-        // Get value of checked item.
+	@RequestMapping(value = "/processForm", method = RequestMethod.POST)
+	public String processForm(@ModelAttribute(value = "foo") Foo foo) {
+		// Get value of checked item.
 
-        List<String> checkedItems = foo.getCheckedItems();
-        for(String s : checkedItems) {
-            groupRepository.save(resp.get(Integer.parseInt(s)));
-        }
- return "redirect:/main";
-    }
+		List<String> checkedItems = foo.getCheckedItems();
+		for (String s : checkedItems) {
+			groupRepository.save(resp.get(Integer.parseInt(s)));
+		}
+		return "redirect:/main";
+	}
 }

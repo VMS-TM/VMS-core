@@ -4,13 +4,13 @@ import vms.models.User;
 
 
 public interface UserService {
-    Iterable<User> listAllUsers();
+	Iterable<User> listAllUsers();
 
-    User getUserById(Integer id);
+	User getUserById(Integer id);
 
-    void saveOrUpdateUser(User user);
+	void saveOrUpdateUser(User user);
 
-    void deleteUser(Integer id);
+	void deleteUser(Integer id);
 
-    User getByUsername (String usrename);
+	User getByUsername(String username);
 }

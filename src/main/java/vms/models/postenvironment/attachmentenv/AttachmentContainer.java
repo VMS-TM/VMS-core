@@ -8,24 +8,36 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AttachmentContainer implements Serializable {
 
-  @JsonProperty("type")
-  private String type;
+	@JsonProperty("type")
+	private String type;
 
-  @JsonProperty("album")
-  private Album album;
+	@JsonProperty("album")
+	private Album album;
 
-  @JsonProperty("photo")
-  private Photo photo;
+	@JsonProperty("photo")
+	private Photo photo;
 
-  public String getType() { return this.type; }
+	public String getType() {
+		return this.type;
+	}
 
-  public void setType(String type) { this.type = type; }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-  public Photo getPhoto() { return this.photo; }
+	public Photo getPhoto() {
+		return this.photo;
+	}
 
-  public void setPhoto(Photo photo) { this.photo = photo; }
+	public void setPhoto(Photo photo) {
+		this.photo = photo;
+	}
 
-  public Album getAlbum() { return this.album; }
+	public Album getAlbum() {
+		return this.album;
+	}
 
-  public void setAlbum(Album album) { this.album = album; }
+	public void setAlbum(Album album) {
+		this.album = album;
+	}
 }

@@ -19,41 +19,41 @@ import java.util.List;
 @Controller
 public class ExtraPropertiesController {
 
-    @Autowired
-    private PostSearchService postSearchService;
+	@Autowired
+	private PostSearchService postSearchService;
 
-    @Autowired
-    private GroupService groupService;
+	@Autowired
+	private GroupService groupService;
 
-    @Autowired
-    private VkPostService postService;
+	@Autowired
+	private VkPostService postService;
 
 
-    @RequestMapping(value = "/properties/extra", method = RequestMethod.GET)
-    public String propertiesExtraMain() {
-        return "extraproperties";
-    }
+	@RequestMapping(value = "/properties/extra", method = RequestMethod.GET)
+	public String propertiesExtraMain() {
+		return "extraproperties";
+	}
 
-    @RequestMapping(value = "/properties/extra", method = RequestMethod.POST)
-    public String propertiesExtraOptions(@RequestParam(value = "options", required = false) int[] options, ModelMap modelMap) {
+	@RequestMapping(value = "/properties/extra", method = RequestMethod.POST)
+	public String propertiesExtraOptions(@RequestParam(value = "options", required = false) int[] options, ModelMap modelMap) {
 
-        if (options != null) {
-            for (int i = 0; i < options.length; i++) {
-                if (options[i] == 1) {
-                    List<Post> posts = postService.getAllPostFromDb();
-                    for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
-                        Post postCurrent = iter.next();
-                        String removedNoTag = postCurrent.getText().replaceAll("[id+\\d+|]", "");
-                        postCurrent.setText(EmojiParser.removeAllEmojis(removedNoTag));
-                    }
-                }
-            }
-            modelMap.addAttribute("result", true);
-        } else {
-            modelMap.addAttribute("result", false);
-        }
+		if (options != null) {
+			for (int i = 0; i < options.length; i++) {
+				if (options[i] == 1) {
+					List<Post> posts = postService.getAllPostFromDb();
+					for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
+						Post postCurrent = iter.next();
+						String removedNoTag = postCurrent.getText().replaceAll("[id+\\d+|]", "");
+						postCurrent.setText(EmojiParser.removeAllEmojis(removedNoTag));
+					}
+				}
+			}
+			modelMap.addAttribute("result", true);
+		} else {
+			modelMap.addAttribute("result", false);
+		}
 
-        return "extraproperties";
-    }
+		return "extraproperties";
+	}
 
 }

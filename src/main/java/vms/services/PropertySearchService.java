@@ -8,20 +8,20 @@ import vms.services.absr.PropertyService;
 @Service
 public class PropertySearchService {
 
-    @Autowired
-    PropertyService propertyService;
+	@Autowired
+	PropertyService propertyService;
 
-    public String getValue(String key) {
+	public String getValue(String key) {
 
-        Property property = propertyService.getPropertyByName(key);
+		Property property = propertyService.getPropertyByName(key);
 
-        if (property != null) {
-            return property.getValue();
-        }
+		if (property != null) {
+			return property.getValue();
+		}
 
-        return null;
+		return null;
 
-    }
+	}
 
 
 }

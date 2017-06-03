@@ -12,26 +12,26 @@ import vms.services.absr.GroupService;
 @Transactional
 public class GroupServiceImpl implements GroupService {
 
-    @Autowired
-    private GroupRepository GroupRepository;
+	@Autowired
+	private GroupRepository GroupRepository;
 
-    @Override
-    public Iterable<Group> listAllVkGroups() {
-        return GroupRepository.findAll();
-    }
+	@Override
+	public Iterable<Group> listAllVkGroups() {
+		return GroupRepository.findAll();
+	}
 
-    @Override
-    public Group getGroupById(String id) {
-        return GroupRepository.findOne(id);
-    }
+	@Override
+	public Group getGroupById(String id) {
+		return GroupRepository.findOne(id);
+	}
 
-    @Override
-    public void saveGroup(Group group) {
-        GroupRepository.save(group);
-    }
+	@Override
+	public void saveGroup(Group group) {
+		GroupRepository.save(group);
+	}
 
-    @Override
-    public void deleteGroupById(String id) {
-        GroupRepository.delete(id);
-    }
+	@Override
+	public void deleteGroupById(String id) {
+		GroupRepository.delete(id);
+	}
 }

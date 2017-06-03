@@ -45,7 +45,7 @@ public class ProxyPropertiesController {
 								  @RequestParam(value = "token") String token,
 								  @RequestParam(value = "ip") String ip,
 								  @RequestParam(value = "port") Long port) {
-		if(bindingResult.hasErrors()){
+		if (bindingResult.hasErrors()) {
 			return "redirect:/properties/proxy?hasNull";
 		}
 
@@ -53,7 +53,7 @@ public class ProxyPropertiesController {
 
 		try {
 			proxyServerService.addProxyServer(server);
-		}catch (Exception exp){
+		} catch (Exception exp) {
 			return "redirect:/properties/proxy?duplicate";
 		}
 
@@ -69,7 +69,7 @@ public class ProxyPropertiesController {
 								   @RequestParam(value = "token") String token,
 								   @RequestParam(value = "ip") String ip,
 								   @RequestParam(value = "port") Long port) {
-		if(bindingResult.hasErrors()){
+		if (bindingResult.hasErrors()) {
 			return "redirect:/properties/proxy?hasNull";
 		}
 
@@ -77,7 +77,7 @@ public class ProxyPropertiesController {
 
 		try {
 			proxyServerService.editProxyServer(server);
-		}catch (Exception exp){
+		} catch (Exception exp) {
 			return "redirect:/properties/proxy?duplicate";
 		}
 

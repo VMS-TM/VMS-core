@@ -11,11 +11,11 @@
 <body>
 <div class="navbar navbar-inverse" role="navigation">
     <div>
-        <a class="navbar-brand" href="#">vms Project</a>
+        <a class="navbar-brand" href="#">VMS Project</a>
     </div>
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="/logout">Выйти</a></li>
         </ul>
     </div>
 </div>
@@ -24,8 +24,8 @@
     <div class="row">
         <div class="col-md-2 colxxx sidebar">
             <ul class="nav nav-tabs nav-stacked">
-                <li><a href="/main">Groups for search </a></li>
-                <li><a href="/post/">Post from VK groups</a></li>
+                <li><a href="/main">Группы в БД</a></li>
+                <li><a href="/post/">Посты из групп ВК</a></li>
                 <li><a href="/showgroups">Поиск групп</a></li>
                 <li><a href="/userssearch">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
@@ -36,13 +36,13 @@
 
             <div th:if="${result} == true">
                 <div class="alert alert-success">
-                    <label>Your properties were saved successfully.</label>
+                    <label>Настройки были успешно сохранены.</label>
                 </div>
             </div>
 
             <div th:if="${result} == false">
                 <div class="alert alert-danger">
-                    <label>Please choose some of options.</label>
+                    <label>Пожалуйста, выберите какие - либо настройки.</label>
                 </div>
             </div>
 
@@ -57,9 +57,10 @@
                     <div>
                         <form th:action="@{/properties/extra}" method="post">
                             <input type="checkbox" id="deleteSmilesAndTags" th:name="options" th:value="1"/>
-                            <label for="deleteSmilesAndTags">Delete smiles and tag's of groups in posts</label>
+                            <label for="deleteSmilesAndTags">Удалить смайлы и теги групп в тексте постов в базе
+                                данных.</label>
                             <div align="right">
-                                <button class="btn btn-primary dark-button-primary" type="submit">Save</button>
+                                <button class="btn btn-primary dark-button-primary" type="submit">Сохранить</button>
                             </div>
                         </form>
                     </div>

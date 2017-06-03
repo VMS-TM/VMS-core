@@ -4,13 +4,13 @@ import java.util.List;
 
 
 public class Foo {
-    private List<String> checkedItems;
+	private List<String> checkedItems;
 
-    public List<String> getCheckedItems() {
-        return checkedItems;
-    }
+	public List<String> getCheckedItems() {
+		return checkedItems;
+	}
 
-    public void setCheckedItems(List<String> checkedItems) {
-        this.checkedItems = checkedItems;
-    }
+	public void setCheckedItems(List<String> checkedItems) {
+		this.checkedItems = checkedItems;
+	}
 }

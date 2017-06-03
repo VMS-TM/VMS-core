@@ -5,11 +5,11 @@ import vms.models.Role;
 
 
 public interface RoleService {
-    Iterable<Role> listAllRoles();
+	Iterable<Role> listAllRoles();
 
-    Role getRoleById(Integer id);
+	Role getRoleById(Integer id);
 
-    void saveOrUpdateRole(Role user);
+	void saveOrUpdateRole(Role user);
 
-    void deleteRole(Integer id);
+	void deleteRole(Integer id);
 }

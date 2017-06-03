@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    </link>
 </head>
 
 <body>
 <div class="container">
-    <form class="form-signin" name='loginForm'  th:action="@{/login}" method='POST'>
-        <h3>Please sign in</h3>
-        <input class="form-control" placeholder="Login" type="text" name="username"/>
-        <input class="form-control" placeholder="Password" type="password" name="password"/>
+    <form class="form-signin" name='loginForm' th:action="@{/login}" method='POST'>
+        <h3>Авторизуйтесь</h3>
+        <input class="form-control" placeholder="Логин" type="text" name="username"/>
+        <input class="form-control" placeholder="Пароль" type="password" name="password"/>
         <br/>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
     </form>
 </div>
 

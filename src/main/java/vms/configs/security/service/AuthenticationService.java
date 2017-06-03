@@ -9,19 +9,18 @@ import vms.models.User;
 import vms.services.absr.UserService;
 
 
-
 @Service
 public class AuthenticationService implements UserDetailsService {
-    @Autowired
-    private UserService service;
+	@Autowired
+	private UserService service;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = service.getByUsername(username);
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = service.getByUsername(username);
 
-        if(user == null) {
-            throw  new UsernameNotFoundException("Username " + username + " not found");
-        }
-        return user;
-    }
+		if (user == null) {
+			throw new UsernameNotFoundException("Username " + username + " not found");
+		}
+		return user;
+	}
 }

@@ -1,7 +1,7 @@
 /* File for changing standard styles of bootstrap */
 
 /* btn-primary black color */
-.dark-button-primary{
+.dark-button-primary {
     background-color: #222222;
     border-color: #000000;
 }
@@ -42,7 +42,7 @@
 }
 
 /* adds elders if the field is too long */
-.cut-text{
+.cut-text {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    </link>
 </head>
 
 <body>
@@ -46,30 +47,31 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="/properties">Основные</a></li>
                 <li><a href="/properties/proxy">Прокси</a></li>
+                <li><a href="/properties/extra">Доп. настройки</a></li>
             </ul>
 
             <table class="table table-striped">
                 <tbody>
-                    <tr>
-                        <th></th>
-                        <th>key</th>
-                        <th>value</th>
-                        <th>actions</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr th:each="property : ${properties}">
-                        <form th:action="@{/properties/update}" th:object="${property}" method="post">
-                            <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
-                            <td ><input type="text" name="name"  th:value="${property.name}"  /> </td>
-                            <td ><input type="text" name="value" th:value="${property.value}"   /> </td>
-                            <td><input type="submit" class="btn btn-default" value="update" /></td>
-                        </form>
-                        <form th:action="@{/properties/delete}" th:object="${property}" method="post">
-                            <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
-                            <td><input type="submit" class="btn btn-default" value="delete" /></td>
-                        </form>
-                    </tr>
+                <tr>
+                    <th></th>
+                    <th>key</th>
+                    <th>value</th>
+                    <th>actions</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="property : ${properties}">
+                    <form th:action="@{/properties/update}" th:object="${property}" method="post">
+                        <td><input type="hidden" name="id" th:value="${property.id}"/></td>
+                        <td><input type="text" name="name" th:value="${property.name}"/></td>
+                        <td><input type="text" name="value" th:value="${property.value}"/></td>
+                        <td><input type="submit" class="btn btn-default" value="update"/></td>
+                    </form>
+                    <form th:action="@{/properties/delete}" th:object="${property}" method="post">
+                        <td><input type="hidden" name="id" th:value="${property.id}"/></td>
+                        <td><input type="submit" class="btn btn-default" value="delete"/></td>
+                    </form>
+                </tr>
                 </tbody>
             </table>
             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addProperty">add</button>
@@ -89,14 +91,14 @@
                     <table class="table table-striped">
                         <tbody>
                         <tr>
-                            <td><input type="text" th:field="*{name}" /> </td>
-                            <td><input type="text" th:field="*{value}" /> </td>
+                            <td><input type="text" th:field="*{name}"/></td>
+                            <td><input type="text" th:field="*{value}"/></td>
                         </tr>
                         <tr>
                         </tr>
                         </tbody>
                     </table>
-                    <input type="submit" class="btn btn-default" value="add" />
+                    <input type="submit" class="btn btn-default" value="add"/>
                 </form>
             </div>
             <div class="modal-footer">

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    </link>
 </head>
 
 <body>
@@ -33,19 +34,21 @@
                 <li class="active"><a data-toggle="tab" href="#panel1">Посты</a></li>
             </ul>
             <div class="tab-content boxShadow3 bg-tab">
-                <form  th:action="@{/post/req}"  method="get">
-                    <td ><input required="required" type="text" name="query" /></td>
-                    <td><input type="submit"  class="btn btn-default" value="Запросить посты из группы сейчас" /></td>
+                <form th:action="@{/post/req}" method="get">
+                    <td><input required="required" type="text" name="query"/></td>
+                    <td><input type="submit" class="btn btn-default" value="Запросить посты из группы сейчас"/></td>
                 </form>
                 <h3>
-                    <span class="label label-info">Found Posts<span class="badge" th:if="${FoundCount != null}" th:text="${FoundCount}"></span></span>
-                    <span class="label label-info">Getting Posts<span class="badge" th:if="${GettingCount != null}" th:text="${GettingCount}"></span></span>
-                    <span class="label label-info">All Posts<span class="badge" th:if="${AllPosts != null}" th:text="${AllPosts}"></span></span>
+                    <span class="label label-info">Found Posts<span class="badge" th:if="${FoundCount != null}"
+                                                                    th:text="${FoundCount}"></span></span>
+                    <span class="label label-info">Getting Posts<span class="badge" th:if="${GettingCount != null}"
+                                                                      th:text="${GettingCount}"></span></span>
+                    <span class="label label-info">All Posts<span class="badge" th:if="${AllPosts != null}"
+                                                                  th:text="${AllPosts}"></span></span>
                 </h3>
                 <table class="table table-striped">
-                    <thead>  </thead>
+                    <thead></thead>
                     <tbody>
-                    <!-- начало строки -->
                     <tr>
                         <th>group</th>
                         <th></th>
@@ -56,20 +59,19 @@
                         <th></th>
                     </tr>
                     <tr th:each="post : ${posts}">
-                        <form  th:action="@{/post/update}" th:object="${post}" method="post">
+                        <form th:action="@{/post/update}" th:object="${post}" method="post">
                             <td><a th:href="@{'https://vk.com/club'+${post.ownerId}}">view</a></td>
-                            <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
+                            <td><input type="hidden" name="id" th:value="${post.id}"/></td>
                             <td width="100" th:text="${post.date}">date</td>
-                            <td width="400"><textarea class="form-control"  rows="13" name="text" th:text="${post.text}"></textarea> </td>
-                            <td><input type="submit" class="btn btn-default" value="update" /></td>
+                            <td width="400"><textarea class="form-control" rows="13" name="text"
+                                                      th:text="${post.text}"></textarea></td>
+                            <td><input type="submit" class="btn btn-default" value="update"/></td>
                         </form>
-                        <form  th:action="@{/post/delete}" th:object="${post}" method="post">
-                            <td ><input type="hidden" name="id" th:value="${post.id}"/></td>
-                            <td><input type="submit" class="btn btn-default" value="delete" /></td>
+                        <form th:action="@{/post/delete}" th:object="${post}" method="post">
+                            <td><input type="hidden" name="id" th:value="${post.id}"/></td>
+                            <td><input type="submit" class="btn btn-default" value="delete"/></td>
                         </form>
-                        <!-- конец строки -->
                     </tr>
-
                     <tr>
                     </tr>
                     </tbody>

@@ -60,6 +60,27 @@ public class Post implements Serializable {
 	@JsonProperty("marked_as_ads")
 	private int marked_as_ads;
 
+
+	private String phoneNumber;
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	private String russianName;
+
+	public String getRussianName() {
+		return russianName;
+	}
+
+	public void setRussianName(String russianName) {
+		this.russianName = russianName;
+	}
+
 	public int getMarkedAsAds() {
 		return this.marked_as_ads;
 	}
@@ -116,20 +137,6 @@ public class Post implements Serializable {
 		this.attachmentContainers = attachmentContainers;
 	}
 
-	@Override
-	public String toString() {
-		return "Post{" +
-				"id=" + id +
-				", from_id=" + from_id +
-				", owner_id=" + owner_id +
-				", date=" + date +
-				", post_id=" + post_id +
-				", text='" + text + '\'' +
-				", attachmentContainers=" + attachmentContainers +
-				", marked_as_ads=" + marked_as_ads +
-				'}';
-	}
-
 	public Post(int from_id, int owner_id, int Date, int post_id, String text) {
 		this.from_id = from_id;
 		this.owner_id = owner_id;
@@ -162,5 +169,19 @@ public class Post implements Serializable {
 		result = 31 * result + post_id;
 		result = 31 * result + (text != null ? text.hashCode() : 0);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Post{" +
+				"id=" + id +
+				", from_id=" + from_id +
+				", owner_id=" + owner_id +
+				", date=" + date +
+				", post_id=" + post_id +
+				", text='" + text + '\'' +
+				", attachmentContainers=" + attachmentContainers +
+				", marked_as_ads=" + marked_as_ads +
+				'}';
 	}
 }

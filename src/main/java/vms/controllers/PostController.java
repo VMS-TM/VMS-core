@@ -15,6 +15,8 @@ import vms.services.absr.PostSearchService;
 import vms.services.absr.VkPostService;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/post")
@@ -79,6 +81,21 @@ public class PostController {
 
 		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
 			Post postCurrent = iter.next();
+			Pattern phoneNumber = Pattern.compile("^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$");
+			String ruNamePart = "[А-яЁё][-А-яЁё]+";
+			Pattern russianNames = Pattern.compile("\\s*[А-ЯЁ][-А-яЁё]+\\s+(" + ruNamePart + "\\s+){1,5}" + ruNamePart + "\\s*");
+
+
+
+			Matcher matcherPhoneNumber = phoneNumber.matcher(postCurrent.getText());
+			Matcher matcherRussianNames = russianNames.matcher(postCurrent.getText());
+
+			if (matcherPhoneNumber.find()) {
+				postCurrent.setPhoneNumber(matcherPhoneNumber.group(0));
+			}
+
+			matcherRussianNames.matches();
+
 			postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
 		}
 	}

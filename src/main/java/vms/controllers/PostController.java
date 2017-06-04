@@ -81,20 +81,25 @@ public class PostController {
 
 		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
 			Post postCurrent = iter.next();
-			Pattern phoneNumber = Pattern.compile("^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$");
-			String ruNamePart = "[А-яЁё][-А-яЁё]+";
-			Pattern russianNames = Pattern.compile("\\s*[А-ЯЁ][-А-яЁё]+\\s+(" + ruNamePart + "\\s+){1,5}" + ruNamePart + "\\s*");
-
+			Pattern phoneNumber = Pattern.compile("((8|\\+7)-?)?\\(?\\d{3}\\)?-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}");
+			Pattern rent = Pattern.compile("(?<=Стоимость|стоимость|Стоимость в месяц|стоимость в месяц|Сдается за|Залог|залог|Стоимость аренды|cтоимость аренды|Цена|цена|стоит|Стоит).*(\\d|\\d.p|\\d p|\\d.руб|\\d руб||\\d руб.|\\d рублей|\\d.рублей|\\d т.р.|\\d т. р.|\\d.\u20BD).(?=\\s)");
+			Pattern metroAndAddress = Pattern.compile("(?<=ул.|Улица|улица|Квартира|м.|квартира|районе|Районе|М.|метро|Метро|Адрес|адрес|адресу).*(\\w)(?=\\D+)");
+//			String ruNamePart = "[А-яЁё][-А-яЁё]+";
+//			Pattern russianNames = Pattern.compile("\\s*[А-ЯЁ][-А-яЁё]+\\s+(" + ruNamePart + "\\s+){1,5}" + ruNamePart + "\\s*");
 
 
 			Matcher matcherPhoneNumber = phoneNumber.matcher(postCurrent.getText());
-			Matcher matcherRussianNames = russianNames.matcher(postCurrent.getText());
+			Matcher matcherRent = rent.matcher(postCurrent.getText());
+			Matcher matcherMetroAndAddress = metroAndAddress.matcher(postCurrent.getText());
+
 
 			if (matcherPhoneNumber.find()) {
 				postCurrent.setPhoneNumber(matcherPhoneNumber.group(0));
+			} else if (matcherRent.find()) {
+				postCurrent.setPriceOfFlat(matcherRent.group(0));
+			} else if (matcherMetroAndAddress.find()) {
+				postCurrent.setMetroAndAddress(matcherMetroAndAddress.group(0));
 			}
-
-			matcherRussianNames.matches();
 
 			postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
 		}

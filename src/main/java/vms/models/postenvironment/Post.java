@@ -81,6 +81,26 @@ public class Post implements Serializable {
 		this.russianName = russianName;
 	}
 
+	private String priceOfFlat;
+
+	public String getPriceOfFlat() {
+		return priceOfFlat;
+	}
+
+	public void setPriceOfFlat(String priceOfFlat) {
+		this.priceOfFlat = priceOfFlat;
+	}
+
+	private String metroAndAddress;
+
+	public String getMetroAndAddress() {
+		return metroAndAddress;
+	}
+
+	public void setMetroAndAddress(String metroAndAddress) {
+		this.metroAndAddress = metroAndAddress;
+	}
+
 	public int getMarkedAsAds() {
 		return this.marked_as_ads;
 	}

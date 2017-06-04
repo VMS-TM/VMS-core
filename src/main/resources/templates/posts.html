@@ -91,6 +91,16 @@
                                                     <input type="text" class="form-control" name="id"
                                                            th:value="${post.phoneNumber}"></input>
                                                 </div>
+                                                <div>
+                                                    <label>Стоимость</label>
+                                                    <input type="text" class="form-control" name="id"
+                                                           th:value="${post.priceOfFlat}"></input>
+                                                </div>
+                                                <div>
+                                                    <label>Метро/Адрес</label>
+                                                    <textarea rows="9" class="form-control" name="text"
+                                                              th:text="${post.metroAndAddress}"></textarea>
+                                                </div>
                                             </div>
 
                                             <div class="modal-footer">

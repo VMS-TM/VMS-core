@@ -39,20 +39,21 @@ public class PostSearchServiceImpl implements PostSearchService {
 		PostResponse postResponseCurrent = new PostResponse();
 		int count = 0;
 		ArrayList<Post> posts = new ArrayList<>();
-		long startTime = System.currentTimeMillis();
 		ExecutorService executorService = Executors.newFixedThreadPool(Iterables.size(groups));
-		Future future = executorService.submit(new Thread(() -> {
-			PostResponse postRes = postResponseCurrent;
-			int countFinal = count;
-			for (Group group : groups) {
+		for (Group group : groups) {
+			Future future = executorService.submit(new Thread(() -> {
+				PostResponse postRes = postResponseCurrent;
+				int countFinal = count;
 				postRes = getPostResponseByGroupName(group.getId(), query);
 				//check when we don't have access to walls of groups
 				if (postRes != null) {
 					posts.addAll(postRes.getPosts());
 					countFinal += postRes.getCount();
 				}
-			}
-		}));
+				postResponseSum.setCount(countFinal);
+			}));
+
+		}
 		executorService.shutdown();
 		try {
 			executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
@@ -62,13 +63,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 		//when we don't have access to all walls of groups
 		if (posts.size() > 0) {
 			postResponseSum.setPosts(posts);
-			postResponseSum.setCount(count);
-		}
 
-		long endTime   = System.currentTimeMillis();
-		long totalTime = endTime - startTime;
-		System.out.println("__________________________________________________");
-		System.out.println(totalTime);
+		}
 
 		return postResponseSum;
 	}

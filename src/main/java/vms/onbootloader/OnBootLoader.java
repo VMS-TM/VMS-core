@@ -10,9 +10,12 @@ import vms.models.Role;
 import vms.models.User;
 import vms.models.rawgroup.Group;
 import org.apache.log4j.Logger;
+import vms.scheduling.Rule;
+import vms.scheduling.TaskStatus;
 import vms.services.absr.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -27,6 +30,8 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
     private RoleService roleService;
     @Autowired
     private PropertyService propertyService;
+    @Autowired
+    private RuleService ruleService;
 
     @Autowired
     private ProxyServerService proxyServerService;
@@ -41,16 +46,19 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
         loadUsers();
         loadProxyServers();
         loadProperty();
+        loadRules();
     }
 
     private void loadProperty() {
         Property RateProperty = new Property();
-
         RateProperty.setName("rate");
         RateProperty.setValue("30000");
-
         propertyService.addProperty(RateProperty);
 
+        Property CronProperty = new Property();
+        CronProperty.setName("CronProperty");
+        CronProperty.setValue("*/3 * * * * *");
+        propertyService.addProperty(CronProperty);
     }
 
     public void loadGroups() {
@@ -91,6 +99,18 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
         user2.setPassword("admin");
         user2.setRoles(roleSet);
         userService.saveOrUpdateUser(user2);
+    }
+
+    private void loadRules(){
+        Rule rule = new Rule();
+
+        rule.setName("1rule");
+        rule.setCronExpr("*/11 * * * * *");
+        rule.setKeyWords("снять");
+        rule.setGroups((List<Group>) groupService.listAllVkGroups());
+        rule.setStatus(TaskStatus.STOP);
+
+        ruleService.addRule(rule);
     }
 
     private void loadProxyServers(){

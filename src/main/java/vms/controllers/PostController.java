@@ -81,12 +81,11 @@ public class PostController {
 
 		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
 			Post postCurrent = iter.next();
-			Pattern phoneNumber = Pattern.compile("((8|\\+7)-?)?\\(?\\d{3}\\)?-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}");
-			Pattern rent = Pattern.compile("(?<=Стоимость|стоимость|Стоимость в месяц|стоимость в месяц|Сдается за|Залог|залог|Стоимость аренды|cтоимость аренды|Цена|цена|стоит|Стоит).*(\\d|\\d.p|\\d p|\\d.руб|\\d руб||\\d руб.|\\d рублей|\\d.рублей|\\d т.р.|\\d т. р.|\\d.\u20BD).(?=\\s)");
+			Pattern phoneNumber = Pattern.compile("(((8|\\+7)-?)?\\(?\\d{3}\\)?-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1})|(^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$)|(((8|\\+7) ?)?\\(?\\d{3}\\)? ?\\d{3}-?\\d{2}-?\\d{2})");
+			Pattern rent = Pattern.compile("(?<=сдаётся по | Стоимость |стоимость |Стоимость в месяц |стоимость в месяц |аренды в месяц |в месяц |Сдается за |cдается за|Залог |залог  |Стоимость аренды |cтоимость аренды |Аренда |аренда |Цена |цена |стоит |Стоит | ВСЕГО за| всего за ).*(\\d|\\d.p|\\d p|\\d.руб|\\d руб|\\d руб.|\\d рублей|\\d.рублей|\\d т.р.|\\d т. р.|\\d.\u20BD).(?=\\s)");
 			Pattern metroAndAddress = Pattern.compile("(?<=ул.|Улица|улица|Квартира|м.|квартира|районе|Районе|М.|метро|Метро|Адрес|адрес|адресу).*(\\w)(?=\\D+)");
 //			String ruNamePart = "[А-яЁё][-А-яЁё]+";
 //			Pattern russianNames = Pattern.compile("\\s*[А-ЯЁ][-А-яЁё]+\\s+(" + ruNamePart + "\\s+){1,5}" + ruNamePart + "\\s*");
-
 
 			Matcher matcherPhoneNumber = phoneNumber.matcher(postCurrent.getText());
 			Matcher matcherRent = rent.matcher(postCurrent.getText());

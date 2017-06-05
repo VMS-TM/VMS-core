@@ -48,3 +48,15 @@
     text-overflow: ellipsis;
     width: 150px;
 }
+
+.cut-text-two {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 400px;
+}
+
+
+.bottom-Margin {
+    margin-bottom: 10px;
+}

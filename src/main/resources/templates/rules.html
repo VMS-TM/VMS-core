@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="#">vms Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Groups for search </a></li>
+                <li><a href="/post/">Post from VK groups</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+                <li><a href="/userssearch">Поиск пользователей</a></li>
+                <li><a href="/properties">Настройки</a></li>
+            </ul>
+        </div>
+        <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
+            <h2 class="sub-header">Настройки</h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="/properties">Основные</a></li>
+                <li><a href="/properties/proxy">Прокси</a></li>
+            </ul>
+
+            <table class="table table-striped">
+                <thead> … </thead>
+                <tbody>
+                <!-- начало строки -->
+                <tr>
+                    <th></th>
+                    <th>key</th>
+                    <th>value</th>
+                    <th>actions</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="property : ${properties}">
+                    <form th:action="@{/properties/update}" th:object="${property}" method="post">
+                        <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
+                        <td ><input type="text" name="name"  th:value="${property.name}"  /> </td>
+                        <td ><input type="text" name="value" th:value="${property.value}"   /> </td>
+                        <td><input type="submit" class="btn btn-default" value="update" /></td>
+                    </form>
+                    <form th:action="@{/properties/delete}" th:object="${property}" method="post">
+                        <td ><input type="hidden" name="id" th:value="${property.id}"/></td>
+                        <td><input type="submit" class="btn btn-default" value="delete" /></td>
+                    </form>
+                    <!-- конец строки -->
+                </tr>
+
+                <tr>
+                </tr>
+                </tbody>
+            </table>
+            <!-- Button AddProperty modal trigger -->
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addProperty">add</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Property -->
+<div class="modal fade" id="addProperty" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>New property</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{properties/add}" th:object="${property}" method="post">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <td><input type="text" th:field="*{name}" /> </td>
+                            <td><input type="text" th:field="*{value}" /> </td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" class="btn btn-default" value="add" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/modal.js"></script>
+</body>
+</html>

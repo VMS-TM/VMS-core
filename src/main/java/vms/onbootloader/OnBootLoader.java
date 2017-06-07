@@ -87,11 +87,11 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	private void loadProxyServers() {
 		ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
-				"dead6a659bc53060c5f9100288b01c6534501ba9496f5d8f49e2a944ce910f915d4aa7a278c59871e68dd",
+				"xuev_telegu",
 				"87.228.29.154", 	53281);
 
 		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
-				"bb6211359dc3e3eb8f6fe190d36e8a42ad054dd2e146ec845072dcd19377d474caafd648b3712e3254e54",
+				"i tachku",
 				"93.187.152.190", 8080);
 
 		proxyServerService.addProxyServer(firstProxyServer);

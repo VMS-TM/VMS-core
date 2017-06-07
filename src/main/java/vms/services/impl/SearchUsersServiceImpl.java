@@ -45,7 +45,7 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	/**
 	 * Method forms url for get all countries
 	 *
-	 * @return
+	 * @return String url for get countries
 	 */
 	private String urlForDatabaseCountries() {
 		String token;
@@ -53,11 +53,7 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 		List<ProxyServer> proxyServers = new ArrayList<>();
 		proxyServers.addAll(proxyServerService.proxyServerList());
 
-		if (proxyServers.size() > 0) {
-			token = proxyServers.get(0).getToken();
-		} else {
-			token = environment.getRequiredProperty("DEFAULT_TOKEN");
-		}
+		token = proxyServers.get(0).getToken();
 
 		builder.append(ConstantsForVkApi.METHOD_GET_COUNTRIES);
 		builder.append(ConstantsForVkApi.PARAMETERS_FOR_COUNTRIES);
@@ -71,9 +67,9 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	/**
 	 * Method forms url for search cities
 	 *
-	 * @param id
-	 * @param query
-	 * @return
+	 * @param id - id of country
+	 * @param query - title wanted city
+	 * @return String url for get countries
 	 */
 	private String urlForDatabaseCities(Long id, String query) {
 		String token;
@@ -81,11 +77,7 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 		StringBuilder builder = new StringBuilder(ConstantsForVkApi.URL);
 		proxyServers.addAll(proxyServerService.proxyServerList());
 
-		if (proxyServers.size() > 0) {
-			token = proxyServers.get(0).getToken();
-		} else {
-			token = environment.getRequiredProperty("DEFAULT_TOKEN");
-		}
+		token = proxyServers.get(0).getToken();
 
 		builder.append(ConstantsForVkApi.METHOD_GET_CITIES);
 		builder.append(ConstantsForVkApi.PARAMETERS_FOR_CITIES);
@@ -103,7 +95,7 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	/**
 	 * Method return all countries
 	 *
-	 * @return
+	 * @return List of countries
 	 */
 	@Override
 	public List<Country> getCountries() {
@@ -115,9 +107,9 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	/**
 	 * Method return list of cities in selected country and sent query
 	 *
-	 * @param id
-	 * @param query
-	 * @return
+	 * @param id - id of country
+	 * @param query - title wanted city
+	 * @return List of cities
 	 */
 	@Override
 	public List<City> getCities(Long id, String query) {
@@ -129,8 +121,8 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	/**
 	 * Method return id-s of users in selected city
 	 *
-	 * @param cityID
-	 * @return
+	 * @param cityID - city, in which will be search users
+	 * @return void, add users in DB
 	 */
 	@Override
 	public void getUsersInSelectedCity(Long cityID) {
@@ -145,6 +137,9 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 			return;
 		}
 
+		/**
+		 * 366 days in year max. Dividing birthdays into two sexes - 732
+		 */
 		int requestOnProxy = 732 / proxyServerList.size();
 		int remainingRequests = 732 % proxyServerList.size();
 
@@ -165,7 +160,11 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 			final int start = firstElement;
 			final int finish = lastElement;
 
+
 			Future future = executorService.submit(new Thread(() -> {
+				/**
+				 * Sending requests with the necessary delays to vk.api
+				 */
 				for (int i = start; i < finish; i++) {
 					if (i > 0 && i % 3 == 0) {
 						try {
@@ -181,10 +180,6 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 							e.printStackTrace();
 						}
 					}
-					String result = proxyTemplate.getForObject(queries.get(i), String.class);
-					System.out.println(result);
-
-					System.out.println(i);
 
 					UsersRootObject usersRootObject = proxyTemplate.getForObject(queries.get(i), UsersRootObject.class);
 					List<UserFromVK> foundedUsersFromVk = usersRootObject.getResponse().getItems();
@@ -214,9 +209,9 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	/**
 	 * Method return RestTemplate, using proxy
 	 *
-	 * @param ip
-	 * @param port
-	 * @return
+	 * @param ip of proxy server
+	 * @param port of proxy server
+	 * @return RestTemplate
 	 */
 	private RestTemplate getRestTemplate(String ip, int port) {
 		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -231,13 +226,13 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	/**
 	 * Method return list of queries
 	 *
-	 * @param requestOnProxy
-	 * @param remainingRequests
-	 * @param cityID
-	 * @return
+	 * @param requestOnProxy - quantity requests on one proxy
+	 * @param remainingRequests - quantity remaining requests on one proxy
+	 * @param cityID - id of city where will be search users
+	 * @return List of queries
 	 */
 	private List<String> getListOfQueries(int requestOnProxy, int remainingRequests, Long cityID) {
-		byte flagNextProxyServer = 0;
+		boolean flagNextProxyServer = false;
 		int countRequest = 0;
 		int countProxyServer = 0;
 		Integer daysInMonth;
@@ -248,7 +243,10 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 		List<ProxyServer> proxyServerList = new ArrayList<>();
 		proxyServerList.addAll(proxyServerService.proxyServerList());
 
-		for (Integer sex = 1; sex < 3; sex++) {
+		/**
+		 * Bypass all days of the year (2 times)
+		 */
+		for (Integer sex = 1; sex <= 2; sex++) {
 			for (Integer month = 1; month <= 12; month++) {
 				if (month <= 7) {
 					if (month == 2) {
@@ -266,15 +264,18 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 					}
 				}
 
+				/**
+				 * Create a request according to each birthday
+				 */
 				for (Integer day = 1; day <= daysInMonth; day++) {
 					if (countRequest >= requestOnProxy) {
-						if (remainingRequests > 0 && flagNextProxyServer == 0) {
+						if (remainingRequests > 0 && !flagNextProxyServer) {
 							remainingRequests--;
-							flagNextProxyServer = 1;
+							flagNextProxyServer = true;
 						} else {
 							countRequest = 0;
 							countProxyServer++;
-							flagNextProxyServer = 0;
+							flagNextProxyServer = false;
 						}
 					}
 					builder.append(ConstantsForVkApi.URL);

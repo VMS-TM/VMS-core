@@ -25,7 +25,7 @@
                     <li><a href="/main">Группы в БД</a></li>
                     <li><a href="/post/">Посты из групп ВК</a></li>
                     <li><a href="/showgroups">Поиск групп</a></li>
-                    <li><a href="/citysearch">Поиск пользователей</a></li>
+                    <li><a href="/city/search">Поиск пользователей</a></li>
                     <li><a href="/properties">Настройки</a></li>
                 </ul>
             </div>
@@ -46,13 +46,13 @@
                                 </div>
 
                                 <div align="center">
-                                    <a class="btn btn-default" href="/citysearch">Back</a>
+                                    <a class="btn btn-default" href="/city/search">Back</a>
                                 </div>
                             </div>
 
                             <div th:if="${not #lists.isEmpty(cities)}">
                                 <div th:each="city : ${cities}">
-                                    <form action="/userssearch" method="post">
+                                    <form action="/users/search" method="post">
                                         <div class="panel panel-default panel-without-margin">
                                             <div class="panel-body">
                                                 <div align="center">

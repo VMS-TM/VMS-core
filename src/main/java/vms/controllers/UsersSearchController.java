@@ -17,14 +17,14 @@ public class UsersSearchController {
 	@Autowired
 	private SearchUsersService searchUsersService;
 
-	@RequestMapping(value = "/citysearch", method = RequestMethod.GET)
+	@RequestMapping(value = "/city/search", method = RequestMethod.GET)
 	public String searchCity(ModelMap modelMap) {
 		modelMap.addAttribute("countries", searchUsersService.getCountries());
 
 		return "searchusers";
 	}
 
-	@RequestMapping(value = "/citysearch", method = RequestMethod.POST)
+	@RequestMapping(value = "/city/search", method = RequestMethod.POST)
 	public String choiceCity(ModelMap modelMap, @RequestParam(value = "county") Long id,
 							 @RequestParam(value = "q") String q) {
 		if(q.equals("")){
@@ -37,10 +37,10 @@ public class UsersSearchController {
 		return "cityselection";
 	}
 
-	@RequestMapping(value = "/userssearch", method = RequestMethod.POST)
+	@RequestMapping(value = "/users/search", method = RequestMethod.POST)
 	public String searchUsers(ModelMap modelMap, @RequestParam(value = "id") Long id) {
 		searchUsersService.getUsersInSelectedCity(id);
 
-		return "redirect:/citysearch";
+		return "redirect:/city/search";
 	}
 }

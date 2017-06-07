@@ -9,12 +9,12 @@ import vms.models.Role;
 import vms.models.User;
 import vms.models.rawgroup.Group;
 import org.apache.log4j.Logger;
-import vms.services.absr.GroupService;
-import vms.services.absr.ProxyServerService;
-import vms.services.absr.RoleService;
-import vms.services.absr.UserService;
+import vms.models.usersenvironment.UserFromVK;
+import vms.services.absr.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -31,6 +31,9 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 	@Autowired
 	private ProxyServerService proxyServerService;
 
+	@Autowired
+	private UserFromVkService userFromVkService;
+
 	private Logger log = Logger.getLogger(OnBootLoader.class);
 
 
@@ -39,6 +42,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		loadGroups();
 		loadUsers();
 		loadProxyServers();
+		loadUsersFromVK();
 	}
 
 	public void loadGroups() {
@@ -228,17 +232,42 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	private void loadProxyServers() {
 		ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
+//<<<<<<< HEAD
+//				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
+//				"88.212.252.47", 18090);
+//
+//		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
+//				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
+//				"46.16.226.222", 53281);
+//=======
 				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
-				"88.212.252.47", 18090);
+				"87.228.29.154", 	53281);
 
 		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
 				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
-				"46.16.226.222", 53281);
+				"93.187.152.190", 8080);
 
 		proxyServerService.addProxyServer(firstProxyServer);
 		log.info("Saved proxy server with ip:" + firstProxyServer.getIp());
 		proxyServerService.addProxyServer(secondProxyServer);
 		log.info("Saved proxy server with ip:" + secondProxyServer.getIp());
+	}
+
+	private void loadUsersFromVK(){
+		List<UserFromVK> userFromVKList = new ArrayList<>();
+		userFromVKList.add(new UserFromVK(115470965L, "Алексей", "Прогнозов"));
+		userFromVKList.add(new UserFromVK(149406594L, "Иван", "Николаев"));
+		userFromVKList.add(new UserFromVK(3420130L, "Иван", "Зверев"));
+		userFromVKList.add(new UserFromVK(13545169L, "Александр", "Вербицкий"));
+		userFromVKList.add(new UserFromVK(11728669L, "Павел", "Романович"));
+		userFromVKList.add(new UserFromVK(28267947L, "Артём", "Корчмит"));
+		userFromVKList.add(new UserFromVK(13651954L, "Виталий", "Секерин"));
+		userFromVKList.add(new UserFromVK(21701619L, "Сергей", "Хилько"));
+		userFromVKList.add(new UserFromVK(20904513L, "Владимир", "Жаринов"));
+		userFromVKList.add(new UserFromVK(118811155L, "Макс", "Чернов"));
+
+		userFromVkService.addListOfUsersOfVK(userFromVKList);
+		log.info("Add 10 users of vk in DB for tests");
 	}
 }
 

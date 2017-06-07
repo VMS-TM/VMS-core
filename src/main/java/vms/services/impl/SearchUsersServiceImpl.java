@@ -34,9 +34,6 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	private RestTemplate restTemplate = new RestTemplate();
 
 	@Autowired
-	private Environment environment;
-
-	@Autowired
 	private ProxyServerService proxyServerService;
 
 	@Autowired
@@ -213,7 +210,8 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	 * @param port of proxy server
 	 * @return RestTemplate
 	 */
-	private RestTemplate getRestTemplate(String ip, int port) {
+	@Override
+	public RestTemplate getRestTemplate(String ip, int port) {
 		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 		InetSocketAddress address = new InetSocketAddress(ip, port);
 		Proxy proxy = new Proxy(Proxy.Type.HTTP, address);

@@ -1,7 +1,6 @@
 package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import vms.models.ProxyServer;
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.PostResponse;
@@ -11,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.ProxyServerService;
-
-import java.net.InetSocketAddress;
-import java.net.Proxy;
+import vms.services.absr.SearchUsersService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -24,6 +21,10 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 	@Autowired
 	private ProxyServerService proxyServerService;
+
+	@Autowired
+	private SearchUsersService searchUsersService;
+
 
 	//constants for query
 	final String ACCESS_TOKEN = "808bcfd51bd94b4d0593a2dda57037fc4fdc46cac46e20d1b260c1a90d88b4c23023dd977e9639f7f8279";
@@ -55,7 +56,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		int remainingRequests = groups.size() % proxyServerList.size();
 
 		for (ProxyServer proxyServer : proxyServerList) {
-			RestTemplate proxyTemplate = getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
+			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
 			lastElement += requestOnProxy;
 			if (remainingRequests > 0) {
 				remainingRequests--;
@@ -78,6 +79,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 					responseList.add(postResponse);
 				}
 			}));
+
 			firstElement += lastElement;
 			counterProxy++;
 		}
@@ -139,16 +141,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 		sb.append("&access_token=");
 		sb.append(ACCESS_TOKEN);
 		return sb.toString();
-	}
-
-	private RestTemplate getRestTemplate(String ip, int port) {
-		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-		InetSocketAddress address = new InetSocketAddress(ip, port);
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, address);
-
-		factory.setProxy(proxy);
-
-		return new RestTemplate(factory);
 	}
 }
 

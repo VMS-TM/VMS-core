@@ -9,12 +9,12 @@ import vms.models.Role;
 import vms.models.User;
 import vms.models.rawgroup.Group;
 import org.apache.log4j.Logger;
-import vms.services.absr.GroupService;
-import vms.services.absr.ProxyServerService;
-import vms.services.absr.RoleService;
-import vms.services.absr.UserService;
+import vms.models.usersenvironment.UserFromVK;
+import vms.services.absr.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -31,6 +31,9 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 	@Autowired
 	private ProxyServerService proxyServerService;
 
+	@Autowired
+	private UserFromVkService userFromVkService;
+
 	private Logger log = Logger.getLogger(OnBootLoader.class);
 
 
@@ -39,6 +42,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		loadGroups();
 		loadUsers();
 		loadProxyServers();
+		loadUsersFromVK();
 	}
 
 	public void loadGroups() {
@@ -83,17 +87,34 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	private void loadProxyServers() {
 		ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
-				"808bcfd51bd94b4d0593a2dda57037fc4fdc46cac46e20d1b260c1a90d88b4c23023dd977e9639f7f8279",
-				"49.86.143.1", 8090L);
+				"xuev_telegu",
+				"87.228.29.154", 	53281);
 
 		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
-				"5b9f338a526931a178f79a13c11bd0595b183532e4ad2da2e26caba388012ce21387c8322b715348e6df8",
-				"55.204.100.108", 13801L);
+				"i tachku",
+				"93.187.152.190", 8080);
 
 		proxyServerService.addProxyServer(firstProxyServer);
 		log.info("Saved proxy server with ip:" + firstProxyServer.getIp());
 		proxyServerService.addProxyServer(secondProxyServer);
 		log.info("Saved proxy server with ip:" + secondProxyServer.getIp());
+	}
+
+	private void loadUsersFromVK(){
+		List<UserFromVK> userFromVKList = new ArrayList<>();
+		userFromVKList.add(new UserFromVK(115470965L, "Алексей", "Прогнозов"));
+		userFromVKList.add(new UserFromVK(149406594L, "Иван", "Николаев"));
+		userFromVKList.add(new UserFromVK(3420130L, "Иван", "Зверев"));
+		userFromVKList.add(new UserFromVK(13545169L, "Александр", "Вербицкий"));
+		userFromVKList.add(new UserFromVK(11728669L, "Павел", "Романович"));
+		userFromVKList.add(new UserFromVK(28267947L, "Артём", "Корчмит"));
+		userFromVKList.add(new UserFromVK(13651954L, "Виталий", "Секерин"));
+		userFromVKList.add(new UserFromVK(21701619L, "Сергей", "Хилько"));
+		userFromVKList.add(new UserFromVK(20904513L, "Владимир", "Жаринов"));
+		userFromVKList.add(new UserFromVK(118811155L, "Макс", "Чернов"));
+
+		userFromVkService.addListOfUsersOfVK(userFromVKList);
+		log.info("Add 10 users of vk in DB for tests");
 	}
 }
 

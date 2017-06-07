@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    </link>
-    <link href="/css/style.css" rel="stylesheet">
-    </link>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="/css/bootstrap.css" rel="stylesheet"> </link>
+    <link href="/css/style.css" rel="stylesheet"> </link>
     <title>Users search</title>
 </head>
 <body>
 <div class="navbar navbar-inverse" role="navigation">
     <div>
-        <a class="navbar-brand" href="#">VMS Project</a>
+        <a class="navbar-brand" href="#">vms Project</a>
     </div>
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout">Выйти</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>
     </div>
 </div>
@@ -27,32 +25,56 @@
                 <li><a href="/main">Группы в БД</a></li>
                 <li><a href="/post/">Посты из групп ВК</a></li>
                 <li><a href="/showgroups">Поиск групп</a></li>
-                <li><a href="/userssearch">Поиск пользователей</a></li>
+                <li><a href="/citysearch">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
         </div>
         <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
-            <h2 class="sub-header">Поиск пользователей по населённому пункту</h2>
+            <h2 class="sub-header">Поиск пользователей</h2>
 
-            <div>
-                <form method="post" action="/userssearch">
-                    <div>
-                        <label>Страна</label>
-                        <select name="county">
-                            <option th:each="country : ${countries}"
-                                    th:selected="${country.id} == 1"
-                                    th:value="${country.id}"
-                                    th:text="${country.title}">
-                            </option>
-                        </select>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <label>Поиск интересующего населённого пункта</label>
+                </div>
+
+                <div class="panel-body">
+                    <div th:if="${param.isEmpty != null}">
+                        <div class="alert alert-danger">
+                            <label>Введите название населённого пункта!</label>
+                        </div>
                     </div>
 
-                    <div>
-                        <input class="btn btn-primary dark-button-primary" type="submit" value="Поиск"/>
+                    <div class="form-search-city">
+                        <form method="post" action="/citysearch">
+                            <div class="form-group">
+                                <div>
+                                    <label>Страна</label>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="county">
+                                        <option th:each="country : ${countries}"
+                                                th:selected="${country.id} == 1"
+                                                th:value="${country.id}"
+                                                th:text="${country.title}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label>Название интересующего населённого пункта</label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="q" required="required"></input>
+                                </div>
+
+                                <div align="right">
+                                    <input class="btn btn-primary dark-button-primary" type="submit" value="Search"/>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
-
 
         </div>
     </div>

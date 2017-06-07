@@ -44,7 +44,7 @@ public class ProxyPropertiesController {
 								  @RequestParam(value = "password") String password,
 								  @RequestParam(value = "token") String token,
 								  @RequestParam(value = "ip") String ip,
-								  @RequestParam(value = "port") Long port) {
+								  @RequestParam(value = "port") int port) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/properties/proxy?hasNull";
 		}
@@ -68,7 +68,7 @@ public class ProxyPropertiesController {
 								   @RequestParam(value = "password") String password,
 								   @RequestParam(value = "token") String token,
 								   @RequestParam(value = "ip") String ip,
-								   @RequestParam(value = "port") Long port) {
+								   @RequestParam(value = "port") int port) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/properties/proxy?hasNull";
 		}

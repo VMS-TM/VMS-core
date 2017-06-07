@@ -38,13 +38,13 @@ public class ProxyServer {
 	@NotNull
 	@Max(value = 65535)
 	@Column(name = "port", nullable = false)
-	private int port;
+	private Integer port;
 
 	public ProxyServer() {
 
 	}
 
-	public ProxyServer(String login, String password, String token, String ip, int port) {
+	public ProxyServer(String login, String password, String token, String ip, Integer port) {
 		this.login = login;
 		this.password = password;
 		this.token = token;
@@ -52,7 +52,7 @@ public class ProxyServer {
 		this.port = port;
 	}
 
-	public ProxyServer(Long id, String login, String password, String token, String ip, int port) {
+	public ProxyServer(Long id, String login, String password, String token, String ip, Integer port) {
 		this.id = id;
 		this.login = login;
 		this.password = password;
@@ -101,11 +101,11 @@ public class ProxyServer {
 		this.ip = ip;
 	}
 
-	public int getPort() {
+	public Integer getPort() {
 		return port;
 	}
 
-	public void setPort(int port) {
+	public void setPort(Integer port) {
 		this.port = port;
 	}
 

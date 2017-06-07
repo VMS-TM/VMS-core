@@ -1,8 +1,5 @@
 package vms.services.impl;
 
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import vms.models.ProxyServer;
@@ -42,7 +39,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	 * @return object PostResponse
 	 */
 	@Override
-	public PostResponse getPostResponseByGroupsList(Iterable<Group> groups, String query) {
+	public PostResponse getPostResponseByGroupsList(List<Group> groups, String query) {
 		List<ProxyServer> proxyServerList = new ArrayList<>();
 		proxyServerList.addAll(proxyServerService.proxyServerList());
 		PostResponse postResponseSum = new PostResponse();
@@ -51,14 +48,11 @@ public class PostSearchServiceImpl implements PostSearchService {
 		int firstElement = 0;
 		int lastElement = 0;
 		ArrayList<Post> posts = new ArrayList<>();
-		List<Callable<PostResponse>> callables = new ArrayList<>();
 		List<PostResponse> responseList = new ArrayList<>();
 		ExecutorService executorService = Executors.newFixedThreadPool(proxyServerList.size());
-		List<Group> groupList = Lists.newArrayList(groups);
 
-
-		int requestOnProxy = Iterables.size(groups) / proxyServerList.size();
-		int remainingRequests = Iterables.size(groups) % proxyServerList.size();
+		int requestOnProxy = groups.size() / proxyServerList.size();
+		int remainingRequests = groups.size() % proxyServerList.size();
 
 		for (ProxyServer proxyServer : proxyServerList) {
 			RestTemplate proxyTemplate = getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
@@ -71,27 +65,24 @@ public class PostSearchServiceImpl implements PostSearchService {
 			final int start = firstElement;
 			final int finish = lastElement;
 
-			callables.add(() -> {
-				PostResponse postResponse = null;
+			executorService.submit(new Thread(() -> {
 				for (int i = start; i < finish; i++) {
-					postResponse = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groupList.get(i).getId(), query);
+					PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
 					if (i % 3 == 0) {
 						try {
-							Thread.sleep(3000);
+							Thread.sleep(1000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					}
 					responseList.add(postResponse);
 				}
-				return postResponse;
-			});
+			}));
 			firstElement += lastElement;
 			counterProxy++;
 		}
 
 		try {
-			List<Future<PostResponse>> futures = executorService.invokeAll(callables);
 			executorService.shutdown();
 			executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
@@ -100,9 +91,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 		for (PostResponse postResponse : responseList) {
 			if (postResponse != null) {
-					posts.addAll(postResponse.getPosts());
-					count += postResponse.getCount();
-				}
+				posts.addAll(postResponse.getPosts());
+				count += postResponse.getCount();
+			}
 		}
 
 		if (posts.size() > 0) {
@@ -114,7 +105,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	@Override
-	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate,String proxyServer, String nameGroup, String query) {
+	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate, String proxyServer, String nameGroup, String query) {
 		RootObject rootObject = proxyTemplate.getForObject(getUriQueryWall(proxyServer, nameGroup, query), RootObject.class);
 		if (rootObject.getPostResponse() != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);

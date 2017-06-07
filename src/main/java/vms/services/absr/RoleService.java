@@ -2,10 +2,11 @@ package vms.services.absr;
 
 
 import vms.models.Role;
+import java.util.Set;
 
 
 public interface RoleService {
-	Iterable<Role> listAllRoles();
+	Set<Role> listAllRoles();
 
 	Role getRoleById(Integer id);
 

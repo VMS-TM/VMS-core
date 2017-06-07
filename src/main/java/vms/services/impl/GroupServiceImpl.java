@@ -7,6 +7,8 @@ import vms.models.rawgroup.Group;
 import vms.repositories.GroupRepository;
 import vms.services.absr.GroupService;
 
+import java.util.List;
+
 
 @Service
 @Transactional
@@ -16,8 +18,8 @@ public class GroupServiceImpl implements GroupService {
 	private GroupRepository GroupRepository;
 
 	@Override
-	public Iterable<Group> listAllVkGroups() {
-		return GroupRepository.findAll();
+	public List<Group> listAllVkGroups() {
+		return (List<Group>) GroupRepository.findAll();
 	}
 
 	@Override

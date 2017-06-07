@@ -7,6 +7,8 @@ import vms.models.User;
 import vms.repositories.UserRepository;
 import vms.services.absr.UserService;
 
+import java.util.List;
+
 
 @Service
 @Transactional
@@ -17,8 +19,8 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public Iterable<User> listAllUsers() {
-		return userRepository.findAll();
+	public List<User> listAllUsers() {
+		return (List<User>) userRepository.findAll();
 	}
 
 	@Override

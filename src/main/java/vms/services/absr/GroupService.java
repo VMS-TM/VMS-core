@@ -2,10 +2,11 @@ package vms.services.absr;
 
 import vms.models.rawgroup.Group;
 
+import java.util.List;
 
 public interface GroupService {
 
-	Iterable<Group> listAllVkGroups();
+	List<Group> listAllVkGroups();
 
 	Group getGroupById(String id);
 

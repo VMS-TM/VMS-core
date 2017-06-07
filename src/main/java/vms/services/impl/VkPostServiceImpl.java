@@ -2,6 +2,7 @@ package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vms.models.postenvironment.Post;
 import vms.repositories.PostRepository;
 import vms.services.absr.VkPostService;
@@ -9,6 +10,7 @@ import vms.services.absr.VkPostService;
 import java.util.List;
 
 @Service
+@Transactional
 public class VkPostServiceImpl implements VkPostService {
 
 	@Autowired

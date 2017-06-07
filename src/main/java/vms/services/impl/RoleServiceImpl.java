@@ -7,6 +7,8 @@ import vms.models.Role;
 import vms.repositories.RoleRepository;
 import vms.services.absr.RoleService;
 
+import java.util.Set;
+
 
 @Service
 @Transactional
@@ -16,8 +18,8 @@ public class RoleServiceImpl implements RoleService {
 	RoleRepository roleRepository;
 
 	@Override
-	public Iterable<Role> listAllRoles() {
-		return roleRepository.findAll();
+	public Set<Role> listAllRoles() {
+		return (Set<Role>) roleRepository.findAll();
 	}
 
 	@Override

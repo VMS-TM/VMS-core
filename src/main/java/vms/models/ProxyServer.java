@@ -38,13 +38,13 @@ public class ProxyServer {
 	@NotNull
 	@Max(value = 65535)
 	@Column(name = "port", nullable = false)
-	private Long port;
+	private Integer port;
 
 	public ProxyServer() {
 
 	}
 
-	public ProxyServer(String login, String password, String token, String ip, Long port) {
+	public ProxyServer(String login, String password, String token, String ip, Integer port) {
 		this.login = login;
 		this.password = password;
 		this.token = token;
@@ -52,7 +52,7 @@ public class ProxyServer {
 		this.port = port;
 	}
 
-	public ProxyServer(Long id, String login, String password, String token, String ip, Long port) {
+	public ProxyServer(Long id, String login, String password, String token, String ip, Integer port) {
 		this.id = id;
 		this.login = login;
 		this.password = password;
@@ -101,11 +101,11 @@ public class ProxyServer {
 		this.ip = ip;
 	}
 
-	public Long getPort() {
+	public Integer getPort() {
 		return port;
 	}
 
-	public void setPort(Long port) {
+	public void setPort(Integer port) {
 		this.port = port;
 	}
 
@@ -116,12 +116,12 @@ public class ProxyServer {
 
 		ProxyServer that = (ProxyServer) o;
 
+		if (port != that.port) return false;
 		if (id != null ? !id.equals(that.id) : that.id != null) return false;
 		if (login != null ? !login.equals(that.login) : that.login != null) return false;
 		if (password != null ? !password.equals(that.password) : that.password != null) return false;
 		if (token != null ? !token.equals(that.token) : that.token != null) return false;
-		if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
-		return port != null ? port.equals(that.port) : that.port == null;
+		return ip != null ? ip.equals(that.ip) : that.ip == null;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class ProxyServer {
 		result = 31 * result + (password != null ? password.hashCode() : 0);
 		result = 31 * result + (token != null ? token.hashCode() : 0);
 		result = 31 * result + (ip != null ? ip.hashCode() : 0);
-		result = 31 * result + (port != null ? port.hashCode() : 0);
+		result = 31 * result + port;
 		return result;
 	}
 }

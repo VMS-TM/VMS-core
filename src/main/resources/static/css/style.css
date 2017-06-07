@@ -59,4 +59,16 @@
 
 .bottom-Margin {
     margin-bottom: 10px;
+.form-search-city{
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.panel-without-margin{
+    margin-bottom: 0px;
+}
+
+#invisible{
+    display: none;
 }

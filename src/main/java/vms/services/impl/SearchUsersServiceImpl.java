@@ -127,8 +127,14 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 		int firstElement = 0;
 		int lastElement = 0;
 
+		List<ProxyServer>allProxyServers = proxyServerService.proxyServerList();
 		List<ProxyServer> proxyServerList = new ArrayList<>();
-		proxyServerList.addAll(proxyServerService.proxyServerList());
+
+		for (ProxyServer proxyServer: allProxyServers) {
+			if(proxyServer.getDestiny().equalsIgnoreCase("user")){
+				proxyServerList.add(proxyServer);
+			}
+		}
 
 		if (proxyServerList.size() == 0) {
 			return;

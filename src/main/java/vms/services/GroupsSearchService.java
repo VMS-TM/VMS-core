@@ -21,7 +21,7 @@ public class GroupsSearchService {
 	final String path = "https://api.vk.com/method/execute";
 	final String version = "&v=5.64";
 
-	public List<Group> getPostsByGroupName(String first, String second, long count) {
+	public List<Group> getGroupsByGroupName(String first, String second, long count) {
 //
 		RestTemplate restTemplate = new RestTemplate();
 		List<Group> items = new ArrayList<Group>();
@@ -29,7 +29,6 @@ public class GroupsSearchService {
 		for (String query : parseQuery(first, second)) {
 			String result = restTemplate.getForObject(getUri(path, query), String.class);
 
-			//Работа с Jackson
 			ObjectMapper objectMapper = new ObjectMapper();
 			RootObject rootObject = null;
 
@@ -41,7 +40,7 @@ public class GroupsSearchService {
 
 
 			for (Group r : rootObject.getGroup()) {
-				if (r.getMembersCount() >= count) {
+				if (r.getMembersCount() >= count && r.getIsClosed()==0  ) {
 					items.add(r);
 				}
 			}

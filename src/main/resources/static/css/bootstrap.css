@@ -8228,3 +8228,13 @@ button.close {
 .bg-custom {
     background: #f1f1f1;
 }
+
+.row.slim {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.row.slim > [class^="col-"], .slim > [class*=" col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}

@@ -16,3 +16,21 @@ $("#myModal").on('hidden.bs.modal', function () {
     var form = $(this).find('form');
     form[0].reset();
 });
+
+
+// после загрузки страницы
+$(function() {
+    $("#checkbox_check").click(function(){
+        $("input[type=checkbox]").each(function(){
+            $(this).prop('checked', true);
+        });
+    });
+
+    $("#checkbox_cancel").click(function(){
+        $("input[type=checkbox]").each(function(){
+            $(this).prop('checked', false);
+        });
+    });
+
+
+});

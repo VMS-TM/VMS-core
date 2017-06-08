@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <link href="/css/bootstrap.css" rel="stylesheet"></link>
     <link href="/css/style.css" rel="stylesheet"></link>
-
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
 </head>
 
 <body>
@@ -51,7 +51,8 @@
                     <thead></thead>
                     <tbody>
                     <tr>
-                        <th>Информация по посту</th>
+                        <th>Содержание</th>
+                        <th>Статус</th>
                         <th>Текст</th>
                         <th>Пост</th>
                         <th>Дата</th>
@@ -62,6 +63,7 @@
                         <form th:action="@{/post/update}" th:object="${post}" method="post">
                             <td><a class="btn btn-default" type="button"
                                    data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
+                            <td><span class="glyphicon glyphicon-info-sign"></span>  <span class="glyphicon glyphicon-picture"></span>  <span class="glyphicon glyphicon-ok-sign"></span></td>
                             <td width="400"><p th:text="${post.text}"
                                                class="cut-text-two"></p></td>
                             <td><a

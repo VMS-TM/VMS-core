@@ -22,6 +22,7 @@ import java.util.*;
 public class PostController {
 
 	private static final String home = "redirect:/post/";
+	private static final Long IDGroup = null;
 
 	@Autowired
 	private VkPostService postService;
@@ -34,6 +35,8 @@ public class PostController {
 
 	@Autowired
 	private PostToGroupService postToGroupService;
+
+
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
@@ -81,7 +84,7 @@ public class PostController {
 
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
 	public void doPostToGroup(@ModelAttribute Post post) {
-		postToGroupService.postToGroup(post.getOwnerId(), post);
+		postToGroupService.postToGroup(IDGroup, post);
 	}
 
 	void preparationPost(List<Post> posts) {

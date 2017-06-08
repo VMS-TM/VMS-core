@@ -18,7 +18,7 @@ public class PostToGroupService {
 
 	final String uri = "https://api.vk.com/method";
 
-	private String doPost(Integer idOfGroup, String text, String proxyServer) {
+	private String doPost(Long idOfGroup, String text, String proxyServer) {
 		StringBuilder sb = new StringBuilder(uri);
 		sb.append("/wall.post?owner_id=");
 		sb.append(idOfGroup);
@@ -29,7 +29,7 @@ public class PostToGroupService {
 		return sb.toString();
 	}
 
-	public void postToGroup(Integer idGroup, Post post) {
+	public void postToGroup(Long idGroup, Post post) {
 
 		String token = propertySearchService.getValue("defaultKey");
 

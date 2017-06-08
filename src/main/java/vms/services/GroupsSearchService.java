@@ -22,7 +22,7 @@ public class GroupsSearchService {
 	final String version = "&v=5.64";
 
 	public List<Group> getGroupsByGroupName(String first, String second, long count) {
-//
+
 		RestTemplate restTemplate = new RestTemplate();
 		List<Group> items = new ArrayList<Group>();
 

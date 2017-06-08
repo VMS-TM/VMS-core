@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import vms.models.postenvironment.PostResponse;
+import vms.services.PostToGroupService;
 import vms.services.absr.GroupService;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.VkPostService;
@@ -30,6 +31,9 @@ public class PostController {
 
 	@Autowired
 	private GroupService groupService;
+
+	@Autowired
+	private PostToGroupService postToGroupService;
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
@@ -73,6 +77,11 @@ public class PostController {
 			return "posts";
 		}
 		return home;
+	}
+
+	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
+	public void doPostToGroup(@ModelAttribute Post post) {
+		postToGroupService.postToGroup(post.getOwnerId(), post);
 	}
 
 	void preparationPost(List<Post> posts) {

@@ -67,7 +67,7 @@ public class PostController {
 	@RequestMapping(value = {"/req"}, method = RequestMethod.GET)
 	public String getNewPosts(Model model, @ModelAttribute Post post, @RequestParam(value = "query", required = false) String query) {
 		PostResponse postResponse = postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
-		if (postResponse != null) {
+		if (postResponse.getPosts() != null) {
 			ArrayList<Post> listPosts = postResponse.getPosts();
 			postService.addPosts(listPosts);
 			List<Post> posts = postService.getAllPostFromDb();
@@ -78,6 +78,9 @@ public class PostController {
 			model.addAttribute("FoundCount", postResponse.getCount());
 			model.addAttribute("GettingCount", postResponse.getPosts().size());
 			return "posts";
+		}
+		else{
+			model.addAttribute("warning", true);
 		}
 		return home;
 	}

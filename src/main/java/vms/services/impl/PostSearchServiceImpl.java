@@ -85,9 +85,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 							e.printStackTrace();
 						}
 					}
-					if (postResponse != null) {
-						responseList.add(postResponse);
-					}
+					responseList.add(postResponse);
 				}
 			}));
 
@@ -103,8 +101,10 @@ public class PostSearchServiceImpl implements PostSearchService {
 		}
 
 		for (PostResponse postResponse : responseList) {
-			posts.addAll(postResponse.getPosts());
-			count += postResponse.getCount();
+			if (postResponse != null) {
+				posts.addAll(postResponse.getPosts());
+				count += postResponse.getCount();
+			}
 		}
 
 		if (posts.size() > 0) {

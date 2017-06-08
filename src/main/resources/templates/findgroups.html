@@ -29,14 +29,14 @@
                 <li><a href="/properties">Настройки</a></li>
             </ul>
         </div>
-        <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
+        <div class=" row slim col-md-9 fixed">
             <h2 class="sub-header">Поиск групп</h2>
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#panel1">Найденные группы</a></li>
                 <li><a data-toggle="tab" href="#panel2">Найти группы</a></li>
             </ul>
             <div class="tab-content boxShadow3 bg-tab">
-                <div id="panel1" class="tab-pane fade in active boxShadow3 bg-tab">
+                <div id="panel1" class="tab-pane fade in active boxShadow3 bg-tab" style="margin: 1px">
                     <table class="table table-row-cell">
                         <tr>
 
@@ -57,8 +57,16 @@
                                 <td><input type="checkbox" th:field="*{checkedItems}" th:value="${iterStat.count}"/>
                                 </td>
                             </tr>
-                            <input type="submit" text="Add checked"/>
+                            <div class="row slim col-md-8 center" >
+                            <input type="submit" class="btn btn btn-success " style="width:180px;height:30px;margin-left: 370px" value="Добавить выбранное" />
+                            </div>
                         </form>
+                        <div class = "col-md-2 center" >
+                            <input type="button"  class="btn btn btn-primary" style="width:180px;height:30px" id="checkbox_cancel" value="Снять все чекбоксы" /><br/>
+                        </div>
+                        <div class = "col-md-2 center" >
+                        <input type="button"  class="btn  btn-primary" style="width:180px;height:30px" id="checkbox_check" value="Выбрать все чекбоксы" /><br/>
+                        </div>
                     </table>
                 </div>
                 <div id="panel2" class="tab-pane fade boxShadow3 bg-tab">

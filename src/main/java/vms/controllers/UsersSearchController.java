@@ -41,6 +41,6 @@ public class UsersSearchController {
 	public String searchUsers(ModelMap modelMap, @RequestParam(value = "id") Long id) {
 		searchUsersService.getUsersInSelectedCity(id);
 
-		return "redirect:/city/search";
+		return "searchis";
 	}
 }

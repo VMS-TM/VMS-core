@@ -61,9 +61,10 @@
                 <li><a href="/properties/extra">Доп. настройки</a></li>
             </ul>
 
+
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <label>Список прокси серверов для поиска постов по пользователям в ВКонтакте</label>
+                    <label>Список прокси серверов для поиска постов по группам в ВКонтакте</label>
                 </div>
                 <div class="panel-body">
                     <div>
@@ -82,8 +83,8 @@
                             <tbody>
 
                             <th:block th:each="server : ${servers}">
-                                <form method="post" action="/properties/proxy">
-                                    <tr th:if="${server.destiny}=='user'">
+                                <form method="post" action="/properties/proxy/group">
+                                    <tr th:if="${server.destiny}=='group'">
                                         <td align="center" th:text="${server.id}"></td>
                                         <td align="center" th:text="${server.login}"></td>
                                         <td align="center" th:text="${server.password}"></td>
@@ -106,7 +107,7 @@
                                     <div class="modal fade" th:id="${server.id}">
                                         <div class="modal-dialog modal-sm">
                                             <div class="modal-content">
-                                                <form role="form" action="/properties/proxy/edit" method="post">
+                                                <form role="form" action="/properties/proxy/group/edit" method="post">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal">
                                                             &times;
@@ -187,7 +188,7 @@
     <div class="modal fade" id="add-modal">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <form role="form" action="/properties/proxy/add" method="post">
+                <form role="form" action="/properties/proxy/group/add" method="post">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Добавление прокси сервера</h4>
@@ -213,7 +214,7 @@
                             <input type="text" class="form-control" name="port" required="required"
                                    pattern="\d{1,5}"></input>
 
-                            <input type="text" class="form-control invis" name="destiny" value="user"></input>
+                            <input type="text" class="form-control invis" name="destiny" value="group"></input>
 
                         </div>
                     </div>

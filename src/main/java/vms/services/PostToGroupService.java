@@ -4,6 +4,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
 import vms.models.rawgroup.Group;
 import vms.models.rawgroup.RootObject;
@@ -12,9 +13,6 @@ import java.io.IOException;
 
 @Service
 public class PostToGroupService {
-
-	@Autowired
-	private  PropertySearchService propertySearchService;
 
 	final String uri = "https://api.vk.com/method";
 
@@ -31,7 +29,7 @@ public class PostToGroupService {
 
 	public void postToGroup(Long idGroup, Post post) {
 
-		String token = propertySearchService.getValue("defaultKey");
+		String token = ConstantsForVkApi.DEFAULT_TOKEN_ACCESS;
 
 		doPost(idGroup, post.getText(), token);
 

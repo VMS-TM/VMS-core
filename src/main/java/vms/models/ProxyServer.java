@@ -40,25 +40,31 @@ public class ProxyServer {
 	@Column(name = "port", nullable = false)
 	private Integer port;
 
+	@NotNull
+	@Column(name = "destiny")
+	private String destiny;
+
 	public ProxyServer() {
 
 	}
 
-	public ProxyServer(String login, String password, String token, String ip, Integer port) {
+	public ProxyServer(String login, String password, String token, String ip, Integer port, String destiny) {
 		this.login = login;
 		this.password = password;
 		this.token = token;
 		this.ip = ip;
 		this.port = port;
+		this.destiny = destiny;
 	}
 
-	public ProxyServer(Long id, String login, String password, String token, String ip, Integer port) {
+	public ProxyServer(Long id, String login, String password, String token, String ip, Integer port, String destiny) {
 		this.id = id;
 		this.login = login;
 		this.password = password;
 		this.token = token;
 		this.ip = ip;
 		this.port = port;
+		this.destiny = destiny;
 	}
 
 	public Long getId() {
@@ -109,6 +115,14 @@ public class ProxyServer {
 		this.port = port;
 	}
 
+	public String getDestiny() {
+		return destiny;
+	}
+
+	public void setDestiny(String destiny) {
+		this.destiny = destiny;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -116,12 +130,13 @@ public class ProxyServer {
 
 		ProxyServer that = (ProxyServer) o;
 
-		if (port != that.port) return false;
 		if (id != null ? !id.equals(that.id) : that.id != null) return false;
 		if (login != null ? !login.equals(that.login) : that.login != null) return false;
 		if (password != null ? !password.equals(that.password) : that.password != null) return false;
 		if (token != null ? !token.equals(that.token) : that.token != null) return false;
-		return ip != null ? ip.equals(that.ip) : that.ip == null;
+		if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
+		if (port != null ? !port.equals(that.port) : that.port != null) return false;
+		return destiny != null ? destiny.equals(that.destiny) : that.destiny == null;
 	}
 
 	@Override
@@ -131,7 +146,8 @@ public class ProxyServer {
 		result = 31 * result + (password != null ? password.hashCode() : 0);
 		result = 31 * result + (token != null ? token.hashCode() : 0);
 		result = 31 * result + (ip != null ? ip.hashCode() : 0);
-		result = 31 * result + port;
+		result = 31 * result + (port != null ? port.hashCode() : 0);
+		result = 31 * result + (destiny != null ? destiny.hashCode() : 0);
 		return result;
 	}
 }

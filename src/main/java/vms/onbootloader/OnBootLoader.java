@@ -199,7 +199,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		groupService.saveGroup(twetyFourth);
 		groupService.saveGroup(twetyFifth);
 
-		log.info("Saved second - id: " + first.getId());
+		log.info("Add 25 groups of vk in DB for tests");
 	}
 
 	private void loadUsers() {
@@ -232,19 +232,11 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	private void loadProxyServers() {
 		ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
-//<<<<<<< HEAD
-//				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
-//				"88.212.252.47", 18090);
-//
-//		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
-//				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
-//				"46.16.226.222", 53281);
-//=======
-				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
-				"87.228.29.154", 	53281);
+				"23",
+				"87.228.29.154", 53281);
 
 		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
-				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
+				"23",
 				"93.187.152.190", 8080);
 
 		proxyServerService.addProxyServer(firstProxyServer);
@@ -253,7 +245,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		log.info("Saved proxy server with ip:" + secondProxyServer.getIp());
 	}
 
-	private void loadUsersFromVK(){
+	private void loadUsersFromVK() {
 		List<UserFromVK> userFromVKList = new ArrayList<>();
 		userFromVKList.add(new UserFromVK(115470965L, "Алексей", "Прогнозов"));
 		userFromVKList.add(new UserFromVK(149406594L, "Иван", "Николаев"));

@@ -11,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.ProxyServerService;
 import vms.services.absr.SearchUsersService;
+import vms.services.absr.VkPostService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -24,6 +26,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 	@Autowired
 	private SearchUsersService searchUsersService;
+
+	@Autowired
+	private VkPostService postService;
 
 
 	//constants for query

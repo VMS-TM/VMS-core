@@ -232,25 +232,29 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	private void loadProxyServers() {
 		ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
-//<<<<<<< HEAD
-//				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
-//				"88.212.252.47", 18090);
-//
-//		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
-//				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
-//				"46.16.226.222", 53281);
-//=======
-				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
-				"87.228.29.154", 	53281);
+				"bb6211359dc3e3eb8f6fe190d36e8a42ad054dd2e146ec845072dcd19377d474caafd648b3712e3254e54",
+				"91.122.195.202", 8080, "user");
 
 		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
+				"dead6a659bc53060c5f9100288b01c6534501ba9496f5d8f49e2a944ce910f915d4aa7a278c59871e68dd",
+				"46.16.226.222", 53281, "user");
+
+		ProxyServer thirdProxyServer = new ProxyServer("mail@gmail.ru", "32167666",
+				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
+				"87.228.29.154", 53281, "group");
+
+		ProxyServer fourthProxyServer = new ProxyServer("+79158838954", "78%&*rR",
 				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
-				"93.187.152.190", 8080);
+				"46.0.192.176", 10092, "group");
 
 		proxyServerService.addProxyServer(firstProxyServer);
 		log.info("Saved proxy server with ip:" + firstProxyServer.getIp());
 		proxyServerService.addProxyServer(secondProxyServer);
 		log.info("Saved proxy server with ip:" + secondProxyServer.getIp());
+		proxyServerService.addProxyServer(thirdProxyServer);
+		log.info("Saved proxy server with ip:" + thirdProxyServer.getIp());
+		proxyServerService.addProxyServer(fourthProxyServer);
+		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
 	}
 
 	private void loadUsersFromVK(){

@@ -1,6 +1,8 @@
 package vms.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -10,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import vms.models.ProxyServer;
 import vms.services.absr.ProxyServerService;
+
+import javax.validation.ConstraintViolationException;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
 
 
 @Controller
@@ -64,7 +70,7 @@ public class ProxyPropertiesController {
 
 		try {
 			proxyServerService.addProxyServer(server);
-		} catch (Exception exp) {
+		} catch (DataIntegrityViolationException exp) {
 			return "redirect:/properties/proxy/group?duplicate";
 		}
 
@@ -89,7 +95,7 @@ public class ProxyPropertiesController {
 
 		try {
 			proxyServerService.addProxyServer(server);
-		} catch (Exception exp) {
+		} catch (DataIntegrityViolationException exp) {
 			return "redirect:/properties/proxy?duplicate";
 		}
 
@@ -115,7 +121,7 @@ public class ProxyPropertiesController {
 
 		try {
 			proxyServerService.editProxyServer(server);
-		} catch (Exception exp) {
+		} catch (DataIntegrityViolationException exp) {
 			return "redirect:/properties/proxy?duplicate";
 		}
 
@@ -141,7 +147,7 @@ public class ProxyPropertiesController {
 
 		try {
 			proxyServerService.editProxyServer(server);
-		} catch (Exception exp) {
+		} catch (DataIntegrityViolationException exp) {
 			return "redirect:/properties/proxy/group?duplicate";
 		}
 

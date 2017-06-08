@@ -41,7 +41,7 @@ public class ProxyServer {
 	private Integer port;
 
 	@NotNull
-	@Column(name = "Destiny")
+	@Column(name = "destiny")
 	private String destiny;
 
 	public ProxyServer() {

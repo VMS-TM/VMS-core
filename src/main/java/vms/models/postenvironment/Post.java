@@ -71,6 +71,36 @@ public class Post implements Serializable {
 		this.signer_id = signer_id;
 	}
 
+	private boolean savedInDb;
+
+	public boolean isSavedInDb() {
+		return savedInDb;
+	}
+
+	public void setSavedInDb(boolean savedInDb) {
+		this.savedInDb = savedInDb;
+	}
+
+	private boolean havePhoto;
+
+	public boolean isHavePhoto() {
+		return havePhoto;
+	}
+
+	public void setHavePhoto(boolean havePhoto) {
+		this.havePhoto = havePhoto;
+	}
+
+	private boolean postedToGroup;
+
+	public boolean isPostedToGroup() {
+		return postedToGroup;
+	}
+
+	public void setPostedToGroup(boolean postedToGroup) {
+		this.postedToGroup = postedToGroup;
+	}
+
 	private String phoneNumber;
 
 	public String getPhoneNumber() {

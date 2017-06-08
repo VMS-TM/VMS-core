@@ -241,12 +241,12 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 				"136.169.136.88", 53281, "user");
 
 		ProxyServer thirdProxyServer = new ProxyServer("mail@gmail.ru", "32167666",
-				"53c2207ef83c3717171236e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
-				"87.228.29.154", 53281, "group");
+				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
+				"91.214.71.64", 3128, "group");
 
 		ProxyServer fourthProxyServer = new ProxyServer("+79158838954", "78%&*rR",
-				"5d866b1300b52bd30e23d405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
-				"46.0.192.176", 10092, "group");
+				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
+				"194.87.236.25", 60000, "group");
 
 		proxyServerService.addProxyServer(firstProxyServer);
 		log.info("Saved proxy server with ip:" + firstProxyServer.getIp());

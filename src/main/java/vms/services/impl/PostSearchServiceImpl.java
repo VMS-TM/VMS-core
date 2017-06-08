@@ -41,8 +41,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 	 */
 	@Override
 	public PostResponse getPostResponseByGroupsList(List<Group> groups, String query) {
-		List<ProxyServer> proxyServerList = new ArrayList<>();
-		proxyServerList.addAll(proxyServerService.proxyServerList());
 		PostResponse postResponseSum = new PostResponse();
 		int count = 0;
 		int counterProxy = 0;
@@ -50,10 +48,21 @@ public class PostSearchServiceImpl implements PostSearchService {
 		int lastElement = 0;
 		ArrayList<Post> posts = new ArrayList<>();
 		List<PostResponse> responseList = new ArrayList<>();
+
+		List<ProxyServer> allProxyServers = proxyServerService.proxyServerList();
+		List<ProxyServer> proxyServerList = new ArrayList<>();
+
+		for (ProxyServer proxyServer: allProxyServers) {
+			if(proxyServer.getDestiny().equalsIgnoreCase("group")){
+				proxyServerList.add(proxyServer);
+			}
+		}
+
 		ExecutorService executorService = Executors.newFixedThreadPool(proxyServerList.size());
 
 		int requestOnProxy = groups.size() / proxyServerList.size();
 		int remainingRequests = groups.size() % proxyServerList.size();
+
 
 		for (ProxyServer proxyServer : proxyServerList) {
 			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
@@ -76,7 +85,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 							e.printStackTrace();
 						}
 					}
-					responseList.add(postResponse);
+					if (postResponse != null) {
+						responseList.add(postResponse);
+					}
 				}
 			}));
 
@@ -92,10 +103,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 		}
 
 		for (PostResponse postResponse : responseList) {
-			if (postResponse != null) {
-				posts.addAll(postResponse.getPosts());
-				count += postResponse.getCount();
-			}
+			posts.addAll(postResponse.getPosts());
+			count += postResponse.getCount();
 		}
 
 		if (posts.size() > 0) {

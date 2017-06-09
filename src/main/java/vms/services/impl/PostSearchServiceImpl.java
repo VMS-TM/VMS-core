@@ -8,6 +8,7 @@ import vms.models.postenvironment.RootObject;
 import vms.models.rawgroup.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import vms.models.usersenvironment.UserFromVK;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.ProxyServerService;
 import vms.services.absr.SearchUsersService;
@@ -45,7 +46,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	 * @return object PostResponse
 	 */
 	@Override
-	public PostResponse getPostResponseByGroupsList(List<Group> groups, String query) {
+	public void getPostResponseByGroupsList(List<Group> groups, String query) {
 		PostResponse postResponseSum = new PostResponse();
 		int count = 0;
 		int counterProxy = 0;
@@ -53,6 +54,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 		int lastElement = 0;
 		ArrayList<Post> posts = new ArrayList<>();
 		List<PostResponse> responseList = new ArrayList<>();
+
+		List<Post> postsInBD = postService.getAllPostFromDb();
 
 		List<ProxyServer> allProxyServers = proxyServerService.proxyServerList();
 		List<ProxyServer> proxyServerList = new ArrayList<>();
@@ -90,34 +93,26 @@ public class PostSearchServiceImpl implements PostSearchService {
 							e.printStackTrace();
 						}
 					}
-					responseList.add(postResponse);
+
+					if (!postsInBD.containsAll(postResponse.getPosts())) {
+						postService.addPosts(postResponse.getPosts());
+					} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0){
+						List<Post>postsWhichNotInDB = new ArrayList<>();
+
+						for (Post post : postResponse.getPosts()) {
+							if(!postsInBD.contains(post)){
+								postsWhichNotInDB.add(post);
+							}
+						}
+
+						postService.addPosts(postsWhichNotInDB);
+					}
 				}
 			}));
 
 			firstElement += lastElement;
 			counterProxy++;
 		}
-
-		try {
-			executorService.shutdown();
-			executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		for (PostResponse postResponse : responseList) {
-			if (postResponse != null) {
-				posts.addAll(postResponse.getPosts());
-				count += postResponse.getCount();
-			}
-		}
-
-		if (posts.size() > 0) {
-			postResponseSum.setPosts(posts);
-			postResponseSum.setCount(count);
-		}
-
-		return postResponseSum;
 	}
 
 	@Override

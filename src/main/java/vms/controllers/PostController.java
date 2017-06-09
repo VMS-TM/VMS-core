@@ -47,6 +47,7 @@ public class PostController {
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
+		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
 		model.addAttribute("posts", posts);
 		model.addAttribute("AllPosts", posts.size());
 		return "posts";
@@ -54,12 +55,14 @@ public class PostController {
 
 	@RequestMapping(value = {"/add"}, method = RequestMethod.POST)
 	public String addPosts(@ModelAttribute List<Post> posts) {
+		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
 		postService.addPosts(posts);
 		return home;
 	}
 
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)
-	public String updatePosts(@RequestParam(value = "id") Integer id,
+	public String updatePosts(Model model,
+							  @RequestParam(value = "id") Long id,
 							  @RequestParam(value = "title") String title,
 							  @RequestParam(value = "owner") String owner,
 							  @RequestParam(value = "district") String district,
@@ -71,12 +74,14 @@ public class PostController {
 							  @RequestParam("date") String date) throws ParseException {
 
 
-		DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date dateOfPost = format.parse(date);
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, dateOfPost);
 
 		try {
+			editedPost.setSavedInDb(true);
 			postService.update(editedPost);
+			model.addAttribute("editedPost", editedPost.isSavedInDb());
 		} catch (DataIntegrityViolationException exp) {
 			return home;
 		}
@@ -85,24 +90,21 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
-	public String deletePosts(@ModelAttribute Post post) {
-		postService.delete(post);
+	public String deletePosts(@RequestParam(value = "idDeletePost") Long id) {
+		postService.deletePost(id);
 		return home;
 	}
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.GET)
 	public String getNewPosts(Model model, @ModelAttribute Post post, @RequestParam(value = "query", required = false) String query) {
-		PostResponse postResponse = postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
-		if (postResponse.getPosts() != null) {
-			ArrayList<Post> listPosts = postResponse.getPosts();
-			postService.addPosts(listPosts);
-			List<Post> posts = postService.getAllPostFromDb();
+		postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
+		List<Post> posts = postService.getAllPostFromDb();
+
+		if (posts != null) {
 			Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
 			preparationPost(posts);
 			model.addAttribute("posts", posts);
 			model.addAttribute("AllPosts", posts.size());
-			model.addAttribute("FoundCount", postResponse.getCount());
-			model.addAttribute("GettingCount", postResponse.getPosts().size());
 			return "posts";
 		}
 
@@ -120,10 +122,10 @@ public class PostController {
 								@RequestParam(value = "info") String info) {
 
 		Post postToGroup = new Post(title, owner, district, price, textOnView, adress, contact, info);
-
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
 		if (result == null || result.contains("error_code")) {
+			postToGroup.setPostedToGroup(true);
 			return "redirect:/post/req?postInGroupDanger";
 		}
 

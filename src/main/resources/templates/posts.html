@@ -59,12 +59,12 @@
                     <td><input type="submit" class="btn btn-default" value="Запросить посты из группы сейчас"/></td>
                 </form>
                 <!--<h3>-->
-                    <!--<span class="label label-info">Нашли постов<span class="badge" th:if="${FoundCount != null}"-->
-                                                                     <!--th:text="${FoundCount}"></span></span>-->
-                    <!--<span class="label label-info">Полученные посты<span class="badge" th:if="${GettingCount != null}"-->
-                                                                         <!--th:text="${GettingCount}"></span></span>-->
-                    <!--<span class="label label-info">Всего постов<span class="badge" th:if="${AllPosts != null}"-->
-                                                                     <!--th:text="${AllPosts}"></span></span>-->
+                <!--<span class="label label-info">Нашли постов<span class="badge" th:if="${FoundCount != null}"-->
+                <!--th:text="${FoundCount}"></span></span>-->
+                <!--<span class="label label-info">Полученные посты<span class="badge" th:if="${GettingCount != null}"-->
+                <!--th:text="${GettingCount}"></span></span>-->
+                <!--<span class="label label-info">Всего постов<span class="badge" th:if="${AllPosts != null}"-->
+                <!--th:text="${AllPosts}"></span></span>-->
                 <!--</h3>-->
                 <table class="table table-striped">
                     <thead></thead>
@@ -79,10 +79,15 @@
                     </tr>
                     <tr th:each="post : ${posts}">
                         <td width="10"><a class="btn btn-default" type="button"
-                               data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
-                        <td><span class="glyphicon glyphicon-info-sign"></span> <span
-                                class="glyphicon glyphicon-picture"></span> <span
-                                class="glyphicon glyphicon-ok-sign"></span></td>
+                                          data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
+                        <td>
+                            <div id='item1' th:value="${savedInDb}">
+                                <span id="show1" class="glyphicon glyphicon-info-sign"></span>
+                            </div>
+                        </td>
+                        <!--<td><span class="glyphicon glyphicon-info-sign"></span> <span-->
+                        <!--class="glyphicon glyphicon-picture"></span> <span-->
+                        <!--class="glyphicon glyphicon-ok-sign"></span></td>-->
                         <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
                         <td width="100" th:text="${post.date}">Дата</td>
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
@@ -97,7 +102,7 @@
                             <td width="50"><input type="submit" class="btn btn-default" value="Запостить"/></td>
                         </form>
                         <form th:action="@{/post/delete}" th:object="${post}" method="post">
-                            <input class="hide-param" th:value="${post.id}"/>
+                            <input class="hide-param" name="idDeletePost" th:value="${post.id}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
                         </form>
                         <div class="container">

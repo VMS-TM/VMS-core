@@ -41,5 +41,8 @@ public class VkPostServiceImpl implements VkPostService {
 		postRepo.save(post);
 	}
 
-
+	@Override
+	public void deletePost(Long id) {
+		postRepo.delete(id);
+	}
 }

@@ -2,6 +2,7 @@ package vms.models.postenvironment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Value;
 import vms.models.postenvironment.attachmentenv.AttachmentContainer;
 
 import javax.persistence.*;
@@ -19,43 +20,18 @@ public class Post implements Serializable {
 	@Id
 	@Column(name = "id")
 	@JsonProperty("id")
-	public int id;
+	public Long id;
 
 	//id of users
 	@Column(name = "from_id")
 	@JsonProperty("from_id")
 	private int from_id;
 
-	public Post() {
+	public Long getId() {
+		return id;
 	}
 
-	public Post(Integer id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, Date date) {
-		this.id=id;
-		this.headling=title;
-		this.nameOfPerson=owner;
-		this.area=district;
-		this.priceOfFlat=price;
-		this.textOnView=textOnView;
-		this.metroAndAddress=adress;
-		this.text=info;
-		this.date=date;
-	}
-
-	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info) {
-		this.headling=title;
-		this.nameOfPerson=owner;
-		this.area=district;
-		this.priceOfFlat=price;
-		this.textOnView=textOnView;
-		this.metroAndAddress=adress;
-		this.text=info;
-	}
-
-	public int getId() {
-		return this.id;
-	}
-
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -259,13 +235,41 @@ public class Post implements Serializable {
 		this.attachmentContainers = attachmentContainers;
 	}
 
-	public Post(int from_id, int owner_id, int Date, int post_id, String text) {
+	public Post() {
+	}
+
+	public Post(Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, Date date) {
+		this.id=id;
+		this.headling=title;
+		this.nameOfPerson=owner;
+		this.area=district;
+		this.priceOfFlat=price;
+		this.textOnView=textOnView;
+		this.phoneNumber=contact;
+		this.metroAndAddress=adress;
+		this.text=info;
+		this.date=date;
+	}
+
+	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info) {
+		this.headling=title;
+		this.nameOfPerson=owner;
+		this.area=district;
+		this.priceOfFlat=price;
+		this.textOnView=textOnView;
+		this.phoneNumber=contact;
+		this.metroAndAddress=adress;
+		this.text=info;
+	}
+
+	public Post(int from_id, int owner_id, Date date, int post_id, String text) {
 		this.from_id = from_id;
 		this.owner_id = owner_id;
 		this.date = date;
 		this.post_id = post_id;
 		this.text = text;
 	}
+
 
 	@Override
 	public boolean equals(Object o) {
@@ -274,11 +278,15 @@ public class Post implements Serializable {
 
 		Post post = (Post) o;
 
-		if (id != post.id) return false;
 		if (from_id != post.from_id) return false;
 		if (owner_id != post.owner_id) return false;
 		if (post_id != post.post_id) return false;
 		if (marked_as_ads != post.marked_as_ads) return false;
+		if (signer_id != post.signer_id) return false;
+		if (savedInDb != post.savedInDb) return false;
+		if (havePhoto != post.havePhoto) return false;
+		if (postedToGroup != post.postedToGroup) return false;
+		if (id != null ? !id.equals(post.id) : post.id != null) return false;
 		if (date != null ? !date.equals(post.date) : post.date != null) return false;
 		if (text != null ? !text.equals(post.text) : post.text != null) return false;
 		if (attachmentContainers != null ? !attachmentContainers.equals(post.attachmentContainers) : post.attachmentContainers != null)
@@ -296,7 +304,7 @@ public class Post implements Serializable {
 
 	@Override
 	public int hashCode() {
-		int result = id;
+		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + from_id;
 		result = 31 * result + owner_id;
 		result = 31 * result + (date != null ? date.hashCode() : 0);
@@ -304,6 +312,10 @@ public class Post implements Serializable {
 		result = 31 * result + (text != null ? text.hashCode() : 0);
 		result = 31 * result + (attachmentContainers != null ? attachmentContainers.hashCode() : 0);
 		result = 31 * result + marked_as_ads;
+		result = 31 * result + signer_id;
+		result = 31 * result + (savedInDb ? 1 : 0);
+		result = 31 * result + (havePhoto ? 1 : 0);
+		result = 31 * result + (postedToGroup ? 1 : 0);
 		result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
 		result = 31 * result + (nameOfPerson != null ? nameOfPerson.hashCode() : 0);
 		result = 31 * result + (priceOfFlat != null ? priceOfFlat.hashCode() : 0);
@@ -326,6 +338,10 @@ public class Post implements Serializable {
 				", text='" + text + '\'' +
 				", attachmentContainers=" + attachmentContainers +
 				", marked_as_ads=" + marked_as_ads +
+				", signer_id=" + signer_id +
+				", savedInDb=" + savedInDb +
+				", havePhoto=" + havePhoto +
+				", postedToGroup=" + postedToGroup +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", nameOfPerson='" + nameOfPerson + '\'' +
 				", priceOfFlat='" + priceOfFlat + '\'' +

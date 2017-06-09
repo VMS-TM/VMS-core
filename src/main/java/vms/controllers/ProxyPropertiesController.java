@@ -41,7 +41,6 @@ public class ProxyPropertiesController {
 	@RequestMapping(value = "/properties/proxy", method = RequestMethod.POST)
 	public String delProxyServers(@RequestParam(value = "id") Long id) {
 		proxyServerService.deleteProxyServer(id);
-
 		return "redirect:/properties/proxy";
 	}
 

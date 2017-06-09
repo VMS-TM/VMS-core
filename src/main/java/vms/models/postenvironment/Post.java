@@ -60,6 +60,127 @@ public class Post implements Serializable {
 	@JsonProperty("marked_as_ads")
 	private int marked_as_ads;
 
+	@JsonProperty("signer_id")
+	private int signer_id;
+
+	public int getSignerId() {
+		return this.signer_id;
+	}
+
+	public void setSignerId(int signer_id) {
+		this.signer_id = signer_id;
+	}
+
+	private boolean savedInDb;
+
+	public boolean isSavedInDb() {
+		return savedInDb;
+	}
+
+	public void setSavedInDb(boolean savedInDb) {
+		this.savedInDb = savedInDb;
+	}
+
+	private boolean havePhoto;
+
+	public boolean isHavePhoto() {
+		return havePhoto;
+	}
+
+	public void setHavePhoto(boolean havePhoto) {
+		this.havePhoto = havePhoto;
+	}
+
+	private boolean postedToGroup;
+
+	public boolean isPostedToGroup() {
+		return postedToGroup;
+	}
+
+	public void setPostedToGroup(boolean postedToGroup) {
+		this.postedToGroup = postedToGroup;
+	}
+
+	private String phoneNumber;
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	private String nameOfPerson;
+
+	public String getNameOfPerson() {
+		return nameOfPerson;
+	}
+
+	public void setNameOfPerson(String nameOfPerson) {
+		this.nameOfPerson = nameOfPerson;
+	}
+
+	private String priceOfFlat;
+
+	public String getPriceOfFlat() {
+		return priceOfFlat;
+	}
+
+	public void setPriceOfFlat(String priceOfFlat) {
+		this.priceOfFlat = priceOfFlat;
+	}
+
+	private String metroAndAddress;
+
+	public String getMetroAndAddress() {
+		return metroAndAddress;
+	}
+
+	public void setMetroAndAddress(String metroAndAddress) {
+		this.metroAndAddress = metroAndAddress;
+	}
+
+	private String headling;
+
+	public String getHeadling() {
+		return headling;
+	}
+
+	public void setHeadling(String headling) {
+		this.headling = headling;
+	}
+
+	private String area;
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	private String textOnView;
+
+	public String getTextOnView() {
+		return textOnView;
+	}
+
+	public void setTextOnView(String textOnView) {
+		this.textOnView = textOnView;
+	}
+
+	private String authorOfpost;
+
+	public String getAuthorOfpost() {
+		return authorOfpost;
+	}
+
+	public void setAuthorOfpost(String authorOfpost) {
+		this.authorOfpost = authorOfpost;
+	}
+
 	public int getMarkedAsAds() {
 		return this.marked_as_ads;
 	}
@@ -116,20 +237,6 @@ public class Post implements Serializable {
 		this.attachmentContainers = attachmentContainers;
 	}
 
-	@Override
-	public String toString() {
-		return "Post{" +
-				"id=" + id +
-				", from_id=" + from_id +
-				", owner_id=" + owner_id +
-				", date=" + date +
-				", post_id=" + post_id +
-				", text='" + text + '\'' +
-				", attachmentContainers=" + attachmentContainers +
-				", marked_as_ads=" + marked_as_ads +
-				'}';
-	}
-
 	public Post(int from_id, int owner_id, int Date, int post_id, String text) {
 		this.from_id = from_id;
 		this.owner_id = owner_id;
@@ -141,7 +248,7 @@ public class Post implements Serializable {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Post)) return false;
+		if (o == null || getClass() != o.getClass()) return false;
 
 		Post post = (Post) o;
 
@@ -149,8 +256,20 @@ public class Post implements Serializable {
 		if (from_id != post.from_id) return false;
 		if (owner_id != post.owner_id) return false;
 		if (post_id != post.post_id) return false;
-		if (!date.equals(post.date)) return false;
-		return text != null ? text.equals(post.text) : post.text == null;
+		if (marked_as_ads != post.marked_as_ads) return false;
+		if (date != null ? !date.equals(post.date) : post.date != null) return false;
+		if (text != null ? !text.equals(post.text) : post.text != null) return false;
+		if (attachmentContainers != null ? !attachmentContainers.equals(post.attachmentContainers) : post.attachmentContainers != null)
+			return false;
+		if (phoneNumber != null ? !phoneNumber.equals(post.phoneNumber) : post.phoneNumber != null) return false;
+		if (nameOfPerson != null ? !nameOfPerson.equals(post.nameOfPerson) : post.nameOfPerson != null) return false;
+		if (priceOfFlat != null ? !priceOfFlat.equals(post.priceOfFlat) : post.priceOfFlat != null) return false;
+		if (metroAndAddress != null ? !metroAndAddress.equals(post.metroAndAddress) : post.metroAndAddress != null)
+			return false;
+		if (headling != null ? !headling.equals(post.headling) : post.headling != null) return false;
+		if (area != null ? !area.equals(post.area) : post.area != null) return false;
+		if (textOnView != null ? !textOnView.equals(post.textOnView) : post.textOnView != null) return false;
+		return authorOfpost != null ? authorOfpost.equals(post.authorOfpost) : post.authorOfpost == null;
 	}
 
 	@Override
@@ -158,9 +277,41 @@ public class Post implements Serializable {
 		int result = id;
 		result = 31 * result + from_id;
 		result = 31 * result + owner_id;
-		result = 31 * result + date.hashCode();
+		result = 31 * result + (date != null ? date.hashCode() : 0);
 		result = 31 * result + post_id;
 		result = 31 * result + (text != null ? text.hashCode() : 0);
+		result = 31 * result + (attachmentContainers != null ? attachmentContainers.hashCode() : 0);
+		result = 31 * result + marked_as_ads;
+		result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+		result = 31 * result + (nameOfPerson != null ? nameOfPerson.hashCode() : 0);
+		result = 31 * result + (priceOfFlat != null ? priceOfFlat.hashCode() : 0);
+		result = 31 * result + (metroAndAddress != null ? metroAndAddress.hashCode() : 0);
+		result = 31 * result + (headling != null ? headling.hashCode() : 0);
+		result = 31 * result + (area != null ? area.hashCode() : 0);
+		result = 31 * result + (textOnView != null ? textOnView.hashCode() : 0);
+		result = 31 * result + (authorOfpost != null ? authorOfpost.hashCode() : 0);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Post{" +
+				"id=" + id +
+				", from_id=" + from_id +
+				", owner_id=" + owner_id +
+				", date=" + date +
+				", post_id=" + post_id +
+				", text='" + text + '\'' +
+				", attachmentContainers=" + attachmentContainers +
+				", marked_as_ads=" + marked_as_ads +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", nameOfPerson='" + nameOfPerson + '\'' +
+				", priceOfFlat='" + priceOfFlat + '\'' +
+				", metroAndAddress='" + metroAndAddress + '\'' +
+				", headling='" + headling + '\'' +
+				", area='" + area + '\'' +
+				", textOnView='" + textOnView + '\'' +
+				", authorOfpost='" + authorOfpost + '\'' +
+				'}';
 	}
 }

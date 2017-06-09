@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    </link>
+    <link href="/css/bootstrap.css" rel="stylesheet"></link>
+    <link href="/css/style.css" rel="stylesheet"></link>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
 </head>
 
 <body>
@@ -57,30 +58,167 @@
                     <thead></thead>
                     <tbody>
                     <tr>
-                        <th>группа</th>
+                        <th>Содержание</th>
+                        <th>Статус</th>
+                        <th>Текст</th>
+                        <th>Пост</th>
+                        <th>Дата</th>
                         <th></th>
-                        <th>действия</th>
-                        <th></th>
-                        <th>текст</th>
-                        <th>дата</th>
-                        <th></th>
+                        <th>Удаление</th>
                     </tr>
                     <tr th:each="post : ${posts}">
                         <form th:action="@{/post/update}" th:object="${post}" method="post">
-                            <td><a class="btn btn-primary"
-                                   th:href="@{'https://vk.com/public' + ${post.ownerId} + '?w=wall-' + ${post.ownerId} + '_' + ${post.id}}">Посмотреть</a>
+                            <td><a class="btn btn-default" type="button"
+                                   data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
+                            <td><span class="glyphicon glyphicon-info-sign"></span>  <span class="glyphicon glyphicon-picture"></span>  <span class="glyphicon glyphicon-ok-sign"></span></td>
+                            <td width="400"><p th:text="${post.text}"
+                                               class="cut-text-two"></p></td>
+                            <td><a
+                                    th:href="@{'https://vk.com/public' + ${post.ownerId} + '?w=wall-' + ${post.ownerId} + '_' + ${post.id}}">ВК</a>
                             </td>
-                            <td><input type="submit" class="btn btn-default" value="Объявление"/></td>
-                            <form th:action="@{/post/delete}" th:object="${post}" method="post">
-                                <td><input type="hidden" name="id" th:value="${post.id}"/></td>
-                                <td><input type="submit" class="btn btn-default" value="удалить"/></td>
-                            </form>
-                            <td width="400"><textarea class="form-control" rows="13" name="text" th:text="${post.text}"></textarea></td>
                             <td width="100" th:text="${post.date}">Дата</td>
                         </form>
+                        <form th:action="@{/post/delete}" th:object="${post}" method="post">
+                            <td><input type="hidden" name="id" th:value="${post.id}"/></td>
+                            <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
+                        </form>
 
-                    </tr>
-                    <tr>
+                        <div class="container">
+                            <div class="modal fade" th:id="${post.id}">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <form role="form" action="/post/update" method="post">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title" align="center"
+                                                    th:text="'Пост номер ' + ${post.id}"></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active"><a href="#home" data-toggle="tab">Общие</a></li>
+                                                    <li><a href="#photo" data-toggle="tab">Фото</a></li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="home">
+                                                        <div class="row">
+                                                            <input type="hidden" name="id" th:value="${post.id}"/>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="iTitle">Заголовок</label>
+                                                                    <input th:value="${post.headling}" name="title"
+                                                                           type="text" class="form-control"
+                                                                           id="iTitle" placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iOwner">Собственник</label>
+                                                                    <input name="owner" th:value="${post.nameOfPerson}"
+                                                                           type="text" class="form-control"
+                                                                           id="iOwner" placeholder=""
+                                                                           value="Собственник"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iDistrict">Район</label>
+                                                                    <input name="district" th:value="${post.area}"
+                                                                           type="text"
+                                                                           class="form-control" id="iDistrict"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iPrice">Стоимость</label>
+                                                                    <input name="price" type="text"
+                                                                           th:value="${post.priceOfFlat}"
+                                                                           class="form-control" id="iPrice"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iLol">Text</label>
+                                                                    <input name="lol" th:value="${post.textOnView}"
+                                                                           type="text" class="form-control"
+                                                                           id="iLol" placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iAdress">Адрес</label>
+                                                                    <input name="adress" type="text"
+                                                                           th:value="${post.metroAndAddress}"
+                                                                           class="form-control" id="iAdress"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iContact">Контакты</label>
+                                                                    <input name="contact" type="text"
+                                                                           th:value="${post.phoneNumber}"
+                                                                           class="form-control" id="iContact"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="iInfo">Доп. инфо:</label>
+                                                                    <textarea name="info" class="form-control"
+                                                                              th:text="${post.text}" rows="3"
+                                                                              id="iInfo"></textarea>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iVkh"><a name="vkh"
+                                                                                         th:href="@{'https://vk.com/public' + ${post.ownerId} + '?w=wall-' + ${post.ownerId} + '_' + ${post.id}}"
+                                                                                         target="_blank">Ссылка
+                                                                        поста в ВК</a></label>
+                                                                    <input name="nVkh" type="text" class="form-control"
+                                                                           id="iVkh" placeholder=""/>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iVka"><a name="vka"
+                                                                                         th:href="@{'https://vk.com/id' + ${post.signerId}}"
+                                                                                         target="_blank">Ссылка
+                                                                        на автора поста в ВК</a></label>
+                                                                    <input name="nVka" th:text="${post.authorOfpost}"
+                                                                           type="text" class="form-control"
+                                                                           id="iVka" placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="photo">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <input type="submit" class="btn btn-primary"
+                                                       value="Сохранить изменения"/>
+                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                       value="${_csrf.token}"/>
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Закрыть
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </tr>
                     </tbody>
                 </table>
@@ -89,9 +227,9 @@
     </div>
 </div>
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="/js/bootstrap.js"></script>
 <script src="/js/modal.js"></script>
+<script src="/js/status.js"></script>
 </body>
 </html>

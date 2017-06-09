@@ -59,7 +59,8 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)
-	public String updatePosts(@RequestParam(value = "id") Integer id,
+	public String updatePosts(@ModelAttribute Post post,
+							  @RequestParam(value = "id") Integer id,
 							  @RequestParam(value = "title") String title,
 							  @RequestParam(value = "owner") String owner,
 							  @RequestParam(value = "district") String district,
@@ -104,15 +105,13 @@ public class PostController {
 			model.addAttribute("FoundCount", postResponse.getCount());
 			model.addAttribute("GettingCount", postResponse.getPosts().size());
 			return "posts";
-		} else {
-			model.addAttribute("warning", true);
 		}
-		return home;
+
+		return "redirect:/post/req?warning";
 	}
 
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
-	public String doPostToGroup(Model model,
-								@ModelAttribute Post post,
+	public String doPostToGroup(@ModelAttribute Post post,
 								@RequestParam(value = "title") String title,
 								@RequestParam(value = "owner") String owner,
 								@RequestParam(value = "district") String district,

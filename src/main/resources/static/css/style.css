@@ -49,6 +49,13 @@
     width: 150px;
 }
 
+.beginingOfPost {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 400px;
+}
+
 .cut-text-two {
     overflow: hidden;
     white-space: nowrap;
@@ -79,8 +86,13 @@
     display: none;
 }
 
-#postSend1, #postSend2, #postSend3,
-#postSend4, #postSend5, #postSend6,
-#postSend7, #postSend8, #postDelete {
+.hide-param {
     display: none;
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 5px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #dddddd;
 }

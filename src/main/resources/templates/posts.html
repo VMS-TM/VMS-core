@@ -29,10 +29,10 @@
                 <li><a href="/properties">Настройки</a></li>
             </ul>
         </div>
-        <div class=" col-md-9 fixed " >
+        <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Посты из групп</h2>
 
-            <div th:if="${warning == true}">
+            <div th:if="${param.warning != null}">
                 <div class="alert alert-danger">
                     <label>Проверьте Proxy Servers</label>
                 </div>
@@ -40,7 +40,7 @@
 
             <div th:if="${param.postInGroupDanger != null}">
                 <div class="alert alert-danger">
-                    <label>Произошла ошибка при отправке постав в группу.</label>
+                    <label>Произошла ошибка при отправке поста в группу.</label>
                 </div>
             </div>
 
@@ -72,38 +72,39 @@
                     <tr>
                         <th>Содержание</th>
                         <th>Статус</th>
-                        <th>Текст</th>
-                        <th>Пост</th>
+                        <th>Начало поста</th>
                         <th>Дата</th>
+                        <th>В группу</th>
                         <th>Удаление</th>
                     </tr>
                     <tr th:each="post : ${posts}">
-                        <td><a class="btn btn-default" type="button"
+                        <td width="10"><a class="btn btn-default" type="button"
                                data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
-                        <td><span class="glyphicon glyphicon-info-sign"></span>  <span class="glyphicon glyphicon-picture"></span>  <span class="glyphicon glyphicon-ok-sign"></span></td>
-                        <td width="250"><p th:text="${post.text}"
-                                           class="cut-text-two"></p></td>
+                        <td><span class="glyphicon glyphicon-info-sign"></span> <span
+                                class="glyphicon glyphicon-picture"></span> <span
+                                class="glyphicon glyphicon-ok-sign"></span></td>
+                        <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
                         <td width="100" th:text="${post.date}">Дата</td>
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
-                            <input id="postSend1" name="title" th:value="${post.headling}"/>
-                            <input id="postSend2" name="owner" th:value="${post.nameOfPerson}"/>
-                            <input id="postSend3" name="district" th:value="${post.area}"/>
-                            <input id="postSend4" name="price" th:value="${post.priceOfFlat}"/>
-                            <input id="postSend5" name="textOnView" th:value="${post.textOnView}"/>
-                            <input id="postSend6" name="adress" th:value="${post.metroAndAddress}"/>
-                            <input id="postSend7" name="contact" th:value="${post.phoneNumber}"/>
-                            <input id="postSend8" name="info" th:value="${post.text}"/>
+                            <input class="hide-param" name="title" th:value="${post.headling}"/>
+                            <input class="hide-param" name="owner" th:value="${post.nameOfPerson}"/>
+                            <input class="hide-param" name="district" th:value="${post.area}"/>
+                            <input class="hide-param" name="price" th:value="${post.priceOfFlat}"/>
+                            <input class="hide-param" name="textOnView" th:value="${post.textOnView}"/>
+                            <input class="hide-param" name="adress" th:value="${post.metroAndAddress}"/>
+                            <input class="hide-param" name="contact" th:value="${post.phoneNumber}"/>
+                            <input class="hide-param" name="info" th:value="${post.text}"/>
                             <td width="50"><input type="submit" class="btn btn-default" value="Запостить"/></td>
                         </form>
                         <form th:action="@{/post/delete}" th:object="${post}" method="post">
-                            <input id="postDelete" th:value="${post.id}"/>
+                            <input class="hide-param" th:value="${post.id}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
                         </form>
                         <div class="container">
                             <div class="modal fade" th:id="${post.id}">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
-                                        <form role="form" th:action="@{/post/update}"  th:object="${post}" method="post">
+                                        <form role="form" th:action="@{/post/update}" th:object="${post}" method="post">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">
                                                     &times;
@@ -159,7 +160,8 @@
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="iLol">Text</label>
-                                                                    <input name="textOnView" th:value="${post.textOnView}"
+                                                                    <input name="textOnView"
+                                                                           th:value="${post.textOnView}"
                                                                            type="text" class="form-control"
                                                                            id="iLol" placeholder=""/>
                                                                 </div>

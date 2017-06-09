@@ -29,6 +29,28 @@ public class Post implements Serializable {
 	public Post() {
 	}
 
+	public Post(Integer id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, Date date) {
+		this.id=id;
+		this.headling=title;
+		this.nameOfPerson=owner;
+		this.area=district;
+		this.priceOfFlat=price;
+		this.textOnView=textOnView;
+		this.metroAndAddress=adress;
+		this.text=info;
+		this.date=date;
+	}
+
+	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info) {
+		this.headling=title;
+		this.nameOfPerson=owner;
+		this.area=district;
+		this.priceOfFlat=price;
+		this.textOnView=textOnView;
+		this.metroAndAddress=adress;
+		this.text=info;
+	}
+
 	public int getId() {
 		return this.id;
 	}

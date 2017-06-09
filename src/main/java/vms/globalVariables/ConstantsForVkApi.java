@@ -29,7 +29,7 @@ public class ConstantsForVkApi {
 	public final static String PARAMETER_AGE_FROM = "&age_from=20";
 	public final static String PARAMETER_FIELDS = "&fields=wall_comments";
 
-	public final static String DEFAULT_TOKEN_ACCESS = "cada64882a306d1fed8b31e37336af492e31c71f2a6ec70136fe8204e55e97757c15baf3e54ad8df22005";
-	public final static Long ID_GROUP = 145578365L;
+	public final static String DEFAULT_TOKEN_ACCESS = "d8cbb44b52afa22d68b9aee1504d621b7dd2c59f2a4f0ef2179a2275aa494e6e3f861a9efd0da5980f7dd";
+	public final static Integer ID_GROUP = 145578365;
 
 }

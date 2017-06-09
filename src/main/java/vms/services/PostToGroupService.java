@@ -16,22 +16,33 @@ public class PostToGroupService {
 
 	final String uri = "https://api.vk.com/method";
 
-	private String doPost(Long idOfGroup, String text, String proxyServer) {
+	private String doPost(Integer idOfGroup, String text, String proxyServer) {
 		StringBuilder sb = new StringBuilder(uri);
-		sb.append("/wall.post?owner_id=");
-		sb.append(idOfGroup);
-		sb.append("&message=");
-		sb.append(text);
-		sb.append("access_token=");
-		sb.append(proxyServer);
+		sb.append("/wall.post?owner_id=-")
+			.append(idOfGroup)
+			.append("&friends_only=1")
+			.append("&from_group=0")
+			.append("&message=")
+			.append(text)
+			.append("&signed=0")
+			.append("&mark_as_ads=0")
+			.append("&access_token=")
+			.append(proxyServer)
+			.append("&v=5.65");
 		return sb.toString();
 	}
 
-	public void postToGroup(Long idGroup, Post post) {
+	public String postToGroup(Integer idGroup, Post post) {
 
-		String token = ConstantsForVkApi.DEFAULT_TOKEN_ACCESS;
+		RestTemplate restTemplate = new RestTemplate();
 
-		doPost(idGroup, post.getText(), token);
+		String result = restTemplate.getForObject(doPost(idGroup, post.getText(), ConstantsForVkApi.DEFAULT_TOKEN_ACCESS), String.class);
+
+		if (result != null) {
+			return result;
+		}
+
+		return null;
 
 	}
 

@@ -38,6 +38,18 @@
                 </div>
             </div>
 
+            <div th:if="${param.postInGroupDanger != null}">
+                <div class="alert alert-danger">
+                    <label>Произошла ошибка при отправке постав в группу.</label>
+                </div>
+            </div>
+
+            <div th:if="${param.postInGroupSuccess != null}">
+                <div class="alert alert-success">
+                    <label>Пост был успешно отправлен в группу.</label>
+                </div>
+            </div>
+
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#panel1">Посты</a></li>
             </ul>
@@ -63,31 +75,35 @@
                         <th>Текст</th>
                         <th>Пост</th>
                         <th>Дата</th>
-                        <th></th>
                         <th>Удаление</th>
                     </tr>
                     <tr th:each="post : ${posts}">
-                        <form th:action="@{/post/update}" th:object="${post}" method="post">
-                            <td><a class="btn btn-default" type="button"
-                                   data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
-                            <td><span class="glyphicon glyphicon-info-sign"></span>  <span class="glyphicon glyphicon-picture"></span>  <span class="glyphicon glyphicon-ok-sign"></span></td>
-                            <td width="400"><p th:text="${post.text}"
-                                               class="cut-text-two"></p></td>
-                            <td><a
-                                    th:href="@{'https://vk.com/public' + ${post.ownerId} + '?w=wall-' + ${post.ownerId} + '_' + ${post.id}}">ВК</a>
-                            </td>
-                            <td width="100" th:text="${post.date}">Дата</td>
+                        <td><a class="btn btn-default" type="button"
+                               data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
+                        <td><span class="glyphicon glyphicon-info-sign"></span>  <span class="glyphicon glyphicon-picture"></span>  <span class="glyphicon glyphicon-ok-sign"></span></td>
+                        <td width="250"><p th:text="${post.text}"
+                                           class="cut-text-two"></p></td>
+                        <td width="100" th:text="${post.date}">Дата</td>
+                        <form th:action="@{/post/addPost}" th:object="${post}" method="post">
+                            <input id="postSend1" name="title" th:value="${post.headling}"/>
+                            <input id="postSend2" name="owner" th:value="${post.nameOfPerson}"/>
+                            <input id="postSend3" name="district" th:value="${post.area}"/>
+                            <input id="postSend4" name="price" th:value="${post.priceOfFlat}"/>
+                            <input id="postSend5" name="textOnView" th:value="${post.textOnView}"/>
+                            <input id="postSend6" name="adress" th:value="${post.metroAndAddress}"/>
+                            <input id="postSend7" name="contact" th:value="${post.phoneNumber}"/>
+                            <input id="postSend8" name="info" th:value="${post.text}"/>
+                            <td width="50"><input type="submit" class="btn btn-default" value="Запостить"/></td>
                         </form>
                         <form th:action="@{/post/delete}" th:object="${post}" method="post">
-                            <td><input type="hidden" name="id" th:value="${post.id}"/></td>
+                            <input id="postDelete" th:value="${post.id}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
                         </form>
-
                         <div class="container">
                             <div class="modal fade" th:id="${post.id}">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
-                                        <form role="form" action="/post/update" method="post">
+                                        <form role="form" th:action="@{/post/update}"  th:object="${post}" method="post">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">
                                                     &times;
@@ -104,6 +120,7 @@
                                                     <div class="tab-pane active" id="home">
                                                         <div class="row">
                                                             <input type="hidden" name="id" th:value="${post.id}"/>
+                                                            <input type="hidden" name="date" th:value="${post.date}"/>
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label for="iTitle">Заголовок</label>
@@ -142,7 +159,7 @@
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="iLol">Text</label>
-                                                                    <input name="lol" th:value="${post.textOnView}"
+                                                                    <input name="textOnView" th:value="${post.textOnView}"
                                                                            type="text" class="form-control"
                                                                            id="iLol" placeholder=""/>
                                                                 </div>

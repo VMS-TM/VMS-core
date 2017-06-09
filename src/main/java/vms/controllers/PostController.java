@@ -2,6 +2,7 @@ package vms.controllers;
 
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.web.bind.annotation.RequestParam;
+import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,6 @@ import java.util.*;
 public class PostController {
 
 	private static final String home = "redirect:/post/";
-	private static final Long IDGroup = null;
 
 	@Autowired
 	private VkPostService postService;
@@ -87,7 +87,7 @@ public class PostController {
 
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
 	public void doPostToGroup(@ModelAttribute Post post) {
-		postToGroupService.postToGroup(IDGroup, post);
+		postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, post);
 	}
 
 	void preparationPost(List<Post> posts) {

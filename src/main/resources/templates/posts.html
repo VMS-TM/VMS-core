@@ -30,6 +30,13 @@
         </div>
         <div class=" col-md-9 fixed " >
             <h2 class="sub-header">Посты из групп</h2>
+
+            <div th:if="${warning == true}">
+                <div class="alert alert-danger">
+                    <label>Проверьте Proxy Servers</label>
+                </div>
+            </div>
+
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#panel1">Посты</a></li>
             </ul>

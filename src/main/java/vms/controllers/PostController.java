@@ -59,8 +59,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)
-	public String updatePosts(@ModelAttribute Post post,
-							  @RequestParam(value = "id") Integer id,
+	public String updatePosts(@RequestParam(value = "id") Integer id,
 							  @RequestParam(value = "title") String title,
 							  @RequestParam(value = "owner") String owner,
 							  @RequestParam(value = "district") String district,
@@ -111,8 +110,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
-	public String doPostToGroup(@ModelAttribute Post post,
-								@RequestParam(value = "title") String title,
+	public String doPostToGroup(@RequestParam(value = "title") String title,
 								@RequestParam(value = "owner") String owner,
 								@RequestParam(value = "district") String district,
 								@RequestParam(value = "price") String price,
@@ -125,11 +123,12 @@ public class PostController {
 
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
-		if (result != null) {
-			return "redirect:/post/?postInGroupSuccess";
+		if (result == null || result.contains("error_code")) {
+			return "redirect:/post/req?postInGroupDanger";
 		}
 
-		return "redirect:/post/?postInGroupDanger";
+		return "redirect:/post/req?postInGroupSuccess";
+
 	}
 
 	void preparationPost(List<Post> posts) {

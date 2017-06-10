@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import vms.globalVariables.ConstantsForVkApi;
+import vms.models.Property;
 import vms.models.ProxyServer;
 import vms.models.Role;
 import vms.models.User;
@@ -24,8 +25,10 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	@Autowired
 	private GroupService groupService;
+
 	@Autowired
 	private UserService userService;
+
 	@Autowired
 	private RoleService roleService;
 
@@ -34,6 +37,9 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	@Autowired
 	private UserFromVkService userFromVkService;
+
+	@Autowired
+	private PropertyService propertyService;
 
 	private Logger log = Logger.getLogger(OnBootLoader.class);
 
@@ -44,9 +50,10 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		loadUsers();
 		loadProxyServers();
 		loadUsersFromVK();
+		loadProperty();
 	}
 
-	public void loadGroups() {
+	private void loadGroups() {
 
 		Group first = new Group();
 		first.setId("57466174");
@@ -274,6 +281,17 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 		userFromVkService.addListOfUsersOfVK(userFromVKList);
 		log.info("Add 10 users of vk in DB for tests");
+	}
+
+	private void loadProperty() {
+
+		Property property = new Property();
+		property.setName("defaultKey");
+		property.setValue("ede9a9f0f1dbbedeb5d5c1030e5e704704a4d2680dee3a6200541d6887f4542c0b0a1b60b9d3cfbe45c90");
+		propertyService.addProperty(property);
+
+		log.info("Add 1 default property");
+
 	}
 }
 

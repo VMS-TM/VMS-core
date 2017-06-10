@@ -84,6 +84,10 @@ public class PostSearchServiceImpl implements PostSearchService {
 						}
 					}
 
+					/*
+					Threads are searching posts from groups and comparing if we have this in our Data Base or not. If not - add to DB.
+					If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
+					 */
 					if (!postsInBD.containsAll(postResponse.getPosts())) {
 						postService.addPosts(postResponse.getPosts());
 					} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {

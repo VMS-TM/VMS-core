@@ -120,7 +120,8 @@ public class PostController {
 								@RequestParam(value = "adress") String adress,
 								@RequestParam(value = "contact") String contact,
 								@RequestParam(value = "info") String info,
-								@RequestParam("date") String date) throws ParseException {
+								@RequestParam("date") String date,
+								@RequestParam("saveInDataBase") boolean save) throws ParseException {
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date dateOfPost = format.parse(date);
@@ -131,7 +132,7 @@ public class PostController {
 			return "redirect:/post/?postInGroupDanger";
 		}
 
-		postToGroup.setSavedInDb(true);
+		postToGroup.setSavedInDb(save);
 		postToGroup.setPostedToGroup(true);
 		postService.update(postToGroup);
 

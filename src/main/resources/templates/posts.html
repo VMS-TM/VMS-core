@@ -90,6 +90,7 @@
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
                             <input type="hidden" name="id" th:value="${post.id}"/>
                             <input type="hidden" name="date" th:value="${post.date}"/>
+                            <input type="hidden" name="saveInDataBase" th:value="${post.savedInDb}"/>
                             <input class="hide-param" name="title" th:value="${post.headling}"/>
                             <input class="hide-param" name="owner" th:value="${post.nameOfPerson}"/>
                             <input class="hide-param" name="district" th:value="${post.area}"/>

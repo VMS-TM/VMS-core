@@ -14,6 +14,9 @@ import java.io.IOException;
 @Service
 public class PostToGroupService {
 
+	@Autowired
+	PropertySearchService propertySearchService;
+
 	final String uri = "https://api.vk.com/method";
 
 	private String doPost(Integer idOfGroup, String text, String proxyServer) {
@@ -36,7 +39,7 @@ public class PostToGroupService {
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		String result = restTemplate.getForObject(doPost(idGroup, post.getText(), ConstantsForVkApi.DEFAULT_TOKEN_ACCESS), String.class);
+		String result = restTemplate.getForObject(doPost(idGroup, post.getText(), propertySearchService.getValue("defaultKey")), String.class);
 
 		if (result != null) {
 			return result;

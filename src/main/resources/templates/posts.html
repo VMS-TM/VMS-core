@@ -80,17 +80,16 @@
                     <tr th:each="post : ${posts}">
                         <td width="10"><a class="btn btn-default" type="button"
                                           data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
-                        <td>
-                            <div id='item1' th:value="${savedInDb}">
-                                <span id="show1" class="glyphicon glyphicon-info-sign"></span>
-                            </div>
+                        <td><span th:if="${post.savedInDb} == true" class="glyphicon glyphicon-info-sign"></span> <span
+                                th:if="${post.havePhoto} == true"
+                                class="glyphicon glyphicon-picture"></span> <span th:if="${post.postedToGroup} == true"
+                                                                                  class="glyphicon glyphicon-ok-sign"></span>
                         </td>
-                        <!--<td><span class="glyphicon glyphicon-info-sign"></span> <span-->
-                        <!--class="glyphicon glyphicon-picture"></span> <span-->
-                        <!--class="glyphicon glyphicon-ok-sign"></span></td>-->
                         <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
                         <td width="100" th:text="${post.date}">Дата</td>
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
+                            <input type="hidden" name="id" th:value="${post.id}"/>
+                            <input type="hidden" name="date" th:value="${post.date}"/>
                             <input class="hide-param" name="title" th:value="${post.headling}"/>
                             <input class="hide-param" name="owner" th:value="${post.nameOfPerson}"/>
                             <input class="hide-param" name="district" th:value="${post.area}"/>

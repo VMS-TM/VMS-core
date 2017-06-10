@@ -81,7 +81,6 @@ public class PostController {
 		try {
 			editedPost.setSavedInDb(true);
 			postService.update(editedPost);
-			model.addAttribute("editedPost", editedPost.isSavedInDb());
 		} catch (DataIntegrityViolationException exp) {
 			return home;
 		}
@@ -112,24 +111,31 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
-	public String doPostToGroup(@RequestParam(value = "title") String title,
+	public String doPostToGroup(@RequestParam(value = "id") Long id,
+								@RequestParam(value = "title") String title,
 								@RequestParam(value = "owner") String owner,
 								@RequestParam(value = "district") String district,
 								@RequestParam(value = "price") String price,
 								@RequestParam(value = "textOnView") String textOnView,
 								@RequestParam(value = "adress") String adress,
 								@RequestParam(value = "contact") String contact,
-								@RequestParam(value = "info") String info) {
+								@RequestParam(value = "info") String info,
+								@RequestParam("date") String date) throws ParseException {
 
-		Post postToGroup = new Post(title, owner, district, price, textOnView, adress, contact, info);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date dateOfPost = format.parse(date);
+		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, dateOfPost);
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
 		if (result == null || result.contains("error_code")) {
-			postToGroup.setPostedToGroup(true);
-			return "redirect:/post/req?postInGroupDanger";
+			return "redirect:/post/?postInGroupDanger";
 		}
 
-		return "redirect:/post/req?postInGroupSuccess";
+		postToGroup.setSavedInDb(true);
+		postToGroup.setPostedToGroup(true);
+		postService.update(postToGroup);
+
+		return "redirect:/post/?postInGroupSuccess";
 
 	}
 

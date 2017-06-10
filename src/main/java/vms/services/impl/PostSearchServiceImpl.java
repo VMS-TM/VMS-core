@@ -8,7 +8,6 @@ import vms.models.postenvironment.RootObject;
 import vms.models.rawgroup.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import vms.models.usersenvironment.UserFromVK;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.ProxyServerService;
 import vms.services.absr.SearchUsersService;
@@ -33,10 +32,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 
 	//constants for query
-	final String ACCESS_TOKEN = "808bcfd51bd94b4d0593a2dda57037fc4fdc46cac46e20d1b260c1a90d88b4c23023dd977e9639f7f8279";
 	final String uri = "https://api.vk.com/method";
-	final String version = "&v=5.63";
-	private int count = 0;
 
 	/**
 	 * confirm one PostResponse object from any PostResponse
@@ -47,21 +43,16 @@ public class PostSearchServiceImpl implements PostSearchService {
 	 */
 	@Override
 	public void getPostResponseByGroupsList(List<Group> groups, String query) {
-		PostResponse postResponseSum = new PostResponse();
-		int count = 0;
 		int counterProxy = 0;
 		int firstElement = 0;
 		int lastElement = 0;
-		ArrayList<Post> posts = new ArrayList<>();
-		List<PostResponse> responseList = new ArrayList<>();
 
 		List<Post> postsInBD = postService.getAllPostFromDb();
-
 		List<ProxyServer> allProxyServers = proxyServerService.proxyServerList();
 		List<ProxyServer> proxyServerList = new ArrayList<>();
 
-		for (ProxyServer proxyServer: allProxyServers) {
-			if(proxyServer.getDestiny().equalsIgnoreCase("group")){
+		for (ProxyServer proxyServer : allProxyServers) {
+			if (proxyServer.getDestiny().equalsIgnoreCase("group")) {
 				proxyServerList.add(proxyServer);
 			}
 		}
@@ -70,7 +61,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 		int requestOnProxy = groups.size() / proxyServerList.size();
 		int remainingRequests = groups.size() % proxyServerList.size();
-
 
 		for (ProxyServer proxyServer : proxyServerList) {
 			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
@@ -96,11 +86,11 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 					if (!postsInBD.containsAll(postResponse.getPosts())) {
 						postService.addPosts(postResponse.getPosts());
-					} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0){
-						List<Post>postsWhichNotInDB = new ArrayList<>();
+					} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
+						List<Post> postsWhichNotInDB = new ArrayList<>();
 
 						for (Post post : postResponse.getPosts()) {
-							if(!postsInBD.contains(post)){
+							if (!postsInBD.contains(post)) {
 								postsWhichNotInDB.add(post);
 							}
 						}
@@ -135,20 +125,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 		sb.append("&count=100");
 		sb.append("&access_token=");
 		sb.append(proxyServer);
-		return sb.toString();
-	}
-
-	private String getUriQueryWall(String ownerId, String query, int count) {
-		StringBuilder sb = new StringBuilder(uri);
-		sb.append("/wall.search?owner_id=");
-		sb.append(ownerId);
-		sb.append("&v=5.63");
-		sb.append("&count=");
-		sb.append(count);
-		sb.append("&query=");
-		sb.append(query);
-		sb.append("&access_token=");
-		sb.append(ACCESS_TOKEN);
 		return sb.toString();
 	}
 }

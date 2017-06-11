@@ -2,14 +2,17 @@ package vms.services;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
-import vms.models.rawgroup.Group;
 import vms.models.rawgroup.RootObject;
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @Service
 public class PostToGroupService {
@@ -19,27 +22,23 @@ public class PostToGroupService {
 
 	final String uri = "https://api.vk.com/method";
 
-	private String doPost(Integer idOfGroup, String text, String proxyServer) {
-		StringBuilder sb = new StringBuilder(uri);
-		sb.append("/wall.post?owner_id=-")
-			.append(idOfGroup)
-			.append("&friends_only=1")
-			.append("&from_group=0")
-			.append("&message=")
-			.append(text)
-			.append("&signed=0")
-			.append("&mark_as_ads=0")
-			.append("&access_token=")
-			.append(proxyServer)
-			.append("&v=5.65");
-		return sb.toString();
-	}
-
 	public String postToGroup(Integer idGroup, Post post) {
 
 		RestTemplate restTemplate = new RestTemplate();
+		String uri = "https://api.vk.com/method/wall.post";
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 
-		String result = restTemplate.getForObject(doPost(idGroup, post.getText(), propertySearchService.getValue("defaultKey")), String.class);
+		map.add("owner_id", "-" + idGroup);
+		map.add("friends_only", "0");
+		map.add("from_group", "1");
+		map.add("message", post.getText());
+		map.add("signed", "0");
+		map.add("mark_as_ads", "0");
+		map.add("access_token", propertySearchService.getValue("defaultKey"));
+		map.add("v", "5.65");
+
+
+		String result = restTemplate.postForObject(uri, map, String.class);
 
 		if (result != null) {
 			return result;

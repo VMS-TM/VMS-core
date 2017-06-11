@@ -48,6 +48,9 @@ public class PostController {
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
 		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
+//		preparationPost(posts);
+		prepareOwnerID(posts);
+
 		model.addAttribute("posts", posts);
 		model.addAttribute("AllPosts", posts.size());
 		return "posts";
@@ -101,7 +104,8 @@ public class PostController {
 
 		if (posts != null) {
 			Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
-			preparationPost(posts);
+//			preparationPost(posts);
+			prepareOwnerID(posts);
 			model.addAttribute("posts", posts);
 			model.addAttribute("AllPosts", posts.size());
 			return "posts";
@@ -139,6 +143,15 @@ public class PostController {
 		return "redirect:/post/?postInGroupSuccess";
 
 	}
+
+	void prepareOwnerID(List<Post> posts) {
+
+		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
+			Post postCurrent = iter.next();
+			postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
+		}
+	}
+
 
 	void preparationPost(List<Post> posts) {
 		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {

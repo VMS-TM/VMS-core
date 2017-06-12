@@ -69,7 +69,7 @@ public class PostController {
 							  @RequestParam(value = "contact") String contact,
 							  @RequestParam(value = "info") String info,
 							  @RequestParam("date") String date) throws ParseException {
-		
+
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date dateOfPost = format.parse(date);
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, dateOfPost);

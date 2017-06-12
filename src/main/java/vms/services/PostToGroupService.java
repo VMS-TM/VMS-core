@@ -18,11 +18,7 @@ public class PostToGroupService {
 
 	final String uri = "https://api.vk.com/method";
 
-	public String postToGroup(Integer idGroup, Post post) {
-
-		RestTemplate restTemplate = new RestTemplate();
-		String uri = "https://api.vk.com/method/wall.post";
-		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+	private String getURI(Post post) {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		if (post.getHeadling() != null) {
@@ -57,11 +53,19 @@ public class PostToGroupService {
 			stringBuilder.append("Доп. Информация: " + post.getText() + "\n");
 		}
 
+		return stringBuilder.toString();
+	}
 
+	public String postToGroup(Integer idGroup, Post post) {
+
+		RestTemplate restTemplate = new RestTemplate();
+		String uri = "https://api.vk.com/method/wall.post";
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+		
 		map.add("owner_id", "-" + idGroup);
 		map.add("friends_only", "0");
 		map.add("from_group", "1");
-		map.add("message", stringBuilder.toString());
+		map.add("message", getURI(post));
 		map.add("signed", "0");
 		map.add("mark_as_ads", "0");
 		map.add("access_token", propertySearchService.getValue("defaultKey"));

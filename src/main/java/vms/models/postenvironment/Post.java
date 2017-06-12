@@ -2,15 +2,14 @@ package vms.models.postenvironment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.beans.factory.annotation.Value;
 import vms.models.postenvironment.attachmentenv.AttachmentContainer;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -26,6 +25,20 @@ public class Post implements Serializable {
 	@Column(name = "from_id")
 	@JsonProperty("from_id")
 	private int from_id;
+
+	@OneToMany(fetch = FetchType.EAGER, targetEntity = Photos.class)
+	@JoinTable(name = "postphotos",
+			joinColumns = {@JoinColumn(name = "photo_id")},
+			inverseJoinColumns = {@JoinColumn(name = "post_id")})
+	private List<Photos> photos;
+
+	public List<Photos> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<Photos> photos) {
+		this.photos = photos;
+	}
 
 	public Long getId() {
 		return id;
@@ -239,27 +252,27 @@ public class Post implements Serializable {
 	}
 
 	public Post(Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, Date date) {
-		this.id=id;
-		this.headling=title;
-		this.nameOfPerson=owner;
-		this.area=district;
-		this.priceOfFlat=price;
-		this.textOnView=textOnView;
-		this.phoneNumber=contact;
-		this.metroAndAddress=adress;
-		this.text=info;
-		this.date=date;
+		this.id = id;
+		this.headling = title;
+		this.nameOfPerson = owner;
+		this.area = district;
+		this.priceOfFlat = price;
+		this.textOnView = textOnView;
+		this.phoneNumber = contact;
+		this.metroAndAddress = adress;
+		this.text = info;
+		this.date = date;
 	}
 
 	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info) {
-		this.headling=title;
-		this.nameOfPerson=owner;
-		this.area=district;
-		this.priceOfFlat=price;
-		this.textOnView=textOnView;
-		this.phoneNumber=contact;
-		this.metroAndAddress=adress;
-		this.text=info;
+		this.headling = title;
+		this.nameOfPerson = owner;
+		this.area = district;
+		this.priceOfFlat = price;
+		this.textOnView = textOnView;
+		this.phoneNumber = contact;
+		this.metroAndAddress = adress;
+		this.text = info;
 	}
 
 	public Post(int from_id, int owner_id, Date date, int post_id, String text) {

@@ -1,8 +1,6 @@
 package vms.controllers;
 
-import com.vdurmont.emoji.EmojiParser;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestParam;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
@@ -12,13 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import vms.models.postenvironment.PostResponse;
 import vms.services.PostToGroupService;
 import vms.services.absr.GroupService;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.VkPostService;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -48,9 +43,8 @@ public class PostController {
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
 		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
-//		preparationPost(posts);
 		prepareOwnerID(posts);
-
+		preparationPost(posts);
 		model.addAttribute("posts", posts);
 		model.addAttribute("AllPosts", posts.size());
 		return "posts";
@@ -75,8 +69,7 @@ public class PostController {
 							  @RequestParam(value = "contact") String contact,
 							  @RequestParam(value = "info") String info,
 							  @RequestParam("date") String date) throws ParseException {
-
-
+		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date dateOfPost = format.parse(date);
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, dateOfPost);
@@ -101,11 +94,10 @@ public class PostController {
 	public String getNewPosts(Model model, @ModelAttribute Post post, @RequestParam(value = "query", required = false) String query) {
 		postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
 		List<Post> posts = postService.getAllPostFromDb();
-
 		if (posts != null) {
 			Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
-//			preparationPost(posts);
 			prepareOwnerID(posts);
+			preparationPost(posts);
 			model.addAttribute("posts", posts);
 			model.addAttribute("AllPosts", posts.size());
 			return "posts";
@@ -145,33 +137,31 @@ public class PostController {
 	}
 
 	void prepareOwnerID(List<Post> posts) {
-
-		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
-			Post postCurrent = iter.next();
-			postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
-		}
+		posts.forEach(post -> post.setOwnerId(Math.abs(post.getOwnerId())));
 	}
 
 
 	void preparationPost(List<Post> posts) {
+
 		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
 			Post postCurrent = iter.next();
-			postCurrent.setOwnerId(Math.abs(postCurrent.getOwnerId()));
-			Pattern phoneNumber = Pattern.compile("(((8|\\+7)-?)?\\(?\\d{3}\\)?-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1})|(^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$)|(((8|\\+7) ?)?\\(?\\d{3}\\)? ?\\d{3}-?\\d{2}-?\\d{2})");
-			Pattern rent = Pattern.compile("(?<=сдаётся по | Стоимость |стоимость |Стоимость в месяц |стоимость в месяц |аренды в месяц |в месяц |Сдается за |cдается за|Залог |залог  |Стоимость аренды |cтоимость аренды |Аренда |аренда |Цена |цена |стоит |Стоит | ВСЕГО за| всего за ).*(\\d|\\d.p|\\d p|\\d.руб|\\d руб|\\d руб.|\\d рублей|\\d.рублей|\\d т.р.|\\d т. р.|\\d.\u20BD).(?=\\s)");
-			Pattern metroAndAddress = Pattern.compile("(?<=ул.|Улица |улица |Квартира |М. |м. |м.|м |квартира |районе |Районе |метро |Метро |Адрес |Адрес: |адрес |адрес: |адресу ).*(\\W+)(?=\\D+)");
+			if (postCurrent.isSavedInDb() != true) {
+				Pattern phoneNumber = Pattern.compile("(((8|\\+7)-?)?\\(?\\d{3}\\)?-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1})|(^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$)|(((8|\\+7) ?)?\\(?\\d{3}\\)? ?\\d{3}-?\\d{2}-?\\d{2})");
+				Pattern rent = Pattern.compile("(?<=сдаётся по | Стоимость |стоимость |Стоимость в месяц |стоимость в месяц |аренды в месяц |в месяц |Сдается за |cдается за|Залог |залог  |Стоимость аренды |cтоимость аренды |Аренда |аренда |Цена |цена |стоит |Стоит | ВСЕГО за| всего за ).*(\\d|\\d.p|\\d p|\\d.руб|\\d руб|\\d руб.|\\d рублей|\\d.рублей|\\d т.р.|\\d т. р.|\\d.\u20BD).(?=\\s)");
+				Pattern metroAndAddress = Pattern.compile("(?<=ул.|Улица |улица |Квартира |М. |м. |м.|м |квартира |районе |Районе |метро |Метро |Адрес |Адрес: |адрес |адрес: |адресу ).*(\\W+)(?=\\D+)");
 
-			Matcher matcherPhoneNumber = phoneNumber.matcher(postCurrent.getText());
-			Matcher matcherRent = rent.matcher(postCurrent.getText());
-			Matcher matcherMetroAndAddress = metroAndAddress.matcher(postCurrent.getText());
+				Matcher matcherPhoneNumber = phoneNumber.matcher(postCurrent.getText());
+				Matcher matcherRent = rent.matcher(postCurrent.getText());
+				Matcher matcherMetroAndAddress = metroAndAddress.matcher(postCurrent.getText());
 
 
-			if (matcherPhoneNumber.find()) {
-				postCurrent.setPhoneNumber(matcherPhoneNumber.group(0));
-			} else if (matcherRent.find()) {
-				postCurrent.setPriceOfFlat(matcherRent.group(0));
-			} else if (matcherMetroAndAddress.find()) {
-				postCurrent.setMetroAndAddress(matcherMetroAndAddress.group(0));
+				if (matcherPhoneNumber.find()) {
+					postCurrent.setPhoneNumber(matcherPhoneNumber.group(0));
+				} else if (matcherRent.find()) {
+					postCurrent.setPriceOfFlat(matcherRent.group(0));
+				} else if (matcherMetroAndAddress.find()) {
+					postCurrent.setMetroAndAddress(matcherMetroAndAddress.group(0));
+				}
 			}
 		}
 	}

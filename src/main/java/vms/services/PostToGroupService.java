@@ -2,8 +2,13 @@ package vms.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import vms.models.postenvironment.Post;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PostToGroupService {
@@ -13,27 +18,57 @@ public class PostToGroupService {
 
 	final String uri = "https://api.vk.com/method";
 
-	private String doPost(Integer idOfGroup, String text, String proxyServer) {
-		StringBuilder sb = new StringBuilder(uri);
-		sb.append("/wall.post?owner_id=-")
-			.append(idOfGroup)
-			.append("&friends_only=1")
-			.append("&from_group=0")
-			.append("&message=")
-			.append(text)
-			.append("&signed=0")
-			.append("&mark_as_ads=0")
-			.append("&access_token=")
-			.append(proxyServer)
-			.append("&v=5.65");
-		return sb.toString();
-	}
-
 	public String postToGroup(Integer idGroup, Post post) {
 
 		RestTemplate restTemplate = new RestTemplate();
+		String uri = "https://api.vk.com/method/wall.post";
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+		StringBuilder stringBuilder = new StringBuilder();
 
-		String result = restTemplate.getForObject(doPost(idGroup, post.getText(), propertySearchService.getValue("defaultKey")), String.class);
+		if (post.getHeadling() != null) {
+			stringBuilder.append("Сдается: " + post.getHeadling() + "\n");
+		}
+
+		if (post.getArea() != null) {
+			stringBuilder.append("Район: " + post.getArea() + "\n");
+		}
+
+		if (post.getMetroAndAddress() != null) {
+			stringBuilder.append("Адрес: " + post.getMetroAndAddress() + "\n");
+		}
+
+		if (post.getPriceOfFlat() != null) {
+			stringBuilder.append("Стоимость: " + post.getPriceOfFlat() + "\n");
+		}
+
+		if (post.getNameOfPerson() != null) {
+			stringBuilder.append("Собственник: " + post.getNameOfPerson() + "\n");
+		}
+
+		if (post.getPhoneNumber() != null) {
+			stringBuilder.append("Контакты: " + post.getPhoneNumber() + "\n");
+		}
+
+		if (post.getTextOnView() != null) {
+			stringBuilder.append("Текст: " + post.getTextOnView() + "\n");
+		}
+
+		if (post.getText() != null) {
+			stringBuilder.append("Доп. Информация: " + post.getText() + "\n");
+		}
+
+
+		map.add("owner_id", "-" + idGroup);
+		map.add("friends_only", "0");
+		map.add("from_group", "1");
+		map.add("message", stringBuilder.toString());
+		map.add("signed", "0");
+		map.add("mark_as_ads", "0");
+		map.add("access_token", propertySearchService.getValue("defaultKey"));
+		map.add("v", "5.65");
+
+
+		String result = restTemplate.postForObject(uri, map, String.class);
 
 		if (result != null) {
 			return result;

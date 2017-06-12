@@ -287,7 +287,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 		Property property = new Property();
 		property.setName("defaultKey");
-		property.setValue("ede9a9f0f1dbbedeb5d5c1030e5e704704a4d2680dee3a6200541d6887f4542c0b0a1b60b9d3cfbe45c90");
+		property.setValue("1e001491848059bf21ab1abc48dd5ecb218c758901ed4ba47da5907aca5bee8e0cde0ba00db55d3914ee4");
 		propertyService.addProperty(property);
 
 		log.info("Add 1 default property");

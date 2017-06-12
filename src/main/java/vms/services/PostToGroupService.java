@@ -1,15 +1,9 @@
 package vms.services;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
-import vms.models.rawgroup.Group;
-import vms.models.rawgroup.RootObject;
-
-import java.io.IOException;
 
 @Service
 public class PostToGroupService {

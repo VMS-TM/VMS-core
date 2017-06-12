@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import vms.models.postenvironment.PostResponse;
+import vms.services.NewsSearchService;
 import vms.services.PostToGroupService;
 import vms.services.absr.GroupService;
 import vms.services.absr.PostSearchService;
@@ -43,6 +44,9 @@ public class PostController {
 	@Autowired
 	private PostToGroupService postToGroupService;
 
+	@Autowired
+	private NewsSearchService newsSearchService;
+
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
@@ -58,6 +62,12 @@ public class PostController {
 		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
 		postService.addPosts(posts);
 		return home;
+	}
+
+	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
+	public String getNews(@RequestParam(value = "query", required = false) String query) {
+		newsSearchService.getAdsFromNews(query);
+		return "newspost";
 	}
 
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)

@@ -23,50 +23,45 @@ public class PostToGroupService {
 		RestTemplate restTemplate = new RestTemplate();
 		String uri = "https://api.vk.com/method/wall.post";
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-		List<String> fullText = new ArrayList<>();
-
-		String message = "";
+		StringBuilder stringBuilder = new StringBuilder();
 
 		if (post.getHeadling() != null) {
-			fullText.add("Сдается: " + post.getHeadling() + "\n");
+			stringBuilder.append("Сдается: " + post.getHeadling() + "\n");
 		}
 
 		if (post.getArea() != null) {
-			fullText.add("Район: " + post.getArea() + "\n");
+			stringBuilder.append("Район: " + post.getArea() + "\n");
 		}
 
 		if (post.getMetroAndAddress() != null) {
-			fullText.add("Адрес: " + post.getMetroAndAddress() + "\n");
+			stringBuilder.append("Адрес: " + post.getMetroAndAddress() + "\n");
 		}
 
 		if (post.getPriceOfFlat() != null) {
-			fullText.add("Стоимость: " + post.getPriceOfFlat() + "\n");
+			stringBuilder.append("Стоимость: " + post.getPriceOfFlat() + "\n");
 		}
 
 		if (post.getNameOfPerson() != null) {
-			fullText.add("Собственник: " + post.getNameOfPerson() + "\n");
+			stringBuilder.append("Собственник: " + post.getNameOfPerson() + "\n");
 		}
 
 		if (post.getPhoneNumber() != null) {
-			fullText.add("Контакты: " + post.getPhoneNumber() + "\n");
+			stringBuilder.append("Контакты: " + post.getPhoneNumber() + "\n");
 		}
 
 		if (post.getTextOnView() != null) {
-			fullText.add("Текст: " + post.getTextOnView() + "\n");
+			stringBuilder.append("Текст: " + post.getTextOnView() + "\n");
 		}
 
 		if (post.getText() != null) {
-			fullText.add("Доп. Информация: " + post.getText() + "\n");
+			stringBuilder.append("Доп. Информация: " + post.getText() + "\n");
 		}
 
-		for (String finalMessage : fullText) {
-			message += finalMessage;
-		}
 
 		map.add("owner_id", "-" + idGroup);
 		map.add("friends_only", "0");
 		map.add("from_group", "1");
-		map.add("message", message);
+		map.add("message", stringBuilder.toString());
 		map.add("signed", "0");
 		map.add("mark_as_ads", "0");
 		map.add("access_token", propertySearchService.getValue("defaultKey"));

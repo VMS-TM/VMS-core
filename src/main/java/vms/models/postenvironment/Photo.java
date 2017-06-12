@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "photos")
-public class Photos {
+public class Photo {
 
 	@Id
 	@Column(name = "id")
@@ -18,6 +18,7 @@ public class Photos {
 			inverseJoinColumns = {@JoinColumn(name = "post_id")})
 	private List<Post> posts;
 
+	private String referenceOnPost;
 
 	public long getId() {
 		return id;
@@ -35,14 +36,19 @@ public class Photos {
 		this.posts = posts;
 	}
 
-	public Photos() {
+	public String getReferenceOnPost() {
+		return referenceOnPost;
+	}
 
+	public void setReferenceOnPost(String referenceOnPost) {
+		this.referenceOnPost = referenceOnPost;
 	}
 
 	@Override
 	public String toString() {
-		return "Photos{" +
+		return "Photo{" +
 				"posts=" + posts +
+				", referenceOnPost='" + referenceOnPost + '\'' +
 				'}';
 	}
 }

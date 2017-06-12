@@ -26,17 +26,17 @@ public class Post implements Serializable {
 	@JsonProperty("from_id")
 	private int from_id;
 
-	@OneToMany(fetch = FetchType.EAGER, targetEntity = Photos.class)
+	@OneToMany(fetch = FetchType.EAGER, targetEntity = Photo.class)
 	@JoinTable(name = "postphotos",
 			joinColumns = {@JoinColumn(name = "photo_id")},
 			inverseJoinColumns = {@JoinColumn(name = "post_id")})
-	private List<Photos> photos;
+	private List<Photo> photos;
 
-	public List<Photos> getPhotos() {
+	public List<Photo> getPhotos() {
 		return photos;
 	}
 
-	public void setPhotos(List<Photos> photos) {
+	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
 	}
 

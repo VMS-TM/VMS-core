@@ -89,12 +89,14 @@ public class PostSearchServiceImpl implements PostSearchService {
 					If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
 					 */
 					if (!postsInBD.containsAll(postResponse.getPosts())) {
+						postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
 						postService.addPosts(postResponse.getPosts());
 					} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
 						List<Post> postsWhichNotInDB = new ArrayList<>();
 
 						for (Post post : postResponse.getPosts()) {
 							if (!postsInBD.contains(post)) {
+								post.setFromWhere("group");
 								postsWhichNotInDB.add(post);
 							}
 						}

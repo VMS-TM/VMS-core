@@ -51,25 +51,14 @@
             </div>
 
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#panel1">Посты</a></li>
+                <li class="active"><a href="/post/">Посты из групп</a></li>
+                <li><a href="/post/news">Объявления из новостей</a></li>
+                <div align="right">
+                    <a class="btn btn-primary" type="button" data-toggle="modal"
+                       data-target="#SearchPost">Поиск</a>
+                </div>
             </ul>
             <div class="tab-content boxShadow3 bg-tab">
-                <form th:action="@{/post/req}" method="get">
-                    <td><input required="required" type="text" name="query"/></td>
-                    <td><input type="submit" class="btn btn-default" value="Запросить посты из группы сейчас"/></td>
-                </form>
-                <form th:action="@{/post/news}" method="get">
-                    <td><input required="required" type="text" name="query"/></td>
-                    <td><input type="submit" class="btn btn-default" value="Новости"/></td>
-                </form>
-                <!--<h3>-->
-                <!--<span class="label label-info">Нашли постов<span class="badge" th:if="${FoundCount != null}"-->
-                <!--th:text="${FoundCount}"></span></span>-->
-                <!--<span class="label label-info">Полученные посты<span class="badge" th:if="${GettingCount != null}"-->
-                <!--th:text="${GettingCount}"></span></span>-->
-                <!--<span class="label label-info">Всего постов<span class="badge" th:if="${AllPosts != null}"-->
-                <!--th:text="${AllPosts}"></span></span>-->
-                <!--</h3>-->
                 <table class="table table-striped">
                     <thead></thead>
                     <tbody>
@@ -94,6 +83,7 @@
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
                             <input type="hidden" name="id" th:value="${post.id}"/>
                             <input type="hidden" name="date" th:value="${post.date}"/>
+                            <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
                             <input type="hidden" name="saveInDataBase" th:value="${post.savedInDb}"/>
                             <input class="hide-param" name="title" th:value="${post.headling}"/>
                             <input class="hide-param" name="owner" th:value="${post.nameOfPerson}"/>
@@ -131,6 +121,7 @@
                                                         <div class="row">
                                                             <input type="hidden" name="id" th:value="${post.id}"/>
                                                             <input type="hidden" name="date" th:value="${post.date}"/>
+                                                            <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label for="iTitle">Заголовок</label>
@@ -251,6 +242,31 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal fade" id="SearchPost">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form role="form" th:action="@{/post/req}" method="get">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Запрос постов</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label>Запрос постов из групп</label>
+                            <input class="form-control" required="required" type="text" name="query"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Найти"/>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>

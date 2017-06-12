@@ -74,6 +74,16 @@ public class Post implements Serializable {
 	@JsonProperty("signer_id")
 	private int signer_id;
 
+	private String fromWhere;
+
+	public String getFromWhere() {
+		return fromWhere;
+	}
+
+	public void setFromWhere(String fromWhere) {
+		this.fromWhere = fromWhere;
+	}
+
 	public int getSignerId() {
 		return this.signer_id;
 	}
@@ -248,10 +258,11 @@ public class Post implements Serializable {
 		this.attachmentContainers = attachmentContainers;
 	}
 
+
 	public Post() {
 	}
 
-	public Post(Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, Date date) {
+	public Post(Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, Date date) {
 		this.id = id;
 		this.headling = title;
 		this.nameOfPerson = owner;
@@ -261,10 +272,11 @@ public class Post implements Serializable {
 		this.phoneNumber = contact;
 		this.metroAndAddress = adress;
 		this.text = info;
+		this.fromWhere = from;
 		this.date = date;
 	}
 
-	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info) {
+	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from) {
 		this.headling = title;
 		this.nameOfPerson = owner;
 		this.area = district;
@@ -273,6 +285,7 @@ public class Post implements Serializable {
 		this.phoneNumber = contact;
 		this.metroAndAddress = adress;
 		this.text = info;
+		this.fromWhere = from;
 	}
 
 	public Post(int from_id, int owner_id, Date date, int post_id, String text) {

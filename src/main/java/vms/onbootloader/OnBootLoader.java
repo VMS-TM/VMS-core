@@ -251,9 +251,17 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
 				"83.239.58.162", 8080, "group");
 
-		ProxyServer fourthProxyServer = new ProxyServer("+79158838954", "78%&*rR",
+		ProxyServer fourthProxyServer = new ProxyServer("+79858838212", "23523423",
 				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
 				"83.169.202.2", 3128, "group");
+
+//		ProxyServer fifthProxyServer = new ProxyServer("mai1231l@gmail.ru", "32167666",
+//				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
+//				"194.67.210.184", 8888, "news");
+//
+//		ProxyServer sixthProxyServer = new ProxyServer("mai12412342231l@gmail.ru", "26235234",
+//				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
+//				"77.73.64.12", 8080, "news");
 
 
 		proxyServerService.addProxyServer(firstProxyServer);
@@ -264,6 +272,10 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		log.info("Saved proxy server with ip:" + thirdProxyServer.getIp());
 		proxyServerService.addProxyServer(fourthProxyServer);
 		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
+//		proxyServerService.addProxyServer(fifthProxyServer);
+//		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
+//		proxyServerService.addProxyServer(sixthProxyServer);
+//		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
 	}
 
 	private void loadUsersFromVK() {

@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/post")
@@ -43,28 +44,56 @@ public class PostController {
  	private NewsSearchService newsSearchService;
 
 
+
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
-		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
-		prepareOwnerID(posts);
-		preparationPost(posts);
-		model.addAttribute("posts", posts);
-		model.addAttribute("AllPosts", posts.size());
+
+		List<Post> result = posts.stream()
+				.filter(post -> "group".equals(post.getFromWhere()))
+				.collect(Collectors.toList());
+
+		prepareView(result);
+		preparationPost(result);
+		model.addAttribute("posts", result);
+		model.addAttribute("AllPosts", result.size());
 		return "posts";
 	}
 
 	@RequestMapping(value = {"/add"}, method = RequestMethod.POST)
 	public String addPosts(@ModelAttribute List<Post> posts) {
-		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
+		prepareView(posts);
+		posts.forEach(post -> post.setFromWhere("group"));
 		postService.addPosts(posts);
 		return home;
 	}
 
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
- 	public String getNews(@RequestParam(value = "query", required = false) String query) {
-				newsSearchService.getAdsFromNews(query);
-				return "newspost";
+ 	public String getNews(Model model) {
+		List<Post> posts = postService.getAllPostFromDb();
+
+		List<Post> result = posts.stream()
+				.filter(post -> "news".equals(post.getFromWhere()))
+				.collect(Collectors.toList());
+
+		model.addAttribute("posts", result);
+		return "newspost";
+	}
+
+	@RequestMapping(value = {"/news/find"}, method = RequestMethod.GET)
+	public String getNews(Model model, @RequestParam(value = "news") String query) {
+		newsSearchService.getAdsFromNews(query);
+		List<Post> posts = postService.getAllPostFromDb();
+
+		List<Post> result = posts.stream()
+				.filter(post -> "news".equals(post.getFromWhere()))
+				.collect(Collectors.toList());
+
+		prepareView(result);
+		preparationPost(result);
+
+		model.addAttribute("posts", result);
+		return "newspost";
 	}
 
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)
@@ -78,11 +107,12 @@ public class PostController {
 							  @RequestParam(value = "adress") String adress,
 							  @RequestParam(value = "contact") String contact,
 							  @RequestParam(value = "info") String info,
-							  @RequestParam("date") String date) throws ParseException {
+							  @RequestParam(value = "date") String date,
+							  @RequestParam(value = "fromwhere") String from) throws ParseException {
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date dateOfPost = format.parse(date);
-		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, dateOfPost);
+		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 
 		try {
 			editedPost.setSavedInDb(true);
@@ -94,6 +124,33 @@ public class PostController {
 		return home;
 	}
 
+	@RequestMapping(value = {"/update/news"}, method = RequestMethod.POST)
+	public String updateAdsFromNews(@RequestParam(value = "id") Long id,
+							  @RequestParam(value = "title") String title,
+							  @RequestParam(value = "owner") String owner,
+							  @RequestParam(value = "district") String district,
+							  @RequestParam(value = "price") String price,
+							  @RequestParam(value = "textOnView") String textOnView,
+							  @RequestParam(value = "adress") String adress,
+							  @RequestParam(value = "contact") String contact,
+							  @RequestParam(value = "info") String info,
+							  @RequestParam(value = "date") String date,
+							  @RequestParam(value = "fromwhere") String from) throws ParseException {
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date dateOfPost = format.parse(date);
+		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+
+		try {
+			editedPost.setSavedInDb(true);
+			postService.update(editedPost);
+		} catch (DataIntegrityViolationException exp) {
+			return "newspost";
+		}
+
+		return "newspost";
+	}
+
 	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
 	public String deletePosts(@RequestParam(value = "idDeletePost") Long id) {
 		postService.deletePost(id);
@@ -101,15 +158,20 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.GET)
-	public String getNewPosts(Model model, @ModelAttribute Post post, @RequestParam(value = "query", required = false) String query) {
+	public String getNewPosts(Model model, @RequestParam(value = "query") String query) {
 		postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
+
 		List<Post> posts = postService.getAllPostFromDb();
-		if (posts != null) {
-			Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
-			prepareOwnerID(posts);
-			preparationPost(posts);
-			model.addAttribute("posts", posts);
-			model.addAttribute("AllPosts", posts.size());
+
+		List<Post> result = posts.stream()
+				.filter(post -> "group".equals(post.getFromWhere()))
+				.collect(Collectors.toList());
+
+		if (result != null) {
+			prepareView(result);
+			preparationPost(result);
+			model.addAttribute("posts", result);
+			model.addAttribute("AllPosts", result.size());
 			return "posts";
 		}
 
@@ -127,11 +189,12 @@ public class PostController {
 								@RequestParam(value = "contact") String contact,
 								@RequestParam(value = "info") String info,
 								@RequestParam("date") String date,
-								@RequestParam("saveInDataBase") boolean save) throws ParseException {
+								@RequestParam("saveInDataBase") boolean save,
+								@RequestParam(value = "fromwhere") String from) throws ParseException {
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date dateOfPost = format.parse(date);
-		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, dateOfPost);
+		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
 		if (result == null || result.contains("error_code")) {
@@ -146,10 +209,10 @@ public class PostController {
 
 	}
 
-	void prepareOwnerID(List<Post> posts) {
+	void prepareView(List<Post> posts) {
+		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
 		posts.forEach(post -> post.setOwnerId(Math.abs(post.getOwnerId())));
 	}
-
 
 	void preparationPost(List<Post> posts) {
 

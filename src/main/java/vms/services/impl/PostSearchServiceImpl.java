@@ -109,7 +109,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	@Override
 	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate, String proxyServer, String nameGroup, String query) {
 		RootObject rootObject = proxyTemplate.getForObject(getUriQueryWall(proxyServer, nameGroup, query), RootObject.class);
-		if (rootObject.getPostResponse() != null) {
+		if (rootObject != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
 			return rootObject.getPostResponse();
 		}

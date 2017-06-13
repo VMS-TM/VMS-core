@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
 import vms.models.Role;
 import vms.models.User;
 import vms.models.rawgroup.Group;
 import org.apache.log4j.Logger;
 import vms.models.usersenvironment.UserFromVK;
+import vms.scheduling.Rule;
+import vms.scheduling.RuleService;
+import vms.scheduling.TaskStatus;
 import vms.services.absr.*;
 
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 	@Autowired
 	private UserFromVkService userFromVkService;
 
+	@Autowired
+	private RuleService ruleService;
+
 	private Logger log = Logger.getLogger(OnBootLoader.class);
 
 
@@ -44,6 +49,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		loadUsers();
 		loadProxyServers();
 		loadUsersFromVK();
+		loadRules();
 	}
 
 	public void loadGroups() {
@@ -231,8 +237,26 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		userService.saveOrUpdateUser(user2);
 	}
 
+	private void loadRules(){
+		Rule rule = new Rule();
+
+		rule.setName("1rule");
+		rule.setCronExpr("*/33 * * * * *");
+		rule.setKeyWords("снять");
+		List<Group> groups = new ArrayList<>();
+		groups.add(groupService.getGroupById("57466174"));
+		groups.add(groupService.getGroupById("10298741"));
+		groups.add(groupService.getGroupById("1850339"));
+		groups.add(groupService.getGroupById("47196429"));
+		rule.setGroups(groups);
+		rule.setStatus(TaskStatus.STOPPED);
+
+		ruleService.addRule(rule);
+	}
+
 	private void loadProxyServers() {
 		ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
+
 				"bb6211359dc3e3eb8f6fe190d36e8a42ad054dd2e146ec845072dcd19377d474caafd648b3712e3254e54",
 				"212.34.38.180", 8080, "user");
 
@@ -256,6 +280,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		log.info("Saved proxy server with ip:" + thirdProxyServer.getIp());
 		proxyServerService.addProxyServer(fourthProxyServer);
 		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
+
 	}
 
 	private void loadUsersFromVK(){

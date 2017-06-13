@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+    .status {
+        width: 80px;
+    }
+
+    .name-task {
+        width: 130px;
+    }
+
+    .group-select {
+        width: 180px;
+    }
+</style>
+<head>
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    </link>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="#">vms Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Groups for search </a></li>
+                <li><a href="/post/">Post from VK groups</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+                <li><a href="/userssearch">Поиск пользователей</a></li>
+                <li><a href="/properties">Настройки</a></li>
+            </ul>
+        </div>
+        <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
+            <h2 class="sub-header">Планировщик заданий</h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="/properties">Основные</a></li>
+                <li><a href="/properties/proxy">Прокси</a></li>
+            </ul>
+            <table class="table table-striped">
+                <thead> …</thead>
+                <tbody>
+                <!-- начало строки -->
+                <tr>
+                    <th>Название задачи</th>
+                    <th>Статус выполнения</th>
+                    <th>Ключевые слова для поиска</th>
+                    <th>Группы для поиска</th>
+                    <th>Запуск</th>
+                    <th>Действия</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="rule : ${rules}">
+                    <form th:action="@{/rule/update}" th:object="${rule}" method="post">
+                        <td th:text="${rule.name}"></td>
+                        <td th:text="${rule.status}"></td>
+                        <td th:text="${rule.keyWords}"></td>
+                        <td>
+                            <select class="group-select">
+                                <option th:each="group : ${rule.groups}" th:value="${group.id}"
+                                        th:text="${group.name}"></option>
+                            </select>
+                        </td>
+                        <td th:text="${rule.cronExpr}"></td>
+                        <!-- edit button -->
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#changeRule">Изменить
+                            </button>
+
+                            <!-- Modal change Rule -->
+                            <div class="modal fade" id="changeRule" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4>Change Rule</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form class="form-horizontal" th:action="@{/rule/update}" method="post">
+                                                <input type="hidden" class="form-control" id="ID1" name="id"
+                                                       th:value="${rule.id}"/>
+                                                <div class="form-group ">
+                                                    <label class="control-label" for="name">Имя:</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" id="name" name="name"
+                                                               th:value="${rule.name}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label class="control-label" for="status">Статус: </label>
+                                                    <div>
+                                                        <label class="form-control" id="status"
+                                                               name="status" th:text="${rule.status}"/>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label class="control-label" for="keyWords">Ключевые слова: </label>
+                                                    <div>
+                                                        <input type="text" class="form-control"
+                                                               name="keyWords" th:value="${rule.keyWords}"/>
+                                                    </div>
+                                                    <div class="form-group ">
+                                                        <label class="control-label" for="allGroups">Все группы </label>
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="allGroups" class="table table-striped">
+                                                                        <tbody>
+                                                                        <tr th:each="group : ${groups}">
+                                                                            <td th:text="${group.name}">
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                                <td>
+                                                                    <table id="allGroups" class="table table-striped">
+                                                                        <tbody>
+                                                                        <tr th:each="group2 : ${rule.groups}">
+                                                                            <td th:text="${group2.name}">
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+
+                                                    <div class="form-group ">
+                                                        <label class="control-label" for="keyWords">Ключевые
+                                                            слова: </label>
+                                                        <div>
+                                                            <input type="text" class="form-control" id="keyWords"
+                                                                   name="keyWords" th:value="${rule.cronExpr}"/>
+                                                            <select>
+                                                                <option selected="selected" disabled="disabled"
+                                                                        value="NOT_SELECTED">Минуты
+                                                                </option>
+                                                                <option>каждые 5 минут</option>
+                                                                <option>каждые 10 минут</option>
+                                                                <option>каждые 15 минут</option>
+                                                                <option>каждые 30 минут</option>
+                                                            </select>
+                                                            <input type="checkbox" th:value="${rule.id}"/>
+                                                            <select>
+                                                                <option th:disabled="disabled"
+                                                                        th:selected="selected" value="NOT_SELECTED">Часы
+                                                                </option>
+                                                                <option>каждый час</option>
+                                                                <option>каждые 2 часа</option>
+                                                                <option>каждые 4 часов</option>
+                                                                <option>каждые 6 часов</option>
+                                                                <option>каждые 8 часов</option>
+                                                                <option>каждые 10 часов</option>
+                                                                <option>каждые 12 часов</option>
+                                                                <option>каждые 14 часов</option>
+                                                                <option>каждые 16 часов</option>
+                                                                <option>каждые 18 часов</option>
+                                                                <option>каждые 20 часов</option>
+                                                                <option>каждые 22 часа</option>
+                                                            </select>
+                                                            <input type="checkbox" th:value="${rule.id}"/><select>
+                                                            <option selected="selected" disabled="disabled"
+                                                                    value="NOT_SELECTED">Дни
+                                                            </option>
+                                                            <option>каждый день</option>
+                                                            <option>каждые 2 дня</option>
+                                                            <option>каждые 3 дня</option>
+                                                            <option>каждые 4 дня</option>
+                                                            <option>каждые 5 дней</option>
+                                                            <option>каждые 6 дней</option>
+                                                            <option>каждые 7 дней</option>
+                                                        </select>
+                                                            <input type="checkbox" th:value="${rule.id}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        Закрыть
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary">Обновить задачу
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </form>
+                    <form th:action="@{/rule/start}" th:object="${rule}" method="get">
+                        <td><input type="hidden" name="id" th:value="${rule.id}"/></td>
+                        <td><input type="submit" class="btn btn-default" value="start"/></td>
+                    </form>
+                    <form th:action="@{/rule/stop}" th:object="${rule}" method="get">
+                        <td><input type="hidden" name="id" th:value="${rule.id}"/></td>
+                        <td><input type="hidden" name="id" th:value="${rule.name}"/></td>
+                        <td><input type="submit" class="btn btn-default" value="stop"/></td>
+                    </form>
+                    <form th:action="@{/rule/delete}" th:object="${rule}" method="post">
+                        <td><input type="hidden" name="id" th:value="${rule.id}"/></td>
+                        <td><input type="submit" class="btn btn-default" value="delete"/></td>
+                    </form>
+                    <!-- конец строки -->
+                </tr>
+
+                <tr>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addProperty">Создать
+                правило
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Rule -->
+<div class="modal fade" id="addRule" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>New property</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{rule/add}" th:object="${rule}" method="post">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                        </tr>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" class="btn btn-default" value="add"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/modal.js"></script>
+</body>
+</html>

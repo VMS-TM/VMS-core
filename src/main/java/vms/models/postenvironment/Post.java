@@ -26,6 +26,14 @@ public class Post implements Serializable {
 	@JsonProperty("from_id")
 	private int from_id;
 
+	public int getFrom_id() {
+		return from_id;
+	}
+
+	public void setFrom_id(int from_id) {
+		this.from_id = from_id;
+	}
+
 	@OneToMany(fetch = FetchType.EAGER, targetEntity = Photo.class)
 	@JoinTable(name = "postphotos",
 			joinColumns = {@JoinColumn(name = "photo_id")},

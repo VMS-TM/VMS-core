@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
 
 import java.util.ArrayList;
@@ -16,8 +17,6 @@ public class PostToGroupService {
 
 	@Autowired
 	PropertySearchService propertySearchService;
-
-	final String uri = "https://api.vk.com/method";
 
 	private String getMessage(Post post) {
 		StringBuilder stringBuilder = new StringBuilder();
@@ -60,7 +59,7 @@ public class PostToGroupService {
 	public String postToGroup(Integer idGroup, Post post) {
 
 		RestTemplate restTemplate = new RestTemplate();
-		String uri = "https://api.vk.com/method/wall.post";
+		String uri = ConstantsForVkApi.URL + ConstantsForVkApi.PARAMETER_POST_TO_GROUP_METHOD;
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 
 		map.add("owner_id", "-" + idGroup);
@@ -71,7 +70,6 @@ public class PostToGroupService {
 		map.add("mark_as_ads", "0");
 		map.add("access_token", propertySearchService.getValue("defaultKey"));
 		map.add("v", "5.65");
-
 
 		String result = restTemplate.postForObject(uri, map, String.class);
 

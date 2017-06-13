@@ -1,6 +1,7 @@
 package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.PostResponse;
@@ -122,15 +123,17 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	private String getUriQueryWall(String proxyServer, String ownerId, String query) {
-		StringBuilder sb = new StringBuilder(uri);
-		sb.append("/wall.search?owner_id=-");
-		sb.append(ownerId);
-		sb.append("&v=5.63");
-		sb.append("&query=");
-		sb.append(query);
-		sb.append("&count=100");
-		sb.append("&access_token=");
-		sb.append(proxyServer);
+		StringBuilder sb = new StringBuilder(ConstantsForVkApi.URL);
+		sb.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_OWNER)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_ID_MINUS)
+				.append(ownerId)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_VERSION)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_QUERY)
+				.append(query)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_COUNT)
+				.append(ConstantsForVkApi.TOKEN)
+				.append(proxyServer);
 		return sb.toString();
 	}
 }

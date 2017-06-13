@@ -1,8 +1,10 @@
 package vms.services;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import vms.globalVariables.ConstantsForVkApi;
 import vms.models.rawgroup.Group;
 import vms.models.rawgroup.RootObject;
 
@@ -16,10 +18,10 @@ import java.util.List;
 @Service
 public class GroupsSearchService {
 
-	//константы
-	final String ACCESS_TOKEN = "&access_token=f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4";
-	final String path = "https://api.vk.com/method/execute";
-	final String version = "&v=5.64";
+	@Autowired
+	private PropertySearchService propertySearchService;
+
+	final String path = ConstantsForVkApi.URL + ConstantsForVkApi.PARAMETER_GROUP_SEARCH_METHOD;
 
 	public List<Group> getGroupsByGroupName(String first, String second, long count) {
 
@@ -40,7 +42,7 @@ public class GroupsSearchService {
 
 
 			for (Group r : rootObject.getGroup()) {
-				if (r.getMembersCount() >= count && r.getIsClosed()==0  ) {
+				if (r.getMembersCount() >= count && r.getIsClosed() == 0) {
 					items.add(r);
 				}
 			}
@@ -52,11 +54,12 @@ public class GroupsSearchService {
 
 	private URI getUri(String path, String query) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("https://api.vk.com/method/execute?code=var%20hyi1=API.groups.search(%7B%22q%22:%20%22");
-		sb.append(query);
-		sb.append("%22,%22offset%22:0,%20%22count%22:%20500%7D);%0Aif(hyi1.items.length%3E0)%0A%7B%0Avar%20nya1=API.groups.getById(%7B%22group_ids%22:%20hyi1.items@.id,%20%22fields%22:%22members_count%22%7D);%0Avar%20hyi2%20=%20API.groups.search(%7B%22q%22:%20%22");
-		sb.append(query);
-		sb.append("%22,%20%22offset%22:500,%22count%22:%20500%7D);%0Aif(hyi2.items.length%20%3E0%20)%0A%7B%0Avar%20nya2%20=%20API.groups.getById(%7B%22group_ids%22:%20hyi2.items@.id,%20%22fields%22:%22members_count%22%7D);return+nya1+%2B+nya2%3B%7D%0Areturn%20nya1;%0A%7D%0Areturn%200;&v=5.64&access_token=f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4");
+		sb.append(ConstantsForVkApi.URL)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH_EXE)
+				.append(query)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH_QUERY_ONE)
+				.append(query)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH_QUERY_TWO);
 
 
 		URI uri = null;
@@ -91,9 +94,12 @@ public class GroupsSearchService {
 
 	private URI getUriForValidate(String query) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("https://api.vk.com/method/groups.getById?group_id=");
-		sb.append(query);
-		sb.append("&fields=members_count&v=5.64&access_token=f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4");
+		sb.append(ConstantsForVkApi.URL)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_GET_ID)
+				.append(query)
+				.append(ConstantsForVkApi.PARAMETER_GROUP_GET_ID_QUERY)
+				.append(ConstantsForVkApi.TOKEN)
+				.append(propertySearchService.getValue("defaultKey"));
 
 		URI uri = null;
 		try {

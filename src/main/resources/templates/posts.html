@@ -23,7 +23,7 @@
         <div class="col-md-2 colxxx sidebar">
             <ul class="nav nav-tabs nav-stacked">
                 <li><a href="/main">Группы в БД</a></li>
-                <li><a href="/post/">Посты из групп ВК</a></li>
+                <li><a href="/post/">Посты</a></li>
                 <li><a href="/showgroups">Поиск групп</a></li>
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
@@ -51,8 +51,8 @@
             </div>
 
             <ul class="nav nav-tabs">
-                <li class="active"><a href="/post/">Посты из групп</a></li>
-                <li><a href="/post/news">Объявления из новостей</a></li>
+                <li class="active"><a href="/post/">Посты</a></li>
+                <li><a href="/post/news">Объявления</a></li>
                 <div align="right">
                     <a class="btn btn-primary" type="button" data-toggle="modal"
                        data-target="#SearchPost">Поиск</a>
@@ -253,11 +253,11 @@
                 <form role="form" th:action="@{/post/req}" method="get">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Запрос постов</h4>
+                        <h4 class="modal-title">Запрос постов из групп</h4>
                     </div>
                     <div class="modal-body">
                         <div>
-                            <label>Запрос постов из групп</label>
+                            <label>Запрос постов</label>
                             <input class="form-control" required="required" type="text" name="query"/>
                         </div>
                     </div>

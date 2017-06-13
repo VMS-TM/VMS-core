@@ -9,6 +9,7 @@ import vms.models.postenvironment.Post;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PostToGroupService {
@@ -18,39 +19,39 @@ public class PostToGroupService {
 
 	final String uri = "https://api.vk.com/method";
 
-	private String getURI(Post post) {
+	private String getMessage(Post post) {
 		StringBuilder stringBuilder = new StringBuilder();
 
-		if (post.getHeadling() != null) {
-			stringBuilder.append("Сдается: " + post.getHeadling() + "\n");
+		if (!Objects.equals(post.getHeadling(), "")) {
+			stringBuilder.append("Сдается: ").append(post.getHeadling()).append("\n");
 		}
 
-		if (post.getArea() != null) {
-			stringBuilder.append("Район: " + post.getArea() + "\n");
+		if (!Objects.equals(post.getArea(), "")) {
+			stringBuilder.append("Район: ").append(post.getArea()).append("\n");
 		}
 
-		if (post.getMetroAndAddress() != null) {
-			stringBuilder.append("Адрес: " + post.getMetroAndAddress() + "\n");
+		if (!Objects.equals(post.getMetroAndAddress(), "")) {
+			stringBuilder.append("Адрес: ").append(post.getMetroAndAddress()).append("\n");
 		}
 
-		if (post.getPriceOfFlat() != null) {
-			stringBuilder.append("Стоимость: " + post.getPriceOfFlat() + "\n");
+		if (!Objects.equals(post.getPriceOfFlat(), "")) {
+			stringBuilder.append("Стоимость: ").append(post.getPriceOfFlat()).append("\n");
 		}
 
-		if (post.getNameOfPerson() != null) {
-			stringBuilder.append("Собственник: " + post.getNameOfPerson() + "\n");
+		if (!Objects.equals(post.getNameOfPerson(), "")) {
+			stringBuilder.append("Собственник: ").append(post.getNameOfPerson()).append("\n");
 		}
 
-		if (post.getPhoneNumber() != null) {
-			stringBuilder.append("Контакты: " + post.getPhoneNumber() + "\n");
+		if (!Objects.equals(post.getPhoneNumber(), "")) {
+			stringBuilder.append("Контакты: ").append(post.getPhoneNumber()).append("\n");
 		}
 
-		if (post.getTextOnView() != null) {
-			stringBuilder.append("Текст: " + post.getTextOnView() + "\n");
+		if (!Objects.equals(post.getTextOnView(), "")) {
+			stringBuilder.append("Текст: ").append(post.getTextOnView()).append("\n");
 		}
 
-		if (post.getText() != null) {
-			stringBuilder.append("Доп. Информация: " + post.getText() + "\n");
+		if (!Objects.equals(post.getText(), "")) {
+			stringBuilder.append("Доп. Информация: ").append(post.getText()).append("\n");
 		}
 
 		return stringBuilder.toString();
@@ -61,11 +62,11 @@ public class PostToGroupService {
 		RestTemplate restTemplate = new RestTemplate();
 		String uri = "https://api.vk.com/method/wall.post";
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-		
+
 		map.add("owner_id", "-" + idGroup);
 		map.add("friends_only", "0");
 		map.add("from_group", "1");
-		map.add("message", getURI(post));
+		map.add("message", getMessage(post));
 		map.add("signed", "0");
 		map.add("mark_as_ads", "0");
 		map.add("access_token", propertySearchService.getValue("defaultKey"));

@@ -15,6 +15,7 @@ import vms.services.PostToGroupService;
 import vms.services.absr.GroupService;
 import vms.services.absr.PostSearchService;
 import vms.services.absr.VkPostService;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,8 +42,7 @@ public class PostController {
 	private PostToGroupService postToGroupService;
 
 	@Autowired
- 	private NewsSearchService newsSearchService;
-
+	private NewsSearchService newsSearchService;
 
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -62,20 +62,21 @@ public class PostController {
 
 	@RequestMapping(value = {"/add"}, method = RequestMethod.POST)
 	public String addPosts(@ModelAttribute List<Post> posts) {
-		prepareView(posts);
 		posts.forEach(post -> post.setFromWhere("group"));
 		postService.addPosts(posts);
 		return home;
 	}
 
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
- 	public String getNews(Model model) {
+	public String getNews(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
 
+		prepareView(result);
+		preparationPost(result);
 		model.addAttribute("posts", result);
 		return "newspost";
 	}
@@ -114,41 +115,24 @@ public class PostController {
 		Date dateOfPost = format.parse(date);
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 
-		try {
-			editedPost.setSavedInDb(true);
-			postService.update(editedPost);
-		} catch (DataIntegrityViolationException exp) {
+		if ("news".equals(from)) {
+			try {
+				editedPost.setSavedInDb(true);
+				postService.update(editedPost);
+			} catch (DataIntegrityViolationException exp) {
+				exp.printStackTrace();
+			}
+			return "redirect:/post/news";
+		} else {
+			try {
+				editedPost.setSavedInDb(true);
+				postService.update(editedPost);
+			} catch (DataIntegrityViolationException exp) {
+				exp.printStackTrace();
+			}
 			return home;
 		}
 
-		return home;
-	}
-
-	@RequestMapping(value = {"/update/news"}, method = RequestMethod.POST)
-	public String updateAdsFromNews(@RequestParam(value = "id") Long id,
-							  @RequestParam(value = "title") String title,
-							  @RequestParam(value = "owner") String owner,
-							  @RequestParam(value = "district") String district,
-							  @RequestParam(value = "price") String price,
-							  @RequestParam(value = "textOnView") String textOnView,
-							  @RequestParam(value = "adress") String adress,
-							  @RequestParam(value = "contact") String contact,
-							  @RequestParam(value = "info") String info,
-							  @RequestParam(value = "date") String date,
-							  @RequestParam(value = "fromwhere") String from) throws ParseException {
-
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date dateOfPost = format.parse(date);
-		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
-
-		try {
-			editedPost.setSavedInDb(true);
-			postService.update(editedPost);
-		} catch (DataIntegrityViolationException exp) {
-			return "newspost";
-		}
-
-		return "newspost";
 	}
 
 	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
@@ -197,16 +181,24 @@ public class PostController {
 		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
-		if (result == null || result.contains("error_code")) {
-			return "redirect:/post/?postInGroupDanger";
+		if ("news".equals(from)) {
+			if (result == null || result.contains("error_code")) {
+				return "redirect:/post/news?postInGroupDanger";
+			}
+			postToGroup.setSavedInDb(save);
+			postToGroup.setPostedToGroup(true);
+			postService.update(postToGroup);
+			return "redirect:/post/news?postInGroupSuccess";
+
+		} else {
+			if (result == null || result.contains("error_code")) {
+				return "redirect:/post/?postInGroupDanger";
+			}
+			postToGroup.setSavedInDb(save);
+			postToGroup.setPostedToGroup(true);
+			postService.update(postToGroup);
+			return "redirect:/post/?postInGroupSuccess";
 		}
-
-		postToGroup.setSavedInDb(save);
-		postToGroup.setPostedToGroup(true);
-		postService.update(postToGroup);
-
-		return "redirect:/post/?postInGroupSuccess";
-
 	}
 
 	void prepareView(List<Post> posts) {

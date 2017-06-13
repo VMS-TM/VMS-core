@@ -23,14 +23,14 @@
         <div class="col-md-2 colxxx sidebar">
             <ul class="nav nav-tabs nav-stacked">
                 <li><a href="/main">Группы в БД</a></li>
-                <li><a href="/post/">Посты из групп ВК</a></li>
+                <li><a href="/post/">Посты</a></li>
                 <li><a href="/showgroups">Поиск групп</a></li>
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
         </div>
         <div class=" col-md-9 fixed ">
-            <h2 class="sub-header">Посты из групп</h2>
+            <h2 class="sub-header">Объявления из новостей</h2>
 
             <div th:if="${param.warning != null}">
                 <div class="alert alert-danger">
@@ -51,8 +51,8 @@
             </div>
 
             <ul class="nav nav-tabs">
-                <li><a href="/post/">Посты из групп</a></li>
-                <li class="active"><a href="/post/news">Объявления из новостей</a></li>
+                <li><a href="/post/">Посты</a></li>
+                <li class="active"><a href="/post/news">Объявления</a></li>
                 <div align="right">
                     <a class="btn btn-primary" type="button" data-toggle="modal"
                        data-target="#SearchNews">Поиск</a>
@@ -103,7 +103,7 @@
                             <div class="modal fade" th:id="${post.id}">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
-                                        <form role="form" th:action="@{/post/update/news}" th:object="${post}" method="post">
+                                        <form role="form" th:action="@{/post/update}" th:object="${post}" method="post">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">
                                                     &times;
@@ -243,7 +243,7 @@
                 <form role="form" th:action="@{/post/news/find}" method="get">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Добавление основных настроек</h4>
+                        <h4 class="modal-title">Объявление из новостей</h4>
                     </div>
                     <div class="modal-body">
                         <div>

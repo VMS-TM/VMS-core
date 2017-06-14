@@ -3,6 +3,7 @@ package vms.controllers;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.RequestParam;
 import vms.globalVariables.ConstantsForVkApi;
+import vms.models.ProxyServer;
 import vms.models.postenvironment.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import vms.services.NewsSearchService;
 import vms.services.PostToGroupService;
 import vms.services.absr.GroupService;
 import vms.services.absr.PostSearchService;
+import vms.services.absr.ProxyServerService;
 import vms.services.absr.VkPostService;
 
 import java.text.ParseException;
@@ -43,6 +45,9 @@ public class PostController {
 
 	@Autowired
 	private NewsSearchService newsSearchService;
+
+	@Autowired
+	private ProxyServerService proxyServerService;
 
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -146,16 +151,24 @@ public class PostController {
 		postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
 
 		List<Post> posts = postService.getAllPostFromDb();
+		List<ProxyServer> proxy = proxyServerService.proxyServerList();
 
 		List<Post> result = posts.stream()
 				.filter(post -> "group".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
+
+		List<ProxyServer> badProxy = proxy.stream()
+				.filter(proxyServer -> "off".equals(proxyServer.getWork()))
+				.collect(Collectors.toList());
+
 
 		if (result != null) {
 			prepareView(result);
 			preparationPost(result);
 			model.addAttribute("posts", result);
 			model.addAttribute("AllPosts", result.size());
+			model.addAttribute("BadProxy", badProxy);
+
 			return "posts";
 		}
 

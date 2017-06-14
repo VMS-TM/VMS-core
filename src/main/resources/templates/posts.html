@@ -28,6 +28,11 @@
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
+
+
+            <div th:each="proxy : ${BadProxy}">
+                <button type="button" class="btn btn-primary">Всего постов <span th:text="'Неисправен proxy login - ' + ${proxy.login}" class="badge">7</span></button>
+            </div>
         </div>
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Посты из групп</h2>

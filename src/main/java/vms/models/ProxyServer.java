@@ -5,10 +5,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "proxy")
-public class ProxyServer {
+public class ProxyServer implements Serializable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +44,16 @@ public class ProxyServer {
 	@NotNull
 	@Column(name = "destiny")
 	private String destiny;
+
+	private String work;
+
+	public String getWork() {
+		return work;
+	}
+
+	public void setWork(String work) {
+		this.work = work;
+	}
 
 	public ProxyServer() {
 

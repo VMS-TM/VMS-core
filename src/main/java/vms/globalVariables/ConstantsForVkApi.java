@@ -29,10 +29,9 @@ public class ConstantsForVkApi {
 	/**
 	 * Method and parameters for PostSearchService
 	 */
-	public final static String PARAMETER_GROUP_SEARCH = "/wall.search?";
-	public final static String PARAMETER_GROUP_ID_MINUS = "=-";
+	public final static String PARAMETER_GROUP_SEARCH = "wall.search?owner_id=-";
 	public final static String PARAMETER_GROUP_COUNT = "&count=100";
-	public final static String PARAMETER_GROUP_QUERY = "&q=";
+	public final static String PARAMETER_GROUP_QUERY = "&query=";
 	public final static String PARAMETER_GROUP_VERSION = "&v=5.63";
 	public final static String PARAMETER_GROUP_OWNER = "owner_id";
 
@@ -60,6 +59,6 @@ public class ConstantsForVkApi {
 	 * Method and parameters for PostToGroupService
 	 */
 	public final static String PARAMETER_POST_TO_GROUP_METHOD = "wall.post";
-	public final static Integer ID_GROUP = 145578365;
+	public final static Integer ID_GROUP = 148705229;
 
 }

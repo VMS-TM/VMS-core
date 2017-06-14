@@ -78,6 +78,7 @@ public class PostController {
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
+		model.addAttribute("AllPosts", result.size());
 		return "newspost";
 	}
 
@@ -94,6 +95,7 @@ public class PostController {
 		preparationPost(result);
 
 		model.addAttribute("posts", result);
+		model.addAttribute("AllPosts", result.size());
 		return "newspost";
 	}
 

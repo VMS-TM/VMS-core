@@ -125,8 +125,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 	private String getUriQueryWall(String proxyServer, String ownerId, String query) {
 		StringBuilder sb = new StringBuilder(ConstantsForVkApi.URL);
 		sb.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH)
-				.append(ConstantsForVkApi.PARAMETER_GROUP_OWNER)
-				.append(ConstantsForVkApi.PARAMETER_GROUP_ID_MINUS)
 				.append(ownerId)
 				.append(ConstantsForVkApi.PARAMETER_GROUP_VERSION)
 				.append(ConstantsForVkApi.PARAMETER_GROUP_QUERY)

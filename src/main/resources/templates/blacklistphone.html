@@ -77,7 +77,7 @@
                     <tr th:each="post : ${blackListPhone}">
                         <td><p th:text="${post.phoneNumber}"></p></td>
                         <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
-                        <td width="100" th:text="${post.date}">Дата</td>
+                        <td width="100" th:text="${#dates.format(post.date, 'yyyy-MM-dd HH:mm:ss')}">Дата</td>
                         <form th:action="@{/post/controlblacklistphone}" th:object="${post}" method="post">
                             <input class="hide-param" name="idBlackListPhone" th:value="${post.id}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>

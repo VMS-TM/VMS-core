@@ -61,7 +61,7 @@ public class Post implements Serializable {
 	@JsonProperty("owner_id")
 	private int owner_id;
 
-	@Column(name = "date")
+	@Column(name = "date", length = 1024)
 	@JsonProperty("date")
 	private Date date;
 

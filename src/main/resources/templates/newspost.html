@@ -89,7 +89,7 @@
                                                                                   class="glyphicon glyphicon-ok-sign"></span>
                         </td>
                         <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
-                        <td width="100" th:text="${post.date}">Дата</td>
+                        <td width="100" th:text="${#dates.format(post.date, 'yyyy-MM-dd HH:mm:ss')}">Дата</td>
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
                             <input type="hidden" name="id" th:value="${post.id}"/>
                             <input type="hidden" name="date" th:value="${post.date}"/>
@@ -237,7 +237,7 @@
                                         <div class="modal-footer">
                                             <form th:action="@{/post/controlblacklistphone}" method="post">
                                                 <input class="hide-param" name="idBlackListPhone" th:value="${post.id}"/>
-                                                <input type="submit" class="btn btn-primary dark-button-primary" value="Добавить в черный список телефонов"/>
+                                                <input type="submit" class="btn btn-primary dark-button-primarybtn btn-primary dark-button-primary" value="Добавить в черный список телефонов"/>
                                             </form>
                                         </div>
                                     </div>

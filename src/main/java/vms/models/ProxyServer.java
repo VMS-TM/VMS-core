@@ -45,13 +45,13 @@ public class ProxyServer implements Serializable {
 	@Column(name = "destiny")
 	private String destiny;
 
-	private String work;
+	private Boolean work;
 
-	public String getWork() {
+	public Boolean getWork() {
 		return work;
 	}
 
-	public void setWork(String work) {
+	public void setWork(Boolean work) {
 		this.work = work;
 	}
 

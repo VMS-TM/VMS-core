@@ -60,14 +60,17 @@ public class PostController {
 				.collect(Collectors.toList());
 
 		List<ProxyServer> badProxy = proxy.stream()
-				.filter(proxyServer -> "off".equals(proxyServer.getWork()))
+				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
+
+
 
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
 		model.addAttribute("AllPosts", result.size());
 		model.addAttribute("badproxy", badProxy);
+
 		return "posts";
 	}
 
@@ -167,7 +170,7 @@ public class PostController {
 				.collect(Collectors.toList());
 
 		List<ProxyServer> badProxy = proxy.stream()
-				.filter(proxyServer -> "off".equals(proxyServer.getWork()))
+				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
 
 

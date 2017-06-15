@@ -124,14 +124,15 @@ public class PostSearchServiceImpl implements PostSearchService {
 		 */
 
 		if (proxyServer.getWork() == null) {
-			if (rootObject == null || rootObject.getPostResponse().getPosts().toString().contains("error")) {
-				proxyServer.setWork("off");
+			if (rootObject != null || !rootObject.getPostResponse().getPosts().toString().contains("error")) {
+				proxyServer.setWork(true);
 				proxyServerService.addProxyServer(proxyServer);
 			} else {
-				proxyServer.setWork("on");
+				proxyServer.setWork(false);
 				proxyServerService.addProxyServer(proxyServer);
 			}
 		}
+
 
 		if (rootObject.getPostResponse() != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);

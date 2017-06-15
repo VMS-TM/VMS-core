@@ -28,7 +28,7 @@
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
-            <button type="button" class="btn btn-primary">Всего постов <span th:text="${AllPosts}" class="badge">7</span></button>
+            <button type="button" class="btn btn-primary">Всего постов <span th:text="${AllPosts}" class="badge"> </span></button>
         </div>
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Посты из групп</h2>
@@ -50,6 +50,12 @@
                     <label>Пост был успешно отправлен в группу.</label>
                 </div>
             </div>
+
+            <th:block th:each="proxy : ${badproxy}">
+                <div class="alert alert-danger">
+                    <label th:text="'Проверьте прокси по логином - ' + ${proxy.login}" >Пост был успешно отправлен в группу.</label>
+                </div>
+            </th:block>
 
             <ul class="nav nav-tabs">
                 <li class="active"><a href="/post/">Посты</a></li>

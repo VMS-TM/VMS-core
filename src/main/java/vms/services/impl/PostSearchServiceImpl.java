@@ -48,6 +48,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		int firstElement = 0;
 		int lastElement = 0;
 
+
 		List<Post> postsInBD = postService.getAllPostFromDb();
 		List<ProxyServer> allProxyServers = proxyServerService.proxyServerList();
 		List<ProxyServer> proxyServerList = new ArrayList<>();
@@ -74,6 +75,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 			final int start = firstElement;
 			final int finish = lastElement;
 
+
 			executorService.submit(new Thread(() -> {
 				for (int i = start; i < finish; i++) {
 					PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
@@ -83,12 +85,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-					}
-
-					if (postResponse == null ) {
-						proxyServer.setWork("off");
-					} else {
-						proxyServer.setWork("on");
 					}
 
 					/*
@@ -119,8 +115,24 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	@Override
-	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate, String proxyServer, String nameGroup, String query) {
-		RootObject rootObject = proxyTemplate.getForObject(getUriQueryWall(proxyServer, nameGroup, query), RootObject.class);
+	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
+		RootObject rootObject = proxyTemplate.getForObject(getUriQueryWall(token, nameGroup, query), RootObject.class);
+		ProxyServer proxyServer = proxyServerService.getProxyServerByToken(token);
+
+		/*
+			Check if proxy works as normal mode
+		 */
+
+		if (proxyServer.getWork() == null) {
+			if (rootObject == null) {
+				proxyServer.setWork("off");
+				proxyServerService.addProxyServer(proxyServer);
+			} else {
+				proxyServer.setWork("on");
+				proxyServerService.addProxyServer(proxyServer);
+			}
+		}
+
 		if (rootObject.getPostResponse() != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
 			return rootObject.getPostResponse();

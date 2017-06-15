@@ -53,15 +53,21 @@ public class PostController {
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
+		List<ProxyServer> proxy = proxyServerService.proxyServerList();
 
 		List<Post> result = posts.stream()
 				.filter(post -> "group".equals(post.getFromWhere()))
+				.collect(Collectors.toList());
+
+		List<ProxyServer> badProxy = proxy.stream()
+				.filter(proxyServer -> "off".equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
 
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
 		model.addAttribute("AllPosts", result.size());
+		model.addAttribute("badproxy", badProxy);
 		return "posts";
 	}
 
@@ -95,6 +101,7 @@ public class PostController {
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
+
 
 		prepareView(result);
 		preparationPost(result);
@@ -169,7 +176,7 @@ public class PostController {
 			preparationPost(result);
 			model.addAttribute("posts", result);
 			model.addAttribute("AllPosts", result.size());
-			model.addAttribute("BadProxy", badProxy);
+			model.addAttribute("badproxy", badProxy);
 
 			return "posts";
 		}

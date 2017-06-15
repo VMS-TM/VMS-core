@@ -43,4 +43,9 @@ public class ProxyServerServiceImpl implements ProxyServerService {
 	public void deleteProxyServer(Long id) {
 		repository.delete(id);
 	}
+
+	@Override
+	public ProxyServer getProxyServerByToken(String token) {
+		return repository.getProxyServerByToken(token);
+	}
 }

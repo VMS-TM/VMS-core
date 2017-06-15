@@ -15,5 +15,7 @@ public interface ProxyServerService {
 
 	ProxyServer getProxyServer(String login);
 
+	ProxyServer getProxyServerByToken(String token);
+
 	void deleteProxyServer(Long id);
 }

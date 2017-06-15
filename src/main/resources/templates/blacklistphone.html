@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <link href="/css/bootstrap.css" rel="stylesheet"></link>
+    <link href="/css/style.css" rel="stylesheet"></link>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="#">VMS Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Выйти</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Группы в БД</a></li>
+                <li><a href="/post/">Посты</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+                <li><a href="/city/search">Поиск пользователей</a></li>
+                <li><a href="/properties">Настройки</a></li>
+            </ul>
+            <button type="button" class="btn btn-primary dark-button-primary">В черном списке<span th:text="${AllPosts}" class="badge"> </span></button>
+        </div>
+        <div class=" col-md-9 fixed ">
+            <h2 class="sub-header">Черный список телефонов</h2>
+
+            <div th:if="${param.warning != null}">
+                <div class="alert alert-danger">
+                    <label>Проверьте Proxy Servers</label>
+                </div>
+            </div>
+
+            <div th:if="${param.postInGroupDanger != null}">
+                <div class="alert alert-danger">
+                    <label>Произошла ошибка при отправке поста в группу.</label>
+                </div>
+            </div>
+
+            <div th:if="${param.postInGroupSuccess != null}">
+                <div class="alert alert-success">
+                    <label>Пост был успешно отправлен в группу.</label>
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs">
+                <li><a href="/post/">Посты</a></li>
+                <li><a href="/post/news">Объявления</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">Черный список
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/post/blacklistphone">Телефонов</a></li>
+                        <li><a href="/post/blacklisturl">URL</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="tab-content boxShadow3 bg-tab">
+                <table class="table table-striped">
+                    <thead></thead>
+                    <tbody>
+                    <tr>
+                        <th>Номер телефона</th>
+                        <th>Начало объвления</th>
+                        <th>Дата</th>
+                        <th>Убрать из списка</th>
+                    </tr>
+                    <tr th:each="post : ${blackListPhone}">
+                        <td><p th:text="${post.phoneNumber}"></p></td>
+                        <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
+                        <td width="100" th:text="${post.date}">Дата</td>
+                        <form th:action="@{/post/controlblacklistphone}" th:object="${post}" method="post">
+                            <input class="hide-param" name="idBlackListPhone" th:value="${post.id}"/>
+                            <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
+                        </form>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/modal.js"></script>
+<script src="/js/style.js"></script>
+</body>
+</html>

@@ -18,4 +18,6 @@ public interface VkPostService {
 	void addPost(Post post);
 
 	void deletePost(Long id);
+
+	Post getById(Long id);
 }

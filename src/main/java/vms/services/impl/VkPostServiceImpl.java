@@ -45,4 +45,9 @@ public class VkPostServiceImpl implements VkPostService {
 	public void deletePost(Long id) {
 		postRepo.delete(id);
 	}
+
+	@Override
+	public Post getById(Long id) {
+		return postRepo.getProxyServerById(id);
+	}
 }

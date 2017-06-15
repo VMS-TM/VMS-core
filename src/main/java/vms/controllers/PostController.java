@@ -63,8 +63,6 @@ public class PostController {
 				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
 
-
-
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
@@ -81,6 +79,51 @@ public class PostController {
 		return home;
 	}
 
+	@RequestMapping(value = {"/blacklistphone"}, method = RequestMethod.GET)
+	public String showBlackListPhone(Model model) {
+		List<Post> posts = postService.getAllPostFromDb();
+
+		List<Post> blackListPhone = posts.stream()
+				.filter(post -> Boolean.TRUE.equals(post.isBlackListPhone()))
+				.collect(Collectors.toList());
+		prepareView(blackListPhone);
+
+		model.addAttribute("blackListPhone", blackListPhone);
+		model.addAttribute("AllPosts", blackListPhone.size());
+
+		return "blacklistphone";
+	}
+
+	@RequestMapping(value = {"/controlblacklistphone"}, method = RequestMethod.POST)
+	public String addBlackListPhone(Model model, @RequestParam(value = "idBlackListPhone") Long id) {
+		Post blackPost = postService.getById(id);
+
+		if (!blackPost.isBlackListPhone()) {
+			blackPost.setBlackListPhone(true);
+		} else {
+			blackPost.setBlackListPhone(false);
+		}
+
+		postService.update(blackPost);
+
+		List<Post> posts = postService.getAllPostFromDb();
+		List<Post> blackListPhone = posts.stream()
+				.filter(post -> Boolean.TRUE.equals(post.isBlackListPhone()))
+				.collect(Collectors.toList());
+		prepareView(blackListPhone);
+
+		model.addAttribute("blackListPhone", blackListPhone);
+		model.addAttribute("AllPosts", blackListPhone.size());
+
+
+		return "blacklistphone";
+	}
+
+	@RequestMapping(value = {"/blacklisturl"}, method = RequestMethod.GET)
+	public String showBlackListURL() {
+		return "blacklisturl";
+	}
+
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
 	public String getNews(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
@@ -89,10 +132,14 @@ public class PostController {
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
 
-		prepareView(result);
-		preparationPost(result);
-		model.addAttribute("posts", result);
-		model.addAttribute("AllPosts", result.size());
+		List<Post> resultNotInBlackListPhone = result.stream()
+				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
+				.collect(Collectors.toList());
+
+		prepareView(resultNotInBlackListPhone);
+		preparationPost(resultNotInBlackListPhone);
+		model.addAttribute("posts", resultNotInBlackListPhone);
+		model.addAttribute("AllPosts", resultNotInBlackListPhone.size());
 		return "newspost";
 	}
 
@@ -105,12 +152,16 @@ public class PostController {
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
 
+		List<Post> resultNotInBlackListPhone = result.stream()
+				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
+				.collect(Collectors.toList());
 
-		prepareView(result);
-		preparationPost(result);
 
-		model.addAttribute("posts", result);
-		model.addAttribute("AllPosts", result.size());
+		prepareView(resultNotInBlackListPhone);
+		preparationPost(resultNotInBlackListPhone);
+
+		model.addAttribute("posts", resultNotInBlackListPhone);
+		model.addAttribute("AllPosts", resultNotInBlackListPhone.size());
 		return "newspost";
 	}
 

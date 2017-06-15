@@ -124,7 +124,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		 */
 
 		if (proxyServer.getWork() == null) {
-			if (rootObject == null) {
+			if (rootObject == null || rootObject.getPostResponse().getPosts().toString().contains("error")) {
 				proxyServer.setWork("off");
 				proxyServerService.addProxyServer(proxyServer);
 			} else {

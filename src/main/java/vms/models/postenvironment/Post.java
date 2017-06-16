@@ -92,6 +92,16 @@ public class Post implements Serializable {
 		this.blackListPhone = blackListPhone;
 	}
 
+	private boolean blackListURl;
+
+	public boolean isBlackListURl() {
+		return blackListURl;
+	}
+
+	public void setBlackListURl(boolean blackListURl) {
+		this.blackListURl = blackListURl;
+	}
+
 	private String fromWhere;
 
 	public String getFromWhere() {

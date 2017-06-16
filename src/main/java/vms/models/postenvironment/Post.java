@@ -2,6 +2,7 @@ package vms.models.postenvironment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 import vms.models.postenvironment.attachmentenv.AttachmentContainer;
 
 import javax.persistence.*;
@@ -69,7 +70,7 @@ public class Post implements Serializable {
 	@JsonProperty("post_id")
 	private int post_id;
 
-	@Column(name = "text", length = 16000)
+	@Column(name = "text", length = 25000)
 	@JsonProperty("text")
 	private String text;
 
@@ -180,6 +181,7 @@ public class Post implements Serializable {
 		this.priceOfFlat = priceOfFlat;
 	}
 
+	@Column(length = 16000)
 	private String metroAndAddress;
 
 	public String getMetroAndAddress() {

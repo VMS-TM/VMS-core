@@ -179,7 +179,7 @@ public class PostController {
 		return "newspost";
 	}
 
-	@RequestMapping(value = {"/news/find"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/news/find"}, method = RequestMethod.POST)
 	public String getNews(Model model, @RequestParam(value = "news") String query) {
 		newsSearchService.getAdsFromNews(query);
 		List<Post> posts = postService.getAllPostFromDb();
@@ -198,7 +198,7 @@ public class PostController {
 
 		model.addAttribute("posts", resultNotInBlackListPhone);
 		model.addAttribute("AllPosts", resultNotInBlackListPhone.size());
-		return "newspost";
+		return "redirect:/post/news";
 	}
 
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)
@@ -215,8 +215,17 @@ public class PostController {
 							  @RequestParam(value = "date") String date,
 							  @RequestParam(value = "fromwhere") String from) throws ParseException {
 
+
+
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date dateOfPost = format.parse(date);
+
+		Date dateOfPost = null;
+		try {
+			dateOfPost = format.parse(date);
+		} catch (ParseException e) {
+
+		}
+
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 
 		if ("news".equals(from)) {
@@ -245,7 +254,7 @@ public class PostController {
 		return home;
 	}
 
-	@RequestMapping(value = {"/req"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/req"}, method = RequestMethod.POST)
 	public String getNewPosts(Model model, @RequestParam(value = "query") String query) {
 		postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
 
@@ -289,18 +298,24 @@ public class PostController {
 								@RequestParam(value = "fromwhere") String from) throws ParseException {
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date dateOfPost = format.parse(date);
+		Date dateOfPost = null;
+		try {
+			dateOfPost = format.parse(date);
+		} catch (ParseException e) {
+
+		}
+
 		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
 		if ("news".equals(from)) {
 			if (result == null || result.contains("error_code")) {
-				return "redirect:/post/news?postInGroupDanger";
+				return "redirect:/post/news/?postInGroupDanger";
 			}
 			postToGroup.setSavedInDb(save);
 			postToGroup.setPostedToGroup(true);
 			postService.update(postToGroup);
-			return "redirect:/post/news?postInGroupSuccess";
+			return "redirect:/post/news/?postInGroupSuccess";
 
 		} else {
 			if (result == null || result.contains("error_code")) {

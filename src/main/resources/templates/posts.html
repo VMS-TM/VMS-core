@@ -223,7 +223,7 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="iVka"><a name="vka"
-                                                                                         th:href="@{'https://vk.com/id' + ${post.signerId}}"
+                                                                                         th:href="@{'https://vk.com/id' + ${post.from_id}}"
                                                                                          target="_blank">Ссылка
                                                                         на автора поста в ВК</a></label>
                                                                     <input name="nVka" th:text="${post.authorOfpost}"
@@ -267,7 +267,7 @@
     <div class="modal fade" id="SearchPost">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <form role="form" th:action="@{/post/req}" method="get">
+                <form role="form" th:action="@{/post/req}" method="post">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Запрос постов из групп</h4>

@@ -74,7 +74,7 @@
                         <th>Дата</th>
                         <th>Убрать из списка</th>
                     </tr>
-                    <tr th:each="post : ${blackListPhone}">
+                    <tr th:each="post : ${blackListURL}">
                         <td><p th:text="${post.from_id}"></p></td>
                         <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
                         <td width="100" th:text="${#dates.format(post.date, 'yyyy-MM-dd HH:mm:ss')}">Дата</td>

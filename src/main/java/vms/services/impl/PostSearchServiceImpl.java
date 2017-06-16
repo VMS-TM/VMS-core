@@ -94,6 +94,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 					if (!postsInBD.containsAll(postResponse.getPosts())) {
 						postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
 						postService.addPosts(postResponse.getPosts());
+
 					} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
 						List<Post> postsWhichNotInDB = new ArrayList<>();
 

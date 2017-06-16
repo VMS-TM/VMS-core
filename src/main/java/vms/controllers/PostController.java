@@ -116,7 +116,7 @@ public class PostController {
 		model.addAttribute("AllPosts", blackListPhone.size());
 
 
-		return "blacklistphone";
+		return "redirect:/post/blacklistphone";
 	}
 
 	@RequestMapping(value = {"/blacklisturl"}, method = RequestMethod.GET)
@@ -152,12 +152,13 @@ public class PostController {
 		List<Post> blackListURL = posts.stream()
 				.filter(post -> Boolean.TRUE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
+
 		prepareView(blackListURL);
 
 		model.addAttribute("blackListPhone", blackListURL);
 		model.addAttribute("AllPosts", blackListURL.size());
 
-		return "blacklisturl";
+		return "redirect:/post/blacklisturl";
 	}
 
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
@@ -172,10 +173,14 @@ public class PostController {
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
 				.collect(Collectors.toList());
 
-		prepareView(resultNotInBlackListPhone);
-		preparationPost(resultNotInBlackListPhone);
-		model.addAttribute("posts", resultNotInBlackListPhone);
-		model.addAttribute("AllPosts", resultNotInBlackListPhone.size());
+		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
+				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
+				.collect(Collectors.toList());
+
+		prepareView(cleanResultList);
+		preparationPost(cleanResultList);
+		model.addAttribute("posts", cleanResultList);
+		model.addAttribute("AllPosts", cleanResultList.size());
 		return "newspost";
 	}
 
@@ -192,12 +197,15 @@ public class PostController {
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
 				.collect(Collectors.toList());
 
+		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
+				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
+				.collect(Collectors.toList());
 
-		prepareView(resultNotInBlackListPhone);
-		preparationPost(resultNotInBlackListPhone);
+		prepareView(cleanResultList);
+		preparationPost(cleanResultList);
+		model.addAttribute("posts", cleanResultList);
+		model.addAttribute("AllPosts", cleanResultList.size());
 
-		model.addAttribute("posts", resultNotInBlackListPhone);
-		model.addAttribute("AllPosts", resultNotInBlackListPhone.size());
 		return "redirect:/post/news";
 	}
 

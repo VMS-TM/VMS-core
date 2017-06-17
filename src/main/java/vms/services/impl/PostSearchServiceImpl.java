@@ -61,58 +61,88 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 		ExecutorService executorService = Executors.newFixedThreadPool(proxyServerList.size());
 
-		int requestOnProxy = groups.size() / proxyServerList.size();
-		int remainingRequests = groups.size() % proxyServerList.size();
+		if (groups.size() > 1) {
+			int requestOnProxy = groups.size() / proxyServerList.size();
+			int remainingRequests = groups.size() % proxyServerList.size();
 
-		for (ProxyServer proxyServer : proxyServerList) {
-			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
-			lastElement += requestOnProxy;
-			if (remainingRequests > 0) {
-				remainingRequests--;
-				lastElement += 1;
-			}
+			for (ProxyServer proxyServer : proxyServerList) {
+				RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
+				lastElement += requestOnProxy;
+				if (remainingRequests > 0) {
+					remainingRequests--;
+					lastElement += 1;
+				}
 
-			final int start = firstElement;
-			final int finish = lastElement;
+				final int start = firstElement;
+				final int finish = lastElement;
 
 
-			executorService.submit(new Thread(() -> {
-				for (int i = start; i < finish; i++) {
-					PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
-					if (i % 3 == 0) {
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
+				executorService.submit(new Thread(() -> {
+					for (int i = start; i < finish; i++) {
+						PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
+						if (i % 3 == 0) {
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
-					}
 
 					/*
 					Threads are searching posts from groups and comparing if we have this in our Data Base or not. If not - add to DB.
 					If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
 					 */
-					if (!postsInBD.containsAll(postResponse.getPosts())) {
-						postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
-						postService.addPosts(postResponse.getPosts());
+						if (!postsInBD.containsAll(postResponse.getPosts())) {
+							postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
+							postService.addPosts(postResponse.getPosts());
 
-					} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
-						List<Post> postsWhichNotInDB = new ArrayList<>();
+						} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
+							List<Post> postsWhichNotInDB = new ArrayList<>();
 
-						for (Post post : postResponse.getPosts()) {
-							if (!postsInBD.contains(post)) {
-								post.setFromWhere("group");
-								postsWhichNotInDB.add(post);
+							for (Post post : postResponse.getPosts()) {
+								if (!postsInBD.contains(post)) {
+									post.setFromWhere("group");
+									postsWhichNotInDB.add(post);
+								}
 							}
-						}
 
-						postService.addPosts(postsWhichNotInDB);
+							postService.addPosts(postsWhichNotInDB);
+						}
 					}
+				}));
+
+				firstElement += lastElement;
+				counterProxy++;
+			}
+		} else {
+			executorService.submit(new Thread(() -> {
+				RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(0).getIp(), proxyServerList.get(0).getPort());
+				PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(0).getToken(), groups.get(0).getId(), query);
+
+				/*
+				Threads are searching posts from groups and comparing if we have this in our Data Base or not. If not - add to DB.
+				If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
+				 */
+				if (!postsInBD.containsAll(postResponse.getPosts())) {
+					postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
+					postService.addPosts(postResponse.getPosts());
+
+				} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
+					List<Post> postsWhichNotInDB = new ArrayList<>();
+
+					for (Post post : postResponse.getPosts()) {
+						if (!postsInBD.contains(post)) {
+							post.setFromWhere("group");
+							postsWhichNotInDB.add(post);
+						}
+					}
+
+					postService.addPosts(postsWhichNotInDB);
 				}
 			}));
-
-			firstElement += lastElement;
-			counterProxy++;
 		}
+
+
 	}
 
 	@Override

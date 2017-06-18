@@ -34,6 +34,8 @@ public class ConstantsForVkApi {
 	public final static String PARAMETER_GROUP_QUERY = "&query=";
 	public final static String PARAMETER_GROUP_VERSION = "&v=5.63";
 	public final static String PARAMETER_GROUP_OWNER = "owner_id";
+	public final static Integer TIMEOUT = 5;
+
 
 	/**
 	 * Method and parameters for GroupSearchService

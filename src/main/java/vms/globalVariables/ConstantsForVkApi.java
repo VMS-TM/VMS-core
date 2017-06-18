@@ -56,6 +56,13 @@ public class ConstantsForVkApi {
 	public final static String PARAMETER_NEWS_VERSION = "&v=5.65";
 
 	/**
+	 * Method and parameters for search posts
+	 */
+	public final static String METHOD_GET_USERS_POSTS = "wall.search?count=100&";
+	public final static String PARAMETER_OWNER_ID = "owner_id=";
+	public final static String PARAMETER_QUERY_POST = "&query=";
+
+	/**
 	 * Method and parameters for PostToGroupService
 	 */
 	public final static String PARAMETER_POST_TO_GROUP_METHOD = "wall.post";

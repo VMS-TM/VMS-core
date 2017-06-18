@@ -31,7 +31,7 @@
             <button type="button" class="btn btn-primary">Всего постов <span th:text="${AllPosts}" class="badge"> </span></button>
         </div>
         <div class=" col-md-9 fixed ">
-            <h2 class="sub-header">Посты из групп</h2>
+            <h2 class="sub-header">Посты со стен пользователей</h2>
 
             <div th:if="${param.warning != null}">
                 <div class="alert alert-danger">
@@ -96,7 +96,8 @@
                         <th>В группу</th>
                         <th>Удаление</th>
                     </tr>
-                    <tr th:each="post : ${posts}">
+                    <tr th:each="post : ${posts}"
+                        th:if="${post.fromWhere}=='user'">
                         <td width="10"><a class="btn btn-default" type="button"
                                           data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
                         <td><span th:if="${post.savedInDb} == true" class="glyphicon glyphicon-info-sign"></span> <span
@@ -144,7 +145,7 @@
                                                     <li><a th:href="'#photo' + ${post.id}" data-toggle="tab">Фото</a></li>
                                                 </ul>
                                                 <div class="tab-content">
-                                                    <div class="tab-pane active" th:id="'home' + ${post.id}">
+                                                    <div class="tab-pane active in" th:id="'home' + ${post.id}">
                                                         <div class="row">
                                                             <input type="hidden" name="id" th:value="${post.id}"/>
                                                             <input type="hidden" name="date" th:value="${post.date}"/>
@@ -234,7 +235,7 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="iVka"><a name="vka"
-                                                                                         th:href="@{'https://vk.com/id' + ${post.signerId}}"
+                                                                                         th:href="@{'https://vk.com/id' + ${post.from_id}}"
                                                                                          target="_blank">Ссылка
                                                                         на автора поста в ВК</a></label>
                                                                     <input name="nVka" th:text="${post.authorOfpost}"
@@ -246,7 +247,9 @@
                                                     </div>
 
                                                     <div class="tab-pane fade" th:id="'photo' + ${post.id}">
-
+                                                        <div th:each="photo: ${post.photos}">
+                                                            <img th:src="${photo.referenceOnPost}"></img>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -278,10 +281,10 @@
     <div class="modal fade" id="SearchPost">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <form role="form" th:action="@{/post/req}" method="post">
+                <form role="form" action="/post/users/wall" method="post">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Запрос постов из групп</h4>
+                        <h4 class="modal-title">Запрос постов пользователей</h4>
                     </div>
                     <div class="modal-body">
                         <div>

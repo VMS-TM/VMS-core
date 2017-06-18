@@ -278,9 +278,10 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		userFromVKList.add(new UserFromVK(21701619L, "Сергей", "Хилько"));
 		userFromVKList.add(new UserFromVK(20904513L, "Владимир", "Жаринов"));
 		userFromVKList.add(new UserFromVK(118811155L, "Макс", "Чернов"));
+		userFromVKList.add(new UserFromVK(419790750L, "Dmitry", "Kuz'min"));
 
 		userFromVkService.addListOfUsersOfVK(userFromVKList);
-		log.info("Add 10 users of vk in DB for tests");
+		log.info("Add 11 users of vk in DB for tests");
 	}
 
 	private void loadProperty() {

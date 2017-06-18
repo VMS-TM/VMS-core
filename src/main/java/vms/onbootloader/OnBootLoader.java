@@ -255,6 +255,10 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 				"5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88",
 				"77.73.64.12", 8080, "group");
 
+		ProxyServer fifthProxyServer = new ProxyServer("+7354223438212", "27533423",
+				"f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4",
+				"91.218.84.4", 3128, "group");
+
 
 		proxyServerService.addProxyServer(firstProxyServer);
 		log.info("Saved proxy server with ip:" + firstProxyServer.getIp());
@@ -264,6 +268,8 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		log.info("Saved proxy server with ip:" + thirdProxyServer.getIp());
 		proxyServerService.addProxyServer(fourthProxyServer);
 		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
+		proxyServerService.addProxyServer(fifthProxyServer);
+		log.info("Saved proxy server with ip:" + fifthProxyServer.getIp());
 	}
 
 	private void loadUsersFromVK() {

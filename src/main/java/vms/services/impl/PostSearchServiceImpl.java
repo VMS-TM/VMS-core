@@ -1,6 +1,7 @@
 package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.ResourceAccessException;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
 import vms.models.postenvironment.Post;
@@ -149,26 +150,27 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 	@Override
 	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
-		RootObject rootObject = proxyTemplate.getForObject(getUriQueryWall(token, nameGroup, query), RootObject.class);
+		RootObject rootObject = null;
 		ProxyServer proxyServer = proxyServerService.getProxyServerByToken(token);
-
+		try {
+			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, nameGroup, query), RootObject.class);
+		} catch (ResourceAccessException exp) {
+			proxyServer.setWork(false);
+			proxyServerService.addProxyServer(proxyServer);
+		}
 		/*
 			Check if proxy works as normal mode
 		 */
 
-		if (proxyServer.getWork() == null) {
-			if (rootObject != null || !rootObject.getPostResponse().getPosts().toString().contains("error")) {
-				proxyServer.setWork(true);
-				proxyServerService.addProxyServer(proxyServer);
-			} else {
-				proxyServer.setWork(false);
-				proxyServerService.addProxyServer(proxyServer);
-			}
-		}
-
 
 		if (rootObject.getPostResponse() != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
+
+			if (proxyServer.getWork() == null) {
+				proxyServer.setWork(true);
+				proxyServerService.addProxyServer(proxyServer);
+			}
+			
 			return rootObject.getPostResponse();
 		}
 		return null;

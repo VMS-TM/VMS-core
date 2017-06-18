@@ -16,6 +16,7 @@ import vms.services.absr.VkPostService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.*;
 
 
@@ -116,8 +117,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 			}
 		} else {
 			executorService.submit(new Thread(() -> {
-				RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(0).getIp(), proxyServerList.get(0).getPort());
-				PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(0).getToken(), groups.get(0).getId(), query);
+				int randomProxy = new Random().nextInt(proxyServerList.size());
+				RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(randomProxy).getIp(), proxyServerList.get(randomProxy).getPort());
+				PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(randomProxy).getToken(), groups.get(0).getId(), query);
 
 				/*
 				Threads are searching posts from groups and comparing if we have this in our Data Base or not. If not - add to DB.

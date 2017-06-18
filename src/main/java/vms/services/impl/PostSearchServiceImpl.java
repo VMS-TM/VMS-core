@@ -175,7 +175,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	/*
-		If we have only one group in out list then we use random proxy
+		If we have  one group or less then proxy
 	*/
 	private void searchingThread(ExecutorService executorService, List<ProxyServer> proxyServerList, List<Post> postsInBD, List<Group> groups, String query, Integer i) {
 		executorService.submit(new Thread(() -> {

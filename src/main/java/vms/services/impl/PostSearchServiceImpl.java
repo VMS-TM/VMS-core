@@ -15,6 +15,9 @@ import vms.services.absr.ProxyServerService;
 import vms.services.absr.SearchUsersService;
 import vms.services.absr.VkPostService;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,6 +39,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 	//constants for query
 	final String uri = "https://api.vk.com/method";
+
+
 
 	/**
 	 * confirm one PostResponse object from any PostResponse
@@ -155,22 +160,21 @@ public class PostSearchServiceImpl implements PostSearchService {
 		try {
 			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, nameGroup, query), RootObject.class);
 		} catch (ResourceAccessException exp) {
-			proxyServer.setWork(false);
-			proxyServerService.addProxyServer(proxyServer);
+			/*
+				Check proxy if it still works, ping to host
+		 	*/
+			if (!isProxyAlive(proxyServer, ConstantsForVkApi.TIMEOUT)) {
+				proxyServer.setWork(false);
+				proxyServerService.addProxyServer(proxyServer);
+			}
 		}
 		/*
 			Check if proxy works as normal mode
 		 */
-
-
 		if (rootObject.getPostResponse() != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
-
-			if (proxyServer.getWork() == null) {
-				proxyServer.setWork(true);
-				proxyServerService.addProxyServer(proxyServer);
-			}
-			
+			proxyServer.setWork(true);
+			proxyServerService.addProxyServer(proxyServer);
 			return rootObject.getPostResponse();
 		}
 		return null;
@@ -187,6 +191,15 @@ public class PostSearchServiceImpl implements PostSearchService {
 				.append(ConstantsForVkApi.TOKEN)
 				.append(proxyServer);
 		return sb.toString();
+	}
+
+	private boolean isProxyAlive(ProxyServer proxyServer, int timeout) {
+		try (Socket socket = new Socket()) {
+			socket.connect(new InetSocketAddress(proxyServer.getIp(), proxyServer.getPort()), timeout);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 }
 

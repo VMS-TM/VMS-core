@@ -53,6 +53,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 				//photoService.addPhotos(photos);
 
 			} else {
+				post.setFromWhere("user");
 				vkPostService.addPost(post);
 			}
 		}

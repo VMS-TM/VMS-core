@@ -167,20 +167,13 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
-		model.addAttribute("posts", cleanResultList);
-		model.addAttribute("AllPosts", cleanResultList.size());
+		prepareView(result);
+		preparationPost(result);
+		model.addAttribute("posts", result);
 		return "newspost";
 	}
 
@@ -191,20 +184,13 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
-		model.addAttribute("posts", cleanResultList);
-		model.addAttribute("AllPosts", cleanResultList.size());
+		prepareView(result);
+		preparationPost(result);
+		model.addAttribute("posts", result);
 
 		return "redirect:/post/news";
 	}
@@ -366,21 +352,14 @@ public class PostController {
 
 		List<Post> result = postList.stream()
 				.filter(post -> "user".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
+		prepareView(result);
+		preparationPost(result);
 
-		modelMap.addAttribute("posts", cleanResultList);
-		modelMap.addAttribute("AllPosts", cleanResultList.size());
+		modelMap.addAttribute("posts", result);
 
 		return "usersposts";
 	}

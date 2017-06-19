@@ -6,6 +6,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
+import vms.models.postenvironment.Photo;
 import vms.models.postenvironment.Post;
 
 import java.util.ArrayList;

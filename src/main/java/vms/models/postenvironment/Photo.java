@@ -12,12 +12,11 @@ public class Photo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@OneToMany(fetch = FetchType.EAGER, targetEntity = Post.class)
-	@JoinTable(name = "postphotos",
-			joinColumns = {@JoinColumn(name = "photo_id")},
-			inverseJoinColumns = {@JoinColumn(name = "post_id")})
-	private List<Post> posts;
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Post.class)
+	@JoinColumn(name = "postID", referencedColumnName = "id")
+	private Post post;
 
+	@Column(name = "url", length = 1024)
 	private String referenceOnPost;
 
 	public long getId() {
@@ -28,12 +27,12 @@ public class Photo {
 		this.id = id;
 	}
 
-	public List<Post> getPosts() {
-		return posts;
+	public Post getPost() {
+		return post;
 	}
 
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
+	public void setPost(Post post) {
+		this.post = post;
 	}
 
 	public String getReferenceOnPost() {
@@ -47,7 +46,7 @@ public class Photo {
 	@Override
 	public String toString() {
 		return "Photo{" +
-				"posts=" + posts +
+				"posts=" + post +
 				", referenceOnPost='" + referenceOnPost + '\'' +
 				'}';
 	}

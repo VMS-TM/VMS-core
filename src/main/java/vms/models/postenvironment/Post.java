@@ -35,11 +35,8 @@ public class Post implements Serializable {
 		this.from_id = from_id;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, targetEntity = Photo.class)
-	@JoinTable(name = "postphotos",
-			joinColumns = {@JoinColumn(name = "photo_id")},
-			inverseJoinColumns = {@JoinColumn(name = "post_id")})
-	private List<Photo> photos;
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "post")
+	private List<Photo> photos = new ArrayList<>();
 
 	public List<Photo> getPhotos() {
 		return photos;
@@ -74,7 +71,8 @@ public class Post implements Serializable {
 	@JsonProperty("text")
 	private String text;
 
-	@JsonProperty("attachmentContainers")
+	@JsonProperty("attachments")
+	@Transient
 	private ArrayList<AttachmentContainer> attachmentContainers;
 
 	@JsonProperty("marked_as_ads")

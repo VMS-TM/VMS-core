@@ -1,4 +1,4 @@
-package vms.services;
+package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,11 +6,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
-import vms.models.postenvironment.Photo;
 import vms.models.postenvironment.Post;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Service

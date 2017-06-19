@@ -1,22 +1,15 @@
-package vms.services;
+package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
-import vms.models.ProxyServer;
 import vms.models.postenvironment.Post;
-import vms.models.postenvironment.PostResponse;
 import vms.models.postenvironment.RootObject;
-import vms.models.rawgroup.Group;
-import vms.services.absr.ProxyServerService;
-import vms.services.absr.SearchUsersService;
 import vms.services.absr.VkPostService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service

@@ -12,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import vms.services.NewsSearchService;
-import vms.services.PostToGroupService;
+import vms.services.impl.NewsSearchService;
+import vms.services.impl.PostToGroupService;
 import vms.services.absr.*;
 
 import java.text.ParseException;

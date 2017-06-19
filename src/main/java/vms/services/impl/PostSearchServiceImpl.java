@@ -67,7 +67,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 		if (groups.size() > 1) {
 			int requestOnProxy = groups.size() / proxyServerList.size();
 			int remainingRequests = groups.size() % proxyServerList.size();
-
 			/*
 				If we have proxy > groups
 			 */
@@ -75,7 +74,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 				for (int i = 0; i < groups.size(); i++) {
 					searchingThread(executorService, proxyServerList, postsInBD, groups, query, i);
 				}
-
 			} else {
 				for (ProxyServer proxyServer : proxyServerList) {
 					RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
@@ -84,11 +82,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 						remainingRequests--;
 						lastElement += 1;
 					}
-
 					final int start = firstElement;
 					final int finish = lastElement;
-
-
 					executorService.submit(new Thread(() -> {
 						for (int i = start; i < finish; i++) {
 							List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
@@ -99,22 +94,16 @@ public class PostSearchServiceImpl implements PostSearchService {
 									e.printStackTrace();
 								}
 							}
-
 							getPostFromList(postsInBD, postList, "group");
 						}
 					}));
-
 					firstElement += lastElement;
 					counterProxy++;
 				}
 			}
-
-
 		} else {
 			searchingThread(executorService, proxyServerList, postsInBD, groups, query, 0);
 		}
-
-
 	}
 
 	@Override
@@ -195,7 +184,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 					.collect(Collectors.toList());
 			vkPostService.addPosts(postsWhichNotInDB);
 		}
-
 	}
 
 

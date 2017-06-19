@@ -1,6 +1,7 @@
 package vms.controllers;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import vms.services.NewsSearchService;
 import vms.services.PostToGroupService;
-import vms.services.absr.GroupService;
-import vms.services.absr.PostSearchService;
-import vms.services.absr.ProxyServerService;
-import vms.services.absr.VkPostService;
+import vms.services.absr.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,6 +47,8 @@ public class PostController {
 	@Autowired
 	private ProxyServerService proxyServerService;
 
+	@Autowired
+	private SearchUsersPostsService usersPostsService;
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
@@ -167,20 +167,13 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
-		model.addAttribute("posts", cleanResultList);
-		model.addAttribute("AllPosts", cleanResultList.size());
+		prepareView(result);
+		preparationPost(result);
+		model.addAttribute("posts", result);
 		return "newspost";
 	}
 
@@ -191,20 +184,13 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
-		model.addAttribute("posts", cleanResultList);
-		model.addAttribute("AllPosts", cleanResultList.size());
+		prepareView(result);
+		preparationPost(result);
+		model.addAttribute("posts", result);
 
 		return "redirect:/post/news";
 	}
@@ -224,7 +210,6 @@ public class PostController {
 							  @RequestParam(value = "fromwhere") String from) throws ParseException {
 
 
-
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		Date dateOfPost = null;
@@ -235,6 +220,9 @@ public class PostController {
 		}
 
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+		if (postService.getById(id).isHavePhoto()) {
+			editedPost.setHavePhoto(true);
+		}
 
 		if ("news".equals(from)) {
 			try {
@@ -244,6 +232,14 @@ public class PostController {
 				exp.printStackTrace();
 			}
 			return "redirect:/post/news";
+		} else if ("user".equals(from)) {
+			try {
+				editedPost.setSavedInDb(true);
+				postService.update(editedPost);
+			} catch (DataIntegrityViolationException exp) {
+				exp.printStackTrace();
+			}
+			return "redirect:/post/users/wall";
 		} else {
 			try {
 				editedPost.setSavedInDb(true);
@@ -257,8 +253,12 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
-	public String deletePosts(@RequestParam(value = "idDeletePost") Long id) {
+	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
+							  @RequestParam(value = "fromwhere") String from) {
 		postService.deletePost(id);
+		if("user".equals(from)){
+			return "redirect:/post/users/wall";
+		}
 		return home;
 	}
 
@@ -314,6 +314,9 @@ public class PostController {
 		}
 
 		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+		if(postService.getById(id).isHavePhoto()){
+			postToGroup.setHavePhoto(true);
+		}
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
 		if ("news".equals(from)) {
@@ -324,7 +327,14 @@ public class PostController {
 			postToGroup.setPostedToGroup(true);
 			postService.update(postToGroup);
 			return "redirect:/post/news/?postInGroupSuccess";
-
+		}else if("user".equals(from)){
+			if (result == null || result.contains("error_code")) {
+				return "redirect:/post/users/wall?postInGroupDanger";
+			}
+			postToGroup.setSavedInDb(save);
+			postToGroup.setPostedToGroup(true);
+			postService.update(postToGroup);
+			return "redirect:/post/users/wall?postInGroupSuccess";
 		} else {
 			if (result == null || result.contains("error_code")) {
 				return "redirect:/post/?postInGroupDanger";
@@ -335,6 +345,32 @@ public class PostController {
 			return "redirect:/post/?postInGroupSuccess";
 		}
 	}
+
+	@RequestMapping(value = "/users/wall", method = RequestMethod.GET)
+	public String usersWallPostPage(ModelMap modelMap) {
+		List<Post> postList = postService.getAllPostFromDb();
+
+		List<Post> result = postList.stream()
+				.filter(post -> "user".equals(post.getFromWhere()))
+				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
+				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
+				.collect(Collectors.toList());
+
+		prepareView(result);
+		preparationPost(result);
+
+		modelMap.addAttribute("posts", result);
+
+		return "usersposts";
+	}
+
+	@RequestMapping(value = "/users/wall", method = RequestMethod.POST)
+	public String searchUsersWallPosts(ModelMap modelMap, @RequestParam(value = "query") String query) {
+		usersPostsService.getUsersPosts(query);
+
+		return "redirect:/post/users/wall";
+	}
+
 
 	void prepareView(List<Post> posts) {
 		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
@@ -365,5 +401,4 @@ public class PostController {
 			}
 		}
 	}
-
 }

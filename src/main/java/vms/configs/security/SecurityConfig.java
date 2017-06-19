@@ -60,9 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		filter.setForceEncoding(true);
 		http.csrf().disable().addFilterBefore(filter, CsrfFilter.class);
 		http.authorizeRequests()
-				.antMatchers("/registration").permitAll()
-				.antMatchers("/user/**").hasAnyAuthority("USER")
-				.antMatchers("/main").hasAnyAuthority("ADMIN")
+//				.antMatchers("/registration").permitAll()
+//				.antMatchers("/user/**").hasAnyAuthority("USER")
+//				.antMatchers("/main").hasAnyAuthority("ADMIN")
 				.antMatchers("/").hasAnyAuthority("ADMIN", "USER")
 				.and().formLogin().loginPage("/login").successHandler(successHandler)
 				.usernameParameter("username").passwordParameter("password")

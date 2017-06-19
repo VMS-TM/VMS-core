@@ -68,6 +68,6 @@ public class ConstantsForVkApi {
 	 * Method and parameters for PostToGroupService
 	 */
 	public final static String PARAMETER_POST_TO_GROUP_METHOD = "wall.post";
-	public final static Integer ID_GROUP = 148705229;
+	public final static Integer ID_GROUP = 148962136;
 
 }

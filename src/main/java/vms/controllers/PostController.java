@@ -328,8 +328,10 @@ public class PostController {
 		}
 
 		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+
 		if(postService.getById(id).isHavePhoto()){
 			postToGroup.setHavePhoto(true);
+			postToGroup.setPhotos(postService.getById(id).getPhotos());
 		}
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 

@@ -54,6 +54,22 @@ public class PostToGroupService {
 		return stringBuilder.toString();
 	}
 
+	private String getPhoto(Post post) {
+		StringBuilder stringBuilder = new StringBuilder();
+
+
+
+
+		post.getPhotos().forEach(photo -> {
+			stringBuilder.append("photo")
+					.append(ConstantsForVkApi.ID_GROUP);
+			stringBuilder.append(photo.getReferenceOnPost());
+		});
+
+
+		return stringBuilder.toString();
+	}
+
 	public String postToGroup(Integer idGroup, Post post) {
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -66,6 +82,11 @@ public class PostToGroupService {
 		map.add("message", getMessage(post));
 		map.add("signed", "0");
 		map.add("mark_as_ads", "0");
+
+		if (post.isHavePhoto()) {
+			map.add("attachments", getPhoto(post));
+		}
+
 		map.add("access_token", propertySearchService.getValue("defaultKey"));
 		map.add("v", "5.65");
 

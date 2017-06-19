@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vms.models.Foo;
 import vms.models.rawgroup.Group;
 import vms.repositories.GroupRepository;
-import vms.services.GroupsSearchService;
+import vms.services.impl.GroupsSearchService;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;

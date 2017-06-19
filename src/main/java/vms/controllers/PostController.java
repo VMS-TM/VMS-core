@@ -12,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import vms.services.NewsSearchService;
-import vms.services.PostToGroupService;
+import vms.services.impl.NewsSearchService;
+import vms.services.impl.PostToGroupService;
 import vms.services.absr.*;
 
 import java.text.ParseException;
@@ -222,6 +222,7 @@ public class PostController {
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 		if (postService.getById(id).isHavePhoto()) {
 			editedPost.setHavePhoto(true);
+			editedPost.setPhotos(postService.getById(id).getPhotos());
 		}
 
 		if ("news".equals(from)) {
@@ -256,7 +257,7 @@ public class PostController {
 	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
 							  @RequestParam(value = "fromwhere") String from) {
 		postService.deletePost(id);
-		if("user".equals(from)){
+		if ("user".equals(from)) {
 			return "redirect:/post/users/wall";
 		}
 		return home;
@@ -314,8 +315,10 @@ public class PostController {
 		}
 
 		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
-		if(postService.getById(id).isHavePhoto()){
+
+		if (postService.getById(id).isHavePhoto()) {
 			postToGroup.setHavePhoto(true);
+			postToGroup.setPhotos(postService.getById(id).getPhotos());
 		}
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
@@ -327,7 +330,7 @@ public class PostController {
 			postToGroup.setPostedToGroup(true);
 			postService.update(postToGroup);
 			return "redirect:/post/news/?postInGroupSuccess";
-		}else if("user".equals(from)){
+		} else if ("user".equals(from)) {
 			if (result == null || result.contains("error_code")) {
 				return "redirect:/post/users/wall?postInGroupDanger";
 			}

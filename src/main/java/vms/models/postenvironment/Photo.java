@@ -19,6 +19,10 @@ public class Photo {
 	@Column(name = "url", length = 1024)
 	private String referenceOnPost;
 
+	private long postIdInVk;
+
+	private long ownerIdInVk;
+
 	public long getId() {
 		return id;
 	}
@@ -43,11 +47,30 @@ public class Photo {
 		this.referenceOnPost = referenceOnPost;
 	}
 
+	public long getPostIdInVk() {
+		return postIdInVk;
+	}
+
+	public void setPostIdInVk(long postIdInVk) {
+		this.postIdInVk = postIdInVk;
+	}
+
+	public long getOwnerIdInVk() {
+		return ownerIdInVk;
+	}
+
+	public void setOwnerIdInVk(long ownerIdInVk) {
+		this.ownerIdInVk = ownerIdInVk;
+	}
+
 	@Override
 	public String toString() {
 		return "Photo{" +
-				"posts=" + post +
+				"id=" + id +
+				", post=" + post +
 				", referenceOnPost='" + referenceOnPost + '\'' +
+				", postIdInVk=" + postIdInVk +
+				", ownerIdInVk=" + ownerIdInVk +
 				'}';
 	}
 }

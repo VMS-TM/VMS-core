@@ -68,6 +68,8 @@ public class ConstantsForVkApi {
 	 * Method and parameters for PostToGroupService
 	 */
 	public final static String PARAMETER_POST_TO_GROUP_METHOD = "wall.post";
+	public final static String PARAMETER_GET_SERVER_URL = "photos.getWallUploadServer?";
+	public final static String PARAMETER_GET_SERVER_VERSION = "&v=5.65";
 	public final static Integer ID_GROUP = 148962136;
 
 }

@@ -8,7 +8,6 @@ import vms.models.postenvironment.Photo;
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.PostResponse;
 import vms.models.postenvironment.RootObject;
-import vms.models.postenvironment.attachmentenv.AttachmentContainer;
 import vms.models.rawgroup.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -92,7 +91,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 					executorService.submit(new Thread(() -> {
 						for (int i = start; i < finish; i++) {
-							PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
+							List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
 							if (i % 3 == 0) {
 								try {
 									Thread.sleep(1000);
@@ -101,7 +100,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 								}
 							}
 
-							addPostToDB(postsInBD, postResponse);
+							getPostFromList(postsInBD, postList, "group");
 						}
 					}));
 
@@ -119,7 +118,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	@Override
-	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
+	public List<Post> getPostResponseByGroupName(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
 		RootObject rootObject = null;
 		ProxyServer proxyServer = proxyServerService.getProxyServerByToken(token);
 		try {
@@ -140,7 +139,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
 			proxyServer.setWork(true);
 			proxyServerService.addProxyServer(proxyServer);
-			return rootObject.getPostResponse();
+			return rootObject.getPostResponse().getPosts();
 		}
 		return null;
 	}
@@ -162,22 +161,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 		Threads are searching posts from groups and comparing if we have this in our Data Base or not. If not - add to DB.
 		If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
 	*/
-	public void addPostToDB(List<Post> postsInBD, PostResponse postResponse) {
-		if (!postsInBD.containsAll(postResponse.getPosts())) {
-			postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
-			vkPostService.addPosts(postResponse.getPosts());
-		} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
-			List<Post> postsWhichNotInDB = new ArrayList<>();
-			for (Post post : postResponse.getPosts()) {
-				if (!postsInBD.contains(post)) {
-					post.setFromWhere("group");
-					postsWhichNotInDB.add(post);
-				}
-			}
-			vkPostService.addPosts(postsWhichNotInDB);
-		}
-	}
-
 	@Override
 	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from) {
 		result.forEach(post -> {
@@ -187,6 +170,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 					if (container.getType().equals("photo")) {
 						Photo photo = new Photo();
 						photo.setPost(post);
+						photo.setPostIdInVk(container.getPhoto().getId());
+						photo.setOwnerIdInVk(container.getPhoto().getOwnerId());
 						if (container.getPhoto().getPhoto604() != null) {
 							photo.setReferenceOnPost(container.getPhoto().getPhoto604());
 						} else if (container.getPhoto().getPhoto75() != null) {
@@ -199,10 +184,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 				});
 				post.setPhotos(photos);
 				post.setHavePhoto(true);
-				post.setFromWhere(from);
 			}
 		});
-
+		result.forEach(post -> post.setFromWhere(from));
 		if (!postsInBD.containsAll(result)) {
 			vkPostService.addPosts(result);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
@@ -222,8 +206,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 		executorService.submit(new Thread(() -> {
 			int randomProxy = new Random().nextInt(proxyServerList.size());
 			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(randomProxy).getIp(), proxyServerList.get(randomProxy).getPort());
-			PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(randomProxy).getToken(), groups.get(i).getId(), query);
-			addPostToDB(postsInBD, postResponse);
+			List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(randomProxy).getToken(), groups.get(i).getId(), query);
+			getPostFromList(postsInBD, postList, "group");
 		}));
 	}
 

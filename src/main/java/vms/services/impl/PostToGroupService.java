@@ -57,11 +57,13 @@ public class PostToGroupService {
 	private String getPhoto(Post post) {
 		StringBuilder stringBuilder = new StringBuilder();
 
+
 		post.getPhotos().forEach(photo -> {
 			stringBuilder.append("photo")
-					.append(ConstantsForVkApi.ID_GROUP)
-					.append(photo.getReferenceOnPost())
-					.append("\n");
+					.append(photo.getOwnerIdInVk())
+					.append("_")
+					.append(photo.getPostIdInVk())
+					.append(",");
 		});
 
 
@@ -87,12 +89,12 @@ public class PostToGroupService {
 
 		map.add("access_token", propertySearchService.getValue("defaultKey"));
 		map.add("v", "5.65");
-
 		String result = restTemplate.postForObject(uri, map, String.class);
 
 		if (result != null) {
 			return result;
 		}
+
 
 		return null;
 

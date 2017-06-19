@@ -28,7 +28,7 @@
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
-            <button type="button" class="btn btn-primary">Всего постов <span th:text="${AllPosts}" class="badge"> </span></button>
+            <button type="button" class="btn btn-primary">Всего постов <span th:text="${#lists.size(posts)}" class="badge"> </span></button>
         </div>
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Посты со стен пользователей</h2>

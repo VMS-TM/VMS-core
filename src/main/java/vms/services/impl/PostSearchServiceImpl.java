@@ -180,7 +180,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 	@Override
 	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from) {
-
 		result.forEach(post -> {
 			if (post.getAttachmentContainers() != null) {
 				List<Photo> photos = new ArrayList<>();
@@ -212,7 +211,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 					.collect(Collectors.toList());
 			vkPostService.addPosts(postsWhichNotInDB);
 		}
-
 
 	}
 

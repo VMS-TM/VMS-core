@@ -32,7 +32,6 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 		RootObject rootObject = restTemplate.getForObject(url, RootObject.class);
 		List<Post> usersPostList = rootObject.getPostResponse().getPosts();
 		List<Post> postsInBD = vkPostService.getAllPostFromDb();
-
 		postSearchService.getPostFromList(postsInBD, usersPostList, "user");
 	}
 }

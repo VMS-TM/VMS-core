@@ -57,13 +57,11 @@ public class PostToGroupService {
 	private String getPhoto(Post post) {
 		StringBuilder stringBuilder = new StringBuilder();
 
-
-
-
 		post.getPhotos().forEach(photo -> {
 			stringBuilder.append("photo")
-					.append(ConstantsForVkApi.ID_GROUP);
-			stringBuilder.append(photo.getReferenceOnPost());
+					.append(ConstantsForVkApi.ID_GROUP)
+					.append(photo.getReferenceOnPost())
+					.append("\n");
 		});
 
 

@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.ResourceAccessException;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
+import vms.models.postenvironment.Photo;
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.PostResponse;
 import vms.models.postenvironment.RootObject;
+import vms.models.postenvironment.attachmentenv.AttachmentContainer;
 import vms.models.rawgroup.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -34,7 +37,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	private SearchUsersService searchUsersService;
 
 	@Autowired
-	private VkPostService postService;
+	private VkPostService vkPostService;
 
 	/**
 	 * confirm one PostResponse object from any PostResponse
@@ -50,7 +53,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		int lastElement = 0;
 
 
-		List<Post> postsInBD = postService.getAllPostFromDb();
+		List<Post> postsInBD = vkPostService.getAllPostFromDb();
 		List<ProxyServer> allProxyServers = proxyServerService.proxyServerList();
 		List<ProxyServer> proxyServerList = new ArrayList<>();
 
@@ -70,7 +73,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 				If we have proxy > groups
 			 */
 			if (requestOnProxy < 1) {
-				for	(int i = 0 ; i < groups.size(); i++) {
+				for (int i = 0; i < groups.size(); i++) {
 					searchingThread(executorService, proxyServerList, postsInBD, groups, query, i);
 				}
 
@@ -159,24 +162,60 @@ public class PostSearchServiceImpl implements PostSearchService {
 		Threads are searching posts from groups and comparing if we have this in our Data Base or not. If not - add to DB.
 		If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
 	*/
-	private void addPostToDB(List<Post> postsInBD, PostResponse postResponse) {
+	public void addPostToDB(List<Post> postsInBD, PostResponse postResponse) {
 		if (!postsInBD.containsAll(postResponse.getPosts())) {
 			postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
-			postService.addPosts(postResponse.getPosts());
-
+			vkPostService.addPosts(postResponse.getPosts());
 		} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
 			List<Post> postsWhichNotInDB = new ArrayList<>();
-
 			for (Post post : postResponse.getPosts()) {
 				if (!postsInBD.contains(post)) {
 					post.setFromWhere("group");
 					postsWhichNotInDB.add(post);
 				}
 			}
-
-			postService.addPosts(postsWhichNotInDB);
+			vkPostService.addPosts(postsWhichNotInDB);
 		}
 	}
+
+	@Override
+	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from) {
+
+		result.forEach(post -> {
+			if (post.getAttachmentContainers() != null) {
+				List<Photo> photos = new ArrayList<>();
+				post.getAttachmentContainers().forEach(container -> {
+					if (container.getType().equals("photo")) {
+						Photo photo = new Photo();
+						photo.setPost(post);
+						if (container.getPhoto().getPhoto604() != null) {
+							photo.setReferenceOnPost(container.getPhoto().getPhoto604());
+						} else if (container.getPhoto().getPhoto75() != null) {
+							photo.setReferenceOnPost(container.getPhoto().getPhoto75());
+						} else if (container.getPhoto().getPhoto130() != null) {
+							photo.setReferenceOnPost(container.getPhoto().getPhoto130());
+						}
+						photos.add(photo);
+					}
+				});
+				post.setPhotos(photos);
+				post.setHavePhoto(true);
+				post.setFromWhere(from);
+			}
+		});
+
+		if (!postsInBD.containsAll(result)) {
+			vkPostService.addPosts(result);
+		} else if (postsInBD.containsAll(result) && result.size() != 0) {
+			List<Post> postsWhichNotInDB = result.stream()
+					.filter(post -> !postsInBD.contains(post))
+					.collect(Collectors.toList());
+			vkPostService.addPosts(postsWhichNotInDB);
+		}
+
+
+	}
+
 
 	/*
 		If we have  one group or less then proxy
@@ -186,7 +225,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 			int randomProxy = new Random().nextInt(proxyServerList.size());
 			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(randomProxy).getIp(), proxyServerList.get(randomProxy).getPort());
 			PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(randomProxy).getToken(), groups.get(i).getId(), query);
-
 			addPostToDB(postsInBD, postResponse);
 		}));
 	}

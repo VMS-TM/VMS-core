@@ -6,9 +6,9 @@ import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.RootObject;
+import vms.services.absr.PostSearchService;
 import vms.services.absr.VkPostService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,10 +16,13 @@ import java.util.stream.Collectors;
 public class NewsSearchService {
 
 	@Autowired
-	PropertySearchService propertySearchService;
+	private PropertySearchService propertySearchService;
 
 	@Autowired
-	private VkPostService postService;
+	private VkPostService vkPostService;
+
+	@Autowired
+	private PostSearchService postSearchService;
 
 
 	private String UriForAdsFromNews(String query, String proxyServer) {
@@ -38,7 +41,7 @@ public class NewsSearchService {
 	public void getAdsFromNews(String query) {
 
 		RestTemplate restTemplate = new RestTemplate();
-		List<Post> postsInBD = postService.getAllPostFromDb();
+		List<Post> postsInBD = vkPostService.getAllPostFromDb();
 
 		RootObject rootObject = restTemplate.getForObject(UriForAdsFromNews(query, propertySearchService.getValue("defaultKey")), RootObject.class);
 		List<Post> posts = rootObject.getPostResponse().getPosts();
@@ -46,21 +49,7 @@ public class NewsSearchService {
 				.filter(post -> !(post.getOwnerId() < 0))
 				.collect(Collectors.toList());
 
-		if (!postsInBD.containsAll(result)) {
-			result.forEach(post -> post.setFromWhere("news"));
-			postService.addPosts(result);
-		} else if (postsInBD.containsAll(result) && result.size() != 0) {
-			List<Post> postsWhichNotInDB = new ArrayList<>();
-
-			for (Post post : result) {
-				if (!postsInBD.contains(post)) {
-					post.setFromWhere("news");
-					postsWhichNotInDB.add(post);
-				}
-			}
-
-			postService.addPosts(postsWhichNotInDB);
-		}
+		postSearchService.getPostFromList(postsInBD, result, "news");
 	}
 
 }

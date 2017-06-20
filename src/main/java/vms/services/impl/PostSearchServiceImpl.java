@@ -157,12 +157,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 		/**
 		 * 86_400_000 - 24 hours in milliseconds
 		 */
-		Long  daysAgoDate = date.getTime() - 86_400_000;
+		Long daysAgoDate = date.getTime() - 86_400_000;
 
-		result.stream()
-				.filter(post -> post.getText().length() != 0)
-				.filter(post -> post.getDate().getTime() >= daysAgoDate)
-				.forEach(post -> {
+		result.forEach(post -> {
 			if (post.getAttachmentContainers() != null) {
 				List<Photo> photos = new ArrayList<>();
 				post.getAttachmentContainers().forEach(container -> {
@@ -187,16 +184,21 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 				post.setPhotos(photos);
 			}
-			post.setFromWhere(from);
 		});
 
 		if (!postsInBD.containsAll(result)) {
+			result.stream()
+					.filter(post -> post.getText().length() != 0)
+					.filter(post -> post.getDate().getTime() >= daysAgoDate)
+					.forEach(post -> post.setFromWhere(from));
 			vkPostService.addPosts(result);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
-			List<Post> postsWhichNotInDB = result.stream()
+			result.stream()
+					.filter(post -> post.getText().length() != 0)
+					.filter(post -> post.getDate().getTime() >= daysAgoDate)
 					.filter(post -> !postsInBD.contains(post))
-					.collect(Collectors.toList());
-			vkPostService.addPosts(postsWhichNotInDB);
+					.forEach(post -> post.setFromWhere(from));
+			vkPostService.addPosts(result);
 		}
 	}
 
@@ -222,4 +224,3 @@ public class PostSearchServiceImpl implements PostSearchService {
 		}
 	}
 }
-

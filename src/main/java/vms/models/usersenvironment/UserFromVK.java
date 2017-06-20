@@ -3,10 +3,7 @@ package vms.models.usersenvironment;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "UserFromVK")
@@ -18,21 +15,19 @@ public class UserFromVK {
 	@JsonProperty("id")
 	private Long idOfUser;
 
-	@Column(name = "firstName")
+	@Transient
 	@JsonProperty("first_name")
 	private String firstName;
 
-	@Column(name = "lastName")
+	@Transient
 	@JsonProperty("last_name")
 	private String lastName;
 
 	public UserFromVK() {
 	}
 
-	public UserFromVK(Long idOfUser, String firstName, String lastName) {
+	public UserFromVK(Long idOfUser) {
 		this.idOfUser = idOfUser;
-		this.firstName = firstName;
-		this.lastName = lastName;
 	}
 
 	public Long getIdOfUser() {

@@ -274,20 +274,35 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	private void loadUsersFromVK() {
 		List<UserFromVK> userFromVKList = new ArrayList<>();
-		userFromVKList.add(new UserFromVK(115470965L, "Алексей", "Прогнозов"));
-		userFromVKList.add(new UserFromVK(149406594L, "Иван", "Николаев"));
-		userFromVKList.add(new UserFromVK(3420130L, "Иван", "Зверев"));
-		userFromVKList.add(new UserFromVK(13545169L, "Александр", "Вербицкий"));
-		userFromVKList.add(new UserFromVK(11728669L, "Павел", "Романович"));
-		userFromVKList.add(new UserFromVK(28267947L, "Артём", "Корчмит"));
-		userFromVKList.add(new UserFromVK(13651954L, "Виталий", "Секерин"));
-		userFromVKList.add(new UserFromVK(21701619L, "Сергей", "Хилько"));
-		userFromVKList.add(new UserFromVK(20904513L, "Владимир", "Жаринов"));
-		userFromVKList.add(new UserFromVK(118811155L, "Макс", "Чернов"));
-		userFromVKList.add(new UserFromVK(419790750L, "Dmitry", "Kuz'min"));
+		userFromVKList.add(new UserFromVK(115470965L));
+		userFromVKList.add(new UserFromVK(149406594L));
+		userFromVKList.add(new UserFromVK(3420130L));
+		userFromVKList.add(new UserFromVK(13545169L));
+		userFromVKList.add(new UserFromVK(11728669L));
+		userFromVKList.add(new UserFromVK(28267947L));
+		userFromVKList.add(new UserFromVK(13651954L));
+		userFromVKList.add(new UserFromVK(21701619L));
+		userFromVKList.add(new UserFromVK(20904513L));
+		userFromVKList.add(new UserFromVK(118811155L));
+		userFromVKList.add(new UserFromVK(272354645L));
+		userFromVKList.add(new UserFromVK(3842659L));
+		userFromVKList.add(new UserFromVK(7617438L));
+		userFromVKList.add(new UserFromVK(21035641L));
+		userFromVKList.add(new UserFromVK(189954639L));
+		userFromVKList.add(new UserFromVK(184206338L));
+		userFromVKList.add(new UserFromVK(66074530L));
+		userFromVKList.add(new UserFromVK(201351511L));
+		userFromVKList.add(new UserFromVK(3248243L));
+		userFromVKList.add(new UserFromVK(74574027L));
+		userFromVKList.add(new UserFromVK(201351511L));
+		userFromVKList.add(new UserFromVK(419790750L));
+		userFromVKList.add(new UserFromVK(7666105L));
+		userFromVKList.add(new UserFromVK(331542473L));
+		userFromVKList.add(new UserFromVK(381624104L));
+		userFromVKList.add(new UserFromVK(19638L));
 
 		userFromVkService.addListOfUsersOfVK(userFromVKList);
-		log.info("Add 11 users of vk in DB for tests");
+		log.info("Add 25 users of vk in DB for tests");
 	}
 
 	private void loadProperty() {

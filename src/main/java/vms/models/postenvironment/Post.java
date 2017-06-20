@@ -2,7 +2,6 @@ package vms.models.postenvironment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 import vms.models.postenvironment.attachmentenv.AttachmentContainer;
 
 import javax.persistence.*;

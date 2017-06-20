@@ -81,24 +81,14 @@ public class Post implements Serializable {
 	@JsonProperty("signer_id")
 	private int signer_id;
 
-	private boolean blackListPhone;
+	private boolean blackList;
 
-	public boolean isBlackListPhone() {
-		return blackListPhone;
+	public boolean isBlackList() {
+		return blackList;
 	}
 
-	public void setBlackListPhone(boolean blackListPhone) {
-		this.blackListPhone = blackListPhone;
-	}
-
-	private boolean blackListURl;
-
-	public boolean isBlackListURl() {
-		return blackListURl;
-	}
-
-	public void setBlackListURl(boolean blackListURl) {
-		this.blackListURl = blackListURl;
+	public void setBlackList(boolean blackList) {
+		this.blackList = blackList;
 	}
 
 	private String fromWhere;

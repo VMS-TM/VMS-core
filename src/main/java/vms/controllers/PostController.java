@@ -84,37 +84,34 @@ public class PostController {
 		List<Post> posts = postService.getAllPostFromDb();
 
 		List<Post> blackListPhone = posts.stream()
-				.filter(post -> Boolean.TRUE.equals(post.isBlackListPhone()))
+				.filter(post -> Boolean.TRUE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
 		prepareView(blackListPhone);
 
 		model.addAttribute("blackListPhone", blackListPhone);
-		model.addAttribute("AllPosts", blackListPhone.size());
 
 		return "blacklistphone";
 	}
 
-	@RequestMapping(value = {"/controlblacklistphone"}, method = RequestMethod.POST)
-	public String controlBlackListPhone(Model model, @RequestParam(value = "idBlackListPhone") Long id) {
+	@RequestMapping(value = {"/controlblacklist"}, method = RequestMethod.POST)
+	public String controlBlackListPhone(Model model, @RequestParam(value = "idBlackList") Long id) {
 		Post blackPost = postService.getById(id);
 
-		if (!blackPost.isBlackListPhone()) {
-			blackPost.setBlackListPhone(true);
+		if (!blackPost.isBlackList()) {
+			blackPost.setBlackList(true);
 		} else {
-			blackPost.setBlackListPhone(false);
+			blackPost.setBlackList(false);
 		}
 
 		postService.update(blackPost);
 
 		List<Post> posts = postService.getAllPostFromDb();
 		List<Post> blackListPhone = posts.stream()
-				.filter(post -> Boolean.TRUE.equals(post.isBlackListPhone()))
+				.filter(post -> Boolean.TRUE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
 		prepareView(blackListPhone);
 
 		model.addAttribute("blackListPhone", blackListPhone);
-		model.addAttribute("AllPosts", blackListPhone.size());
-
 
 		return "redirect:/post/blacklistphone";
 	}
@@ -125,41 +122,15 @@ public class PostController {
 		List<Post> posts = postService.getAllPostFromDb();
 
 		List<Post> blackListURL = posts.stream()
-				.filter(post -> Boolean.TRUE.equals(post.isBlackListURl()))
+				.filter(post -> Boolean.TRUE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
 		prepareView(blackListURL);
 
 		model.addAttribute("blackListURL", blackListURL);
-		model.addAttribute("AllPosts", blackListURL.size());
 
 		return "blacklisturl";
 	}
 
-	@RequestMapping(value = {"/controlblacklisturl"}, method = RequestMethod.POST)
-	public String controlBlackListURL(Model model, @RequestParam(value = "idBlackListURL") Long id) {
-
-		Post blackPost = postService.getById(id);
-
-		if (!blackPost.isBlackListURl()) {
-			blackPost.setBlackListURl(true);
-		} else {
-			blackPost.setBlackListURl(false);
-		}
-
-		postService.update(blackPost);
-
-		List<Post> posts = postService.getAllPostFromDb();
-		List<Post> blackListURL = posts.stream()
-				.filter(post -> Boolean.TRUE.equals(post.isBlackListURl()))
-				.collect(Collectors.toList());
-
-		prepareView(blackListURL);
-
-		model.addAttribute("blackListPhone", blackListURL);
-		model.addAttribute("AllPosts", blackListURL.size());
-
-		return "redirect:/post/blacklisturl";
-	}
 
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
 	public String getNews(Model model) {
@@ -167,8 +138,7 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
+				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
 
 		prepareView(result);
@@ -184,8 +154,7 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
+				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
 
 		prepareView(result);
@@ -355,8 +324,7 @@ public class PostController {
 
 		List<Post> result = postList.stream()
 				.filter(post -> "user".equals(post.getFromWhere()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
+				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
 
 		prepareView(result);

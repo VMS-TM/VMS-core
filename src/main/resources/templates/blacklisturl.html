@@ -28,8 +28,7 @@
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
-            <button type="button" class="btn btn-primary dark-button-primary">В черном списке<span th:text="${AllPosts}" class="badge"> </span></button>
-        </div>
+            <button type="button" class="btn btn-primary dark-button-primary">Всего постов <span th:text="${#lists.size(blackListURL)}" class="badge"> </span></button>        </div>
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Черный список URL</h2>
 
@@ -80,16 +79,12 @@
                     <tbody>
                     <tr>
                         <th>URL/ID</th>
-                        <th>Начало объвления</th>
-                        <th>Дата</th>
                         <th>Убрать из списка</th>
                     </tr>
                     <tr th:each="post : ${blackListURL}">
                         <td><p th:text="${post.from_id}"></p></td>
-                        <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
-                        <td width="100" th:text="${#dates.format(post.date, 'yyyy-MM-dd HH:mm:ss')}">Дата</td>
-                        <form th:action="@{/post/controlblacklisturl}" th:object="${post}" method="post">
-                            <input class="hide-param" name="idBlackListURL" th:value="${post.id}"/>
+                        <form th:action="@{/post/controlblacklist}" th:object="${post}" method="post">
+                            <input class="hide-param" name="idBlackList" th:value="${post.id}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
                         </form>
                     </tr>

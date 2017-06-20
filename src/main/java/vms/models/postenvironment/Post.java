@@ -326,8 +326,6 @@ public class Post implements Serializable {
 		if (post_id != post.post_id) return false;
 		if (marked_as_ads != post.marked_as_ads) return false;
 		if (signer_id != post.signer_id) return false;
-		if (blackListPhone != post.blackListPhone) return false;
-		if (blackListURl != post.blackListURl) return false;
 		if (id != null ? !id.equals(post.id) : post.id != null) return false;
 		if (date != null ? !date.equals(post.date) : post.date != null) return false;
 		if (text != null ? !text.equals(post.text) : post.text != null) return false;
@@ -356,8 +354,6 @@ public class Post implements Serializable {
 		result = 31 * result + (attachmentContainers != null ? attachmentContainers.hashCode() : 0);
 		result = 31 * result + marked_as_ads;
 		result = 31 * result + signer_id;
-		result = 31 * result + (blackListPhone ? 1 : 0);
-		result = 31 * result + (blackListURl ? 1 : 0);
 		result = 31 * result + (fromWhere != null ? fromWhere.hashCode() : 0);
 		result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
 		result = 31 * result + (nameOfPerson != null ? nameOfPerson.hashCode() : 0);

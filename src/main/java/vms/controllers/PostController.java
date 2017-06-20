@@ -54,21 +54,17 @@ public class PostController {
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
 		List<ProxyServer> proxy = proxyServerService.proxyServerList();
-
 		List<Post> result = posts.stream()
 				.filter(post -> "group".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
-
 		List<ProxyServer> badProxy = proxy.stream()
 				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
-
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
 		model.addAttribute("AllPosts", result.size());
 		model.addAttribute("badproxy", badProxy);
-
 		return "posts";
 	}
 
@@ -81,47 +77,32 @@ public class PostController {
 
 	@RequestMapping(value = {"/blacklistphone"}, method = RequestMethod.GET)
 	public String showBlackListPhone(Model model) {
-		List<Post> posts = postService.getAllPostFromDb();
-
-		List<Post> blackList = postService.getAllBlackPosts(posts);
+		List<Post> blackList = postService.getAllBlackPosts();
 		prepareView(blackList);
-
 		model.addAttribute("blackListPhone", blackList);
-
 		return "blacklistphone";
 	}
 
 	@RequestMapping(value = {"/controlblacklist"}, method = RequestMethod.POST)
 	public String controlBlackListPhone(Model model, @RequestParam(value = "idBlackList") Long id) {
 		Post blackPost = postService.getById(id);
-
 		if (!blackPost.isBlackList()) {
 			blackPost.setBlackList(true);
 		} else {
 			blackPost.setBlackList(false);
 		}
-
 		postService.update(blackPost);
-
-		List<Post> posts = postService.getAllPostFromDb();
-		List<Post> blackList = postService.getAllBlackPosts(posts);
+		List<Post> blackList = postService.getAllBlackPosts();
 		prepareView(blackList);
-
 		model.addAttribute("blackListPhone", blackList);
-
 		return "redirect:/post/blacklistphone";
 	}
 
 	@RequestMapping(value = {"/blacklisturl"}, method = RequestMethod.GET)
 	public String showBlackListURL(Model model) {
-
-		List<Post> posts = postService.getAllPostFromDb();
-
-		List<Post> blackList = postService.getAllBlackPosts(posts);
+		List<Post> blackList = postService.getAllBlackPosts();
 		prepareView(blackList);
-
 		model.addAttribute("blackListURL", blackList);
-
 		return "blacklisturl";
 	}
 
@@ -129,12 +110,10 @@ public class PostController {
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
 	public String getNews(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
-
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
-
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
@@ -145,16 +124,13 @@ public class PostController {
 	public String getNews(Model model, @RequestParam(value = "news") String query) {
 		newsSearchService.getAdsFromNews(query);
 		List<Post> posts = postService.getAllPostFromDb();
-
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
-
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
-
 		return "redirect:/post/news";
 	}
 
@@ -171,23 +147,18 @@ public class PostController {
 							  @RequestParam(value = "info") String info,
 							  @RequestParam(value = "date") String date,
 							  @RequestParam(value = "fromwhere") String from) throws ParseException {
-
-
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 		Date dateOfPost = null;
 		try {
 			dateOfPost = format.parse(date);
 		} catch (ParseException e) {
 
 		}
-
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 		if (postService.getById(id).isHavePhoto()) {
 			editedPost.setHavePhoto(true);
 			editedPost.setPhotos(postService.getById(id).getPhotos());
 		}
-
 		if ("news".equals(from)) {
 			try {
 				editedPost.setSavedInDb(true);
@@ -213,7 +184,6 @@ public class PostController {
 			}
 			return home;
 		}
-
 	}
 
 	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
@@ -232,26 +202,20 @@ public class PostController {
 
 		List<Post> posts = postService.getAllPostFromDb();
 		List<ProxyServer> proxy = proxyServerService.proxyServerList();
-
 		List<Post> result = posts.stream()
 				.filter(post -> "group".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
-
 		List<ProxyServer> badProxy = proxy.stream()
 				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
-
-
 		if (result != null) {
 			prepareView(result);
 			preparationPost(result);
 			model.addAttribute("posts", result);
 			model.addAttribute("AllPosts", result.size());
 			model.addAttribute("badproxy", badProxy);
-
 			return "posts";
 		}
-
 		return "redirect:/post/req?warning";
 	}
 
@@ -276,15 +240,12 @@ public class PostController {
 		} catch (ParseException e) {
 
 		}
-
 		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
-
 		if (postService.getById(id).isHavePhoto()) {
 			postToGroup.setHavePhoto(true);
 			postToGroup.setPhotos(postService.getById(id).getPhotos());
 		}
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
-
 		if ("news".equals(from)) {
 			if (result == null || result.contains("error_code")) {
 				return "redirect:/post/news/?postInGroupDanger";
@@ -315,24 +276,19 @@ public class PostController {
 	@RequestMapping(value = "/users/wall", method = RequestMethod.GET)
 	public String usersWallPostPage(ModelMap modelMap) {
 		List<Post> postList = postService.getAllPostFromDb();
-
 		List<Post> result = postList.stream()
 				.filter(post -> "user".equals(post.getFromWhere()))
 				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
-
 		prepareView(result);
 		preparationPost(result);
-
 		modelMap.addAttribute("posts", result);
-
 		return "usersposts";
 	}
 
 	@RequestMapping(value = "/users/wall", method = RequestMethod.POST)
 	public String searchUsersWallPosts(ModelMap modelMap, @RequestParam(value = "query") String query) {
 		usersPostsService.getUsersPosts(query);
-
 		return "redirect:/post/users/wall";
 	}
 
@@ -343,19 +299,15 @@ public class PostController {
 	}
 
 	void preparationPost(List<Post> posts) {
-
 		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
 			Post postCurrent = iter.next();
 			if (postCurrent.isSavedInDb() != true) {
 				Pattern phoneNumber = Pattern.compile("(((8|\\+7)-?)?\\(?\\d{3}\\)?-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1})|(^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$)|(((8|\\+7) ?)?\\(?\\d{3}\\)? ?\\d{3}-?\\d{2}-?\\d{2})");
 				Pattern rent = Pattern.compile("(?<=сдаётся по | Стоимость |стоимость |Стоимость в месяц |стоимость в месяц |аренды в месяц |в месяц |Сдается за |cдается за|Залог |залог  |Стоимость аренды |cтоимость аренды |Аренда |аренда |Цена |цена |стоит |Стоит | ВСЕГО за| всего за ).*(\\d|\\d.p|\\d p|\\d.руб|\\d руб|\\d руб.|\\d рублей|\\d.рублей|\\d т.р.|\\d т. р.|\\d.\u20BD).(?=\\s)");
 				Pattern metroAndAddress = Pattern.compile("(?<=ул.|Улица |улица |Квартира |М. |м. |м.|м |квартира |районе |Районе |метро |Метро |Адрес |Адрес: |адрес |адрес: |адресу ).*(\\W+)(?=\\D+)");
-
 				Matcher matcherPhoneNumber = phoneNumber.matcher(postCurrent.getText());
 				Matcher matcherRent = rent.matcher(postCurrent.getText());
 				Matcher matcherMetroAndAddress = metroAndAddress.matcher(postCurrent.getText());
-
-
 				if (matcherPhoneNumber.find()) {
 					postCurrent.setPhoneNumber(matcherPhoneNumber.group(0));
 				} else if (matcherRent.find()) {

@@ -52,7 +52,7 @@ public class VkPostServiceImpl implements VkPostService {
 	}
 
 	@Override
-	public List<Post> getAllBlackPosts(List<Post> postList) {
+	public List<Post> getAllBlackPosts() {
 		return postRepo.findPostsByBlackList(true);
 	}
 }

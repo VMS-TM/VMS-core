@@ -21,5 +21,5 @@ public interface VkPostService {
 
 	Post getById(Long id);
 
-	List<Post> getAllBlackPosts(List<Post> postList);
+	List<Post> getAllBlackPosts();
 }

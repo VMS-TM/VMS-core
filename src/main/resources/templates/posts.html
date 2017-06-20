@@ -28,7 +28,8 @@
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
-            <button type="button" class="btn btn-primary">Всего постов <span th:text="${AllPosts}" class="badge"> </span></button>
+            <button type="button" class="btn btn-primary">Всего постов <span th:text="${AllPosts}"
+                                                                             class="badge"> </span></button>
         </div>
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Посты из групп</h2>
@@ -53,7 +54,8 @@
 
             <th:block th:each="proxy : ${badproxy}">
                 <div class="alert alert-danger">
-                    <label th:text="'Проверьте прокси под логином - ' + ${proxy.login}" >Пост был успешно отправлен в группу.</label>
+                    <label th:text="'Проверьте прокси под логином - ' + ${proxy.login}">Пост был успешно отправлен в
+                        группу.</label>
                 </div>
             </th:block>
 
@@ -140,15 +142,18 @@
                                             </div>
                                             <div class="modal-body">
                                                 <ul class="nav nav-tabs">
-                                                    <li class="active"><a th:href="'#home' + ${post.id}" data-toggle="tab">Общие</a></li>
-                                                    <li><a th:href="'#photo' + ${post.id}" data-toggle="tab">Фото</a></li>
+                                                    <li class="active"><a th:href="'#home' + ${post.id}"
+                                                                          data-toggle="tab">Общие</a></li>
+                                                    <li><a th:href="'#photo' + ${post.id}" data-toggle="tab">Фото</a>
+                                                    </li>
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active" th:id="'home' + ${post.id}">
                                                         <div class="row">
                                                             <input type="hidden" name="id" th:value="${post.id}"/>
                                                             <input type="hidden" name="date" th:value="${post.date}"/>
-                                                            <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
+                                                            <input type="hidden" name="fromwhere"
+                                                                   th:value="${post.fromWhere}"/>
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label for="iTitle">Заголовок</label>
@@ -246,7 +251,9 @@
                                                     </div>
 
                                                     <div class="tab-pane fade" th:id="'photo' + ${post.id}">
-
+                                                        <div th:each="photo: ${post.photos}">
+                                                            <img th:src="${photo.referenceOnPost}"></img>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

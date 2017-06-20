@@ -1,4 +1,4 @@
-package vms.services;
+package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,11 +6,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
-import vms.models.postenvironment.Photo;
 import vms.models.postenvironment.Post;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -57,6 +54,22 @@ public class PostToGroupService {
 		return stringBuilder.toString();
 	}
 
+	private String getPhoto(Post post) {
+		StringBuilder stringBuilder = new StringBuilder();
+
+
+		post.getPhotos().forEach(photo -> {
+			stringBuilder.append("photo")
+					.append(photo.getOwnerIdInVk())
+					.append("_")
+					.append(photo.getPostIdInVk())
+					.append(",");
+		});
+
+
+		return stringBuilder.toString();
+	}
+
 	public String postToGroup(Integer idGroup, Post post) {
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -69,14 +82,19 @@ public class PostToGroupService {
 		map.add("message", getMessage(post));
 		map.add("signed", "0");
 		map.add("mark_as_ads", "0");
+
+		if (post.isHavePhoto()) {
+			map.add("attachments", getPhoto(post));
+		}
+
 		map.add("access_token", propertySearchService.getValue("defaultKey"));
 		map.add("v", "5.65");
-
 		String result = restTemplate.postForObject(uri, map, String.class);
 
 		if (result != null) {
 			return result;
 		}
+
 
 		return null;
 

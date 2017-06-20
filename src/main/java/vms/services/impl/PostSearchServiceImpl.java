@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.ResourceAccessException;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
+import vms.models.postenvironment.Photo;
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.PostResponse;
 import vms.models.postenvironment.RootObject;
@@ -19,9 +20,11 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -34,7 +37,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	private SearchUsersService searchUsersService;
 
 	@Autowired
-	private VkPostService postService;
+	private VkPostService vkPostService;
 
 	/**
 	 * confirm one PostResponse object from any PostResponse
@@ -50,7 +53,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		int lastElement = 0;
 
 
-		List<Post> postsInBD = postService.getAllPostFromDb();
+		List<Post> postsInBD = vkPostService.getAllPostFromDb();
 		List<ProxyServer> allProxyServers = proxyServerService.proxyServerList();
 		List<ProxyServer> proxyServerList = new ArrayList<>();
 
@@ -65,15 +68,13 @@ public class PostSearchServiceImpl implements PostSearchService {
 		if (groups.size() > 1) {
 			int requestOnProxy = groups.size() / proxyServerList.size();
 			int remainingRequests = groups.size() % proxyServerList.size();
-
 			/*
 				If we have proxy > groups
 			 */
 			if (requestOnProxy < 1) {
-				for	(int i = 0 ; i < groups.size(); i++) {
+				for (int i = 0; i < groups.size(); i++) {
 					searchingThread(executorService, proxyServerList, postsInBD, groups, query, i);
 				}
-
 			} else {
 				for (ProxyServer proxyServer : proxyServerList) {
 					RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
@@ -82,14 +83,11 @@ public class PostSearchServiceImpl implements PostSearchService {
 						remainingRequests--;
 						lastElement += 1;
 					}
-
 					final int start = firstElement;
 					final int finish = lastElement;
-
-
 					executorService.submit(new Thread(() -> {
 						for (int i = start; i < finish; i++) {
-							PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
+							List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
 							if (i % 3 == 0) {
 								try {
 									Thread.sleep(1000);
@@ -97,26 +95,20 @@ public class PostSearchServiceImpl implements PostSearchService {
 									e.printStackTrace();
 								}
 							}
-
-							addPostToDB(postsInBD, postResponse);
+							getPostFromList(postsInBD, postList, "group");
 						}
 					}));
-
 					firstElement += lastElement;
 					counterProxy++;
 				}
 			}
-
-
 		} else {
 			searchingThread(executorService, proxyServerList, postsInBD, groups, query, 0);
 		}
-
-
 	}
 
 	@Override
-	public PostResponse getPostResponseByGroupName(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
+	public List<Post> getPostResponseByGroupName(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
 		RootObject rootObject = null;
 		ProxyServer proxyServer = proxyServerService.getProxyServerByToken(token);
 		try {
@@ -137,7 +129,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
 			proxyServer.setWork(true);
 			proxyServerService.addProxyServer(proxyServer);
-			return rootObject.getPostResponse();
+			return rootObject.getPostResponse().getPosts();
 		}
 		return null;
 	}
@@ -159,24 +151,57 @@ public class PostSearchServiceImpl implements PostSearchService {
 		Threads are searching posts from groups and comparing if we have this in our Data Base or not. If not - add to DB.
 		If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
 	*/
-	private void addPostToDB(List<Post> postsInBD, PostResponse postResponse) {
-		if (!postsInBD.containsAll(postResponse.getPosts())) {
-			postResponse.getPosts().forEach(post -> post.setFromWhere("group"));
-			postService.addPosts(postResponse.getPosts());
+	@Override
+	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from) {
+		Date date = new Date();
+		/**
+		 * 86_400_000 - 24 hours in milliseconds
+		 */
+		Long daysAgoDate = date.getTime() - 86_400_000;
 
-		} else if (postsInBD.containsAll(postResponse.getPosts()) && postResponse.getPosts().size() != 0) {
-			List<Post> postsWhichNotInDB = new ArrayList<>();
+		result.forEach(post -> {
+			if (post.getAttachmentContainers() != null) {
+				List<Photo> photos = new ArrayList<>();
+				post.getAttachmentContainers().forEach(container -> {
+					if (container.getType().equals("photo")) {
+						Photo photo = new Photo();
+						photo.setPost(post);
+						photo.setPostIdInVk(container.getPhoto().getId());
+						photo.setOwnerIdInVk(container.getPhoto().getOwnerId());
+						if (container.getPhoto().getPhoto604() != null) {
+							photo.setReferenceOnPost(container.getPhoto().getPhoto604());
+							post.setHavePhoto(true);
+						} else if (container.getPhoto().getPhoto75() != null) {
+							photo.setReferenceOnPost(container.getPhoto().getPhoto75());
+							post.setHavePhoto(true);
+						} else if (container.getPhoto().getPhoto130() != null) {
+							photo.setReferenceOnPost(container.getPhoto().getPhoto130());
+							post.setHavePhoto(true);
+						}
+						photos.add(photo);
+					}
+				});
 
-			for (Post post : postResponse.getPosts()) {
-				if (!postsInBD.contains(post)) {
-					post.setFromWhere("group");
-					postsWhichNotInDB.add(post);
-				}
+				post.setPhotos(photos);
 			}
+		});
 
-			postService.addPosts(postsWhichNotInDB);
+		if (!postsInBD.containsAll(result)) {
+			result.stream()
+					.filter(post -> post.getText().length() != 0)
+					.filter(post -> post.getDate().getTime() >= daysAgoDate)
+					.forEach(post -> post.setFromWhere(from));
+			vkPostService.addPosts(result);
+		} else if (postsInBD.containsAll(result) && result.size() != 0) {
+			result.stream()
+					.filter(post -> post.getText().length() != 0)
+					.filter(post -> post.getDate().getTime() >= daysAgoDate)
+					.filter(post -> !postsInBD.contains(post))
+					.forEach(post -> post.setFromWhere(from));
+			vkPostService.addPosts(result);
 		}
 	}
+
 
 	/*
 		If we have  one group or less then proxy
@@ -185,9 +210,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 		executorService.submit(new Thread(() -> {
 			int randomProxy = new Random().nextInt(proxyServerList.size());
 			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(randomProxy).getIp(), proxyServerList.get(randomProxy).getPort());
-			PostResponse postResponse = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(randomProxy).getToken(), groups.get(i).getId(), query);
-
-			addPostToDB(postsInBD, postResponse);
+			List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(randomProxy).getToken(), groups.get(i).getId(), query);
+			getPostFromList(postsInBD, postList, "group");
 		}));
 	}
 
@@ -200,4 +224,3 @@ public class PostSearchServiceImpl implements PostSearchService {
 		}
 	}
 }
-

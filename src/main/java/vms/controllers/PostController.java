@@ -83,12 +83,10 @@ public class PostController {
 	public String showBlackListPhone(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
 
-		List<Post> blackListPhone = posts.stream()
-				.filter(post -> Boolean.TRUE.equals(post.isBlackList()))
-				.collect(Collectors.toList());
-		prepareView(blackListPhone);
+		List<Post> blackList = postService.getAllBlackPosts(posts);
+		prepareView(blackList);
 
-		model.addAttribute("blackListPhone", blackListPhone);
+		model.addAttribute("blackListPhone", blackList);
 
 		return "blacklistphone";
 	}
@@ -106,12 +104,10 @@ public class PostController {
 		postService.update(blackPost);
 
 		List<Post> posts = postService.getAllPostFromDb();
-		List<Post> blackListPhone = posts.stream()
-				.filter(post -> Boolean.TRUE.equals(post.isBlackList()))
-				.collect(Collectors.toList());
-		prepareView(blackListPhone);
+		List<Post> blackList = postService.getAllBlackPosts(posts);
+		prepareView(blackList);
 
-		model.addAttribute("blackListPhone", blackListPhone);
+		model.addAttribute("blackListPhone", blackList);
 
 		return "redirect:/post/blacklistphone";
 	}
@@ -121,12 +117,10 @@ public class PostController {
 
 		List<Post> posts = postService.getAllPostFromDb();
 
-		List<Post> blackListURL = posts.stream()
-				.filter(post -> Boolean.TRUE.equals(post.isBlackList()))
-				.collect(Collectors.toList());
-		prepareView(blackListURL);
+		List<Post> blackList = postService.getAllBlackPosts(posts);
+		prepareView(blackList);
 
-		model.addAttribute("blackListURL", blackListURL);
+		model.addAttribute("blackListURL", blackList);
 
 		return "blacklisturl";
 	}

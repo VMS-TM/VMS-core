@@ -159,7 +159,10 @@ public class PostSearchServiceImpl implements PostSearchService {
 		 */
 		Long  daysAgoDate = date.getTime() - 86_400_000;
 
-		result.forEach(post -> {
+		result.stream()
+				.filter(post -> post.getText().length() != 0)
+				.filter(post -> post.getDate().getTime() >= daysAgoDate)
+				.forEach(post -> {
 			if (post.getAttachmentContainers() != null) {
 				List<Photo> photos = new ArrayList<>();
 				post.getAttachmentContainers().forEach(container -> {
@@ -184,15 +187,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 				post.setPhotos(photos);
 			}
+			post.setFromWhere(from);
 		});
-		result.forEach(post -> post.setFromWhere(from));
-
-		/**
-		 * Deletes found posts if they have an empty text field and are made earlier than in the last 24 hours
-		 */
-		result = result.stream().filter(post -> post.getText().length() != 0)
-				.filter(post -> post.getDate().getTime() >= daysAgoDate)
-				.collect(Collectors.toList());
 
 		if (!postsInBD.containsAll(result)) {
 			vkPostService.addPosts(result);

@@ -68,7 +68,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 						.append(ConstantsForVkApi.VERSION).toString();
 
 				queries.add(queryURL);
-				stringBuilder.delete(0, stringBuilder.length());
+				stringBuilder.setLength(0);
 			}
 		} else {
 			for (UserFromVK userFromVK : userFromVKList) {
@@ -95,7 +95,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 						.append(ConstantsForVkApi.VERSION).toString();
 
 				queries.add(queryURL);
-				stringBuilder.delete(0, stringBuilder.length());
+				stringBuilder.setLength(0);
 				countRequest++;
 			}
 		}
@@ -199,10 +199,6 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 		int remainingRequests = userFromVKList.size() % proxyServers.size();
 
 		List<String> queries = getListOfQueries(query, requestOnProxy, remainingRequests, userFromVKList, proxyServers);
-
-		if (requestOnProxy == 0) {
-
-		}
 
 		getListOfNewPosts(queries, proxyServers, requestOnProxy, remainingRequests);
 	}

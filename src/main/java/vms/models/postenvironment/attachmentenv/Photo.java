@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Photo implements Serializable {
+
+	@JsonProperty("id")
 	private int id;
 
 	public int getId() {
@@ -17,6 +19,7 @@ public class Photo implements Serializable {
 		this.id = id;
 	}
 
+	@JsonProperty("album_id")
 	private int album_id;
 
 	public int getAlbumId() {
@@ -27,6 +30,7 @@ public class Photo implements Serializable {
 		this.album_id = album_id;
 	}
 
+	@JsonProperty("owner_id")
 	private int owner_id;
 
 	public int getOwnerId() {
@@ -158,5 +162,26 @@ public class Photo implements Serializable {
 
 	public void setAccessKey(String access_key) {
 		this.access_key = access_key;
+	}
+
+	@Override
+	public String toString() {
+		return "Photo{" +
+				"id=" + id +
+				", album_id=" + album_id +
+				", owner_id=" + owner_id +
+				", user_id=" + user_id +
+				", photo_75='" + photo_75 + '\'' +
+				", photo_130='" + photo_130 + '\'' +
+				", photo_604='" + photo_604 + '\'' +
+				", photo_807='" + photo_807 + '\'' +
+				", photo_1280='" + photo_1280 + '\'' +
+				", width=" + width +
+				", height=" + height +
+				", text='" + text + '\'' +
+				", date=" + date +
+				", post_id=" + post_id +
+				", access_key='" + access_key + '\'' +
+				'}';
 	}
 }

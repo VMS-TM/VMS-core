@@ -28,7 +28,7 @@
                 <li><a href="/city/search">Поиск пользователей</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
-            <button type="button" class="btn btn-primary">Всего объявлений<span th:text="${AllPosts}" class="badge"> </span></button>
+            <button type="button" class="btn btn-primary">Всего объявлений<span th:text="${#lists.size(posts)}" class="badge"> </span></button>
         </div>
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Объявления из новостей</h2>
@@ -230,7 +230,9 @@
                                                     </div>
 
                                                     <div class="tab-pane fade" th:id="'photo' + ${post.id}">
-
+                                                        <div th:each="photo: ${post.photos}">
+                                                            <img th:src="${photo.referenceOnPost}"></img>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

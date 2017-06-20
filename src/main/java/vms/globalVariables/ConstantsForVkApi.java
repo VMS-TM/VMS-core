@@ -34,6 +34,8 @@ public class ConstantsForVkApi {
 	public final static String PARAMETER_GROUP_QUERY = "&query=";
 	public final static String PARAMETER_GROUP_VERSION = "&v=5.63";
 	public final static String PARAMETER_GROUP_OWNER = "owner_id";
+	public final static Integer TIMEOUT = 5;
+
 
 	/**
 	 * Method and parameters for GroupSearchService
@@ -66,6 +68,8 @@ public class ConstantsForVkApi {
 	 * Method and parameters for PostToGroupService
 	 */
 	public final static String PARAMETER_POST_TO_GROUP_METHOD = "wall.post";
-	public final static Integer ID_GROUP = 148705229;
+	public final static String PARAMETER_GET_SERVER_URL = "photos.getWallUploadServer?";
+	public final static String PARAMETER_GET_SERVER_VERSION = "&v=5.65";
+	public final static Integer ID_GROUP = 148962136;
 
 }

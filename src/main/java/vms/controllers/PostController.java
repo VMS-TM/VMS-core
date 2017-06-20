@@ -12,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import vms.services.NewsSearchService;
-import vms.services.PostToGroupService;
+import vms.services.impl.NewsSearchService;
+import vms.services.impl.PostToGroupService;
 import vms.services.absr.*;
 
 import java.text.ParseException;
@@ -167,20 +167,13 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
-		model.addAttribute("posts", cleanResultList);
-		model.addAttribute("AllPosts", cleanResultList.size());
+		prepareView(result);
+		preparationPost(result);
+		model.addAttribute("posts", result);
 		return "newspost";
 	}
 
@@ -191,20 +184,13 @@ public class PostController {
 
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
-		model.addAttribute("posts", cleanResultList);
-		model.addAttribute("AllPosts", cleanResultList.size());
+		prepareView(result);
+		preparationPost(result);
+		model.addAttribute("posts", result);
 
 		return "redirect:/post/news";
 	}
@@ -236,6 +222,7 @@ public class PostController {
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
 		if (postService.getById(id).isHavePhoto()) {
 			editedPost.setHavePhoto(true);
+			editedPost.setPhotos(postService.getById(id).getPhotos());
 		}
 
 		if ("news".equals(from)) {
@@ -270,7 +257,7 @@ public class PostController {
 	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
 							  @RequestParam(value = "fromwhere") String from) {
 		postService.deletePost(id);
-		if("user".equals(from)){
+		if ("user".equals(from)) {
 			return "redirect:/post/users/wall";
 		}
 		return home;
@@ -328,8 +315,10 @@ public class PostController {
 		}
 
 		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
-		if(postService.getById(id).isHavePhoto()){
+
+		if (postService.getById(id).isHavePhoto()) {
 			postToGroup.setHavePhoto(true);
+			postToGroup.setPhotos(postService.getById(id).getPhotos());
 		}
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 
@@ -341,7 +330,7 @@ public class PostController {
 			postToGroup.setPostedToGroup(true);
 			postService.update(postToGroup);
 			return "redirect:/post/news/?postInGroupSuccess";
-		}else if("user".equals(from)){
+		} else if ("user".equals(from)) {
 			if (result == null || result.contains("error_code")) {
 				return "redirect:/post/users/wall?postInGroupDanger";
 			}
@@ -366,21 +355,14 @@ public class PostController {
 
 		List<Post> result = postList.stream()
 				.filter(post -> "user".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
-		List<Post> resultNotInBlackListPhone = result.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListPhone()))
-				.collect(Collectors.toList());
-
-		List<Post> cleanResultList = resultNotInBlackListPhone.stream()
 				.filter(post -> Boolean.FALSE.equals(post.isBlackListURl()))
 				.collect(Collectors.toList());
 
-		prepareView(cleanResultList);
-		preparationPost(cleanResultList);
+		prepareView(result);
+		preparationPost(result);
 
-		modelMap.addAttribute("posts", cleanResultList);
-		modelMap.addAttribute("AllPosts", cleanResultList.size());
+		modelMap.addAttribute("posts", result);
 
 		return "usersposts";
 	}

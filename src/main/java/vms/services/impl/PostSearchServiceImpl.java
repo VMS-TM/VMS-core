@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -152,6 +153,12 @@ public class PostSearchServiceImpl implements PostSearchService {
 	*/
 	@Override
 	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from) {
+		Date date = new Date();
+		/**
+		 * 86_400_000 - 24 hours in milliseconds
+		 */
+		Long daysAgoDate = date.getTime() - 86_400_000;
+
 		result.forEach(post -> {
 			if (post.getAttachmentContainers() != null) {
 				List<Photo> photos = new ArrayList<>();
@@ -163,26 +170,35 @@ public class PostSearchServiceImpl implements PostSearchService {
 						photo.setOwnerIdInVk(container.getPhoto().getOwnerId());
 						if (container.getPhoto().getPhoto604() != null) {
 							photo.setReferenceOnPost(container.getPhoto().getPhoto604());
+							post.setHavePhoto(true);
 						} else if (container.getPhoto().getPhoto75() != null) {
 							photo.setReferenceOnPost(container.getPhoto().getPhoto75());
+							post.setHavePhoto(true);
 						} else if (container.getPhoto().getPhoto130() != null) {
 							photo.setReferenceOnPost(container.getPhoto().getPhoto130());
+							post.setHavePhoto(true);
 						}
 						photos.add(photo);
 					}
 				});
+
 				post.setPhotos(photos);
-				post.setHavePhoto(true);
 			}
 		});
-		result.forEach(post -> post.setFromWhere(from));
+
 		if (!postsInBD.containsAll(result)) {
+			result.stream()
+					.filter(post -> post.getText().length() != 0)
+					.filter(post -> post.getDate().getTime() >= daysAgoDate)
+					.forEach(post -> post.setFromWhere(from));
 			vkPostService.addPosts(result);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
-			List<Post> postsWhichNotInDB = result.stream()
+			result.stream()
+					.filter(post -> post.getText().length() != 0)
+					.filter(post -> post.getDate().getTime() >= daysAgoDate)
 					.filter(post -> !postsInBD.contains(post))
-					.collect(Collectors.toList());
-			vkPostService.addPosts(postsWhichNotInDB);
+					.forEach(post -> post.setFromWhere(from));
+			vkPostService.addPosts(result);
 		}
 	}
 
@@ -208,4 +224,3 @@ public class PostSearchServiceImpl implements PostSearchService {
 		}
 	}
 }
-

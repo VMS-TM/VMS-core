@@ -248,13 +248,9 @@
                                             </div>
                                         </form>
                                         <div class="modal-footer">
-                                            <form th:action="@{/post/controlblacklistphone}" method="post">
-                                                <input class="hide-param" name="idBlackListPhone" th:value="${post.id}"/>
-                                                <input type="submit" class="btn btn-primary dark-button-primarybtn btn-primary dark-button-primary" value="Добавить в черный список телефонов"/>
-                                            </form>
-                                            <form th:action="@{/post/controlblacklisturl}" method="post">
-                                                <input class="hide-param" name="idBlackListURL" th:value="${post.id}"/>
-                                                <input type="submit" class="btn btn-primary dark-button-primarybtn btn-primary dark-button-primary" value="Добавить в черный список URL"/>
+                                            <form th:action="@{/post/controlblacklist}" method="post">
+                                                <input class="hide-param" name="idBlackList" th:value="${post.id}"/>
+                                                <input type="submit" class="btn btn-primary dark-button-primarybtn btn-primary dark-button-primary" value="Добавить в черный список"/>
                                             </form>
                                         </div>
                                     </div>

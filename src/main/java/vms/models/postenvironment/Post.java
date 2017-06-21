@@ -80,24 +80,14 @@ public class Post implements Serializable {
 	@JsonProperty("signer_id")
 	private int signer_id;
 
-	private boolean blackListPhone;
+	private boolean blackList;
 
-	public boolean isBlackListPhone() {
-		return blackListPhone;
+	public boolean isBlackList() {
+		return blackList;
 	}
 
-	public void setBlackListPhone(boolean blackListPhone) {
-		this.blackListPhone = blackListPhone;
-	}
-
-	private boolean blackListURl;
-
-	public boolean isBlackListURl() {
-		return blackListURl;
-	}
-
-	public void setBlackListURl(boolean blackListURl) {
-		this.blackListURl = blackListURl;
+	public void setBlackList(boolean blackList) {
+		this.blackList = blackList;
 	}
 
 	private String fromWhere;
@@ -336,14 +326,12 @@ public class Post implements Serializable {
 		if (post_id != post.post_id) return false;
 		if (marked_as_ads != post.marked_as_ads) return false;
 		if (signer_id != post.signer_id) return false;
-		if (savedInDb != post.savedInDb) return false;
-		if (havePhoto != post.havePhoto) return false;
-		if (postedToGroup != post.postedToGroup) return false;
 		if (id != null ? !id.equals(post.id) : post.id != null) return false;
 		if (date != null ? !date.equals(post.date) : post.date != null) return false;
 		if (text != null ? !text.equals(post.text) : post.text != null) return false;
 		if (attachmentContainers != null ? !attachmentContainers.equals(post.attachmentContainers) : post.attachmentContainers != null)
 			return false;
+		if (fromWhere != null ? !fromWhere.equals(post.fromWhere) : post.fromWhere != null) return false;
 		if (phoneNumber != null ? !phoneNumber.equals(post.phoneNumber) : post.phoneNumber != null) return false;
 		if (nameOfPerson != null ? !nameOfPerson.equals(post.nameOfPerson) : post.nameOfPerson != null) return false;
 		if (priceOfFlat != null ? !priceOfFlat.equals(post.priceOfFlat) : post.priceOfFlat != null) return false;
@@ -366,9 +354,7 @@ public class Post implements Serializable {
 		result = 31 * result + (attachmentContainers != null ? attachmentContainers.hashCode() : 0);
 		result = 31 * result + marked_as_ads;
 		result = 31 * result + signer_id;
-		result = 31 * result + (savedInDb ? 1 : 0);
-		result = 31 * result + (havePhoto ? 1 : 0);
-		result = 31 * result + (postedToGroup ? 1 : 0);
+		result = 31 * result + (fromWhere != null ? fromWhere.hashCode() : 0);
 		result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
 		result = 31 * result + (nameOfPerson != null ? nameOfPerson.hashCode() : 0);
 		result = 31 * result + (priceOfFlat != null ? priceOfFlat.hashCode() : 0);

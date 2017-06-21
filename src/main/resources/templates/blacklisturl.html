@@ -26,6 +26,7 @@
                 <li><a href="/post/news">Посты</a></li>
                 <li><a href="/showgroups">Поиск групп</a></li>
                 <li><a href="/city/search">Поиск пользователей</a></li>
+                <li><a href="/post/blacklisturl">Чёрные списки</a></li>
                 <li><a href="/properties">Настройки</a></li>
             </ul>
             <button type="button" class="btn btn-primary dark-button-primary">Всего постов <span th:text="${#lists.size(blackListURL)}" class="badge"> </span></button>        </div>
@@ -51,27 +52,9 @@
             </div>
 
             <ul class="nav nav-tabs">
-                <li><a href="/post/news">Объявления</a></li>
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">Посты
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/post/">Из групп</a></li>
-                        <li><a href="/post/users/wall">Со стен пользователей</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">Черный список
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/post/blacklistphone">Телефонов</a></li>
-                        <li><a href="/post/blacklisturl">URL</a></li>
-                    </ul>
-                </li>
+                <li class="active"><a href="/post/blacklisturl">URL</a></li>
+                <li><a href="/post/blacklistphone">Номеров телефонов</a></li>
+                <li><a href="#">Слов</a></li>
             </ul>
             <div class="tab-content boxShadow3 bg-tab">
                 <table class="table table-striped">

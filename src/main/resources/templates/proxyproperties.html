@@ -11,7 +11,7 @@
 <body>
 <div class="navbar navbar-inverse" role="navigation">
     <div>
-        <a class="navbar-brand" href="#">VMS Project</a>
+        <a class="navbar-brand" href="/main">VMS Project</a>
     </div>
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -31,7 +31,7 @@
                 <li><a href="/properties">Настройки</a></li>
             </ul>
         </div>
-        <div class=" col-md-9 fixed " style="outline: 0.1px solid #000; ">
+        <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Настройки</h2>
 
             <div th:if="${param.duplicate != null}">
@@ -55,7 +55,6 @@
                     <ul class="dropdown-menu">
                         <li><a href="/properties/proxy">Для поиска по людям</a></li>
                         <li><a href="/properties/proxy/group">Для поиска по группам</a></li>
-                        <li><a href="#">что то ещё вдруг...</a></li>
                     </ul>
                 </li>
                 <li><a href="/properties/extra">Доп. настройки</a></li>

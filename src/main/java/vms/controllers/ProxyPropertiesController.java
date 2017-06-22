@@ -1,5 +1,7 @@
 package vms.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,6 +25,8 @@ public class ProxyPropertiesController {
 
 	@Autowired
 	private ProxyServerService proxyServerService;
+
+	private static final Logger logger = LoggerFactory.getLogger(ProxyPropertiesController.class);
 
 	@RequestMapping(value = "/properties/proxy", method = RequestMethod.GET)
 	public String propertiesProxyServers(ModelMap modelMap) {

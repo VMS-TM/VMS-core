@@ -1,5 +1,7 @@
 package vms.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -38,6 +40,8 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 
 	@Autowired
 	private UserFromVkService userFromVkService;
+
+	private static final Logger logger = LoggerFactory.getLogger(SearchUsersServiceImpl.class);
 
 	/**
 	 * Method forms url for get all countries

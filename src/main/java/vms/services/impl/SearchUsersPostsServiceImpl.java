@@ -1,5 +1,7 @@
 package vms.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -35,6 +37,8 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 	private SearchUsersService searchUsersService;
 
 	private RestTemplate restTemplate = new RestTemplate();
+
+	private static final Logger logger = LoggerFactory.getLogger(SearchUsersPostsServiceImpl.class);
 
 	/**
 	 * Method return list of queries for search posts on user's wall

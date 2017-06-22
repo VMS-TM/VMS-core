@@ -1,5 +1,7 @@
 package vms.configs.security.handlers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -7,6 +9,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
+import vms.controllers.UsersSearchController;
 import vms.models.Role;
 
 
@@ -19,7 +22,10 @@ import java.util.Collection;
 
 @Service
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+	private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationSuccessHandler.class);
 
 	//Вызывается когда пользователь удачно аутентифицировался
 	@Override

@@ -1,6 +1,8 @@
 package vms.controllers;
 
 import com.vdurmont.emoji.EmojiParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,6 +30,7 @@ public class ExtraPropertiesController {
 	@Autowired
 	private VkPostService postService;
 
+	private static final Logger logger = LoggerFactory.getLogger(ExtraPropertiesController.class);
 
 	@RequestMapping(value = "/properties/extra", method = RequestMethod.GET)
 	public String propertiesExtraMain() {

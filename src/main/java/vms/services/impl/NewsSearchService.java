@@ -1,5 +1,7 @@
 package vms.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +26,7 @@ public class NewsSearchService {
 	@Autowired
 	private PostSearchService postSearchService;
 
+	private static final Logger logger = LoggerFactory.getLogger(NewsSearchService.class);
 
 	private String UriForAdsFromNews(String query, String proxyServer) {
 		StringBuilder sb = new StringBuilder(ConstantsForVkApi.URL);

@@ -1,5 +1,7 @@
 package vms.configs.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,11 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
 	@Autowired
 	private AuthenticationService authenticationService;
 
 	@Autowired
 	private CustomAuthenticationSuccessHandler successHandler;
+
+	private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

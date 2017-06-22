@@ -1,8 +1,11 @@
 package vms.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
+import vms.VmsApplication;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
 import vms.models.postenvironment.Post;
@@ -27,8 +30,6 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/post")
 public class PostController {
 
-	private static final String home = "redirect:/post/";
-
 	@Autowired
 	private VkPostService postService;
 
@@ -49,6 +50,10 @@ public class PostController {
 
 	@Autowired
 	private SearchUsersPostsService usersPostsService;
+
+	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
+
+	private static final String home = "redirect:/post/";
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {

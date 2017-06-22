@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -51,6 +52,20 @@ public class Post implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Query.class)
+	@JoinTable(name = "queryposts",
+			joinColumns = {@JoinColumn(name = "post_id")},
+			inverseJoinColumns = {@JoinColumn(name = "query_id")})
+	private Set<Query> queries;
+
+	public Set<Query> getQueries() {
+		return queries;
+	}
+
+	public void setQueries(Set<Query> queries) {
+		this.queries = queries;
 	}
 
 	//id of groups(source)

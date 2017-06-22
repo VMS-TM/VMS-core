@@ -18,7 +18,12 @@ import vms.services.absr.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -50,21 +55,28 @@ public class PostController {
 	@Autowired
 	private SearchUsersPostsService usersPostsService;
 
+	private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(ConstantsForVkApi.POOL_SIZE);
+	private final Map<String, ScheduledFuture<?>> mapSchedule = new ConcurrentHashMap<>();
+
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
 		List<ProxyServer> proxy = proxyServerService.proxyServerList();
+
 		List<Post> result = posts.stream()
 				.filter(post -> "group".equals(post.getFromWhere()))
 				.collect(Collectors.toList());
+
 		List<ProxyServer> badProxy = proxy.stream()
 				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
+
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
 		model.addAttribute("AllPosts", result.size());
 		model.addAttribute("badproxy", badProxy);
+
 		return "posts";
 	}
 
@@ -117,12 +129,31 @@ public class PostController {
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
+		model.addAttribute("mapSchedule", mapSchedule);
 		return "newspost";
 	}
 
+	@RequestMapping(value = {"/stop"}, method = RequestMethod.POST)
+	public String cancelThread(Model model, @RequestParam(value = "key") String key) {
+
+		try {
+			mapSchedule.get(key).cancel(true);
+			mapSchedule.remove(key);
+		} catch (NullPointerException exp) {
+
+		}
+		return "redirect:/post/news";
+	}
+
 	@RequestMapping(value = {"/news/find"}, method = RequestMethod.POST)
-	public String getNews(Model model, @RequestParam(value = "news") String query) {
-		newsSearchService.getAdsFromNews(query);
+	public String getNews(Model model,
+						  		@RequestParam(value = "news") String query,
+						  		@RequestParam(value = "time") Long time) {
+
+		mapSchedule.put(query, scheduledExecutorService.scheduleAtFixedRate(() -> {
+			newsSearchService.getAdsFromNews(query);
+		}, 0, time, TimeUnit.MINUTES));
+
 		List<Post> posts = postService.getAllPostFromDb();
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
@@ -130,7 +161,9 @@ public class PostController {
 				.collect(Collectors.toList());
 		prepareView(result);
 		preparationPost(result);
+
 		model.addAttribute("posts", result);
+		model.addAttribute("mapSchedule", mapSchedule);
 		return "redirect:/post/news";
 	}
 

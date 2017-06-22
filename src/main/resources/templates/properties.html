@@ -68,9 +68,9 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <td align="center"><label th:text="ID"></label></td>
-                        <td align="center"><label th:text="Ключ"></label></td>
-                        <td align="center"><label th:text="Токен"></label></td>
+                        <td align="center"><label>Логин учётной записи VK</label></td>
+                        <td align="center"><label>Ключ доступа учётной записи VK</label></td>
+                        <td align="center"><label>ID администрируемой группы VK</label></td>
                         <td align="center"><label th:text="Действия"></label></td>
                     </tr>
                     </thead>
@@ -78,9 +78,9 @@
                     <th:block th:each="property : ${properties}">
                         <form th:action="@{/properties/delete}" method="post">
                             <tr>
-                                <td align="center" th:text="${property.id}"></td>
                                 <td align="center" th:text="${property.name}"></td>
                                 <td align="center" width="250"><p th:text="${property.value}" class="cut-text"></p></td>
+                                <td align="center" th:text="${property.groupID}"></td>
                                 <td align="center">
                                     <a class="btn btn-primary btn-xs" type="button"
                                        data-toggle="modal" th:attr="data-target='#'+${property.id}">Изменить</a>
@@ -95,7 +95,7 @@
                             <div class="modal fade" th:id="${property.id}">
                                 <div class="modal-dialog modal-sm">
                                     <div class="modal-content">
-                                        <form role="form" action="/properties/proxy/edit" method="post">
+                                        <form role="form" action="/properties/update" method="post">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">
                                                     &times;
@@ -105,23 +105,23 @@
 
                                             <div class="modal-body">
                                                 <div>
-
-                                                    <label>ID</label>
-                                                    <input type="text" class="form-control" name="id"
-                                                           th:value="${property.id}" readonly="readonly"></input>
-
-                                                    <label>Ключ</label>
-                                                    <input type="text" class="form-control" name="login"
+                                                    <label>Логин учётной записи VK</label>
+                                                    <input type="text" class="form-control" name="name"
                                                            required="required"
-                                                           th:value="${property.name}" readonly="readonly"></input>
+                                                           th:value="${property.name}"></input>
 
-                                                    <label>Токен</label>
-                                                    <input type="text" class="form-control" name="login"
+                                                    <label>Ключ доступа</label>
+                                                    <input type="text" class="form-control" name="value"
                                                            required="required"
                                                            th:value="${property.value}"></input>
 
+                                                    <label>ID администрируемой группы VK</label>
+                                                    <input type="text" class="form-control" name="groupID"
+                                                           required="required"
+                                                           th:value="${property.groupID}"></input>
 
-
+                                                    <input type="text" class="form-control invis" name="id"
+                                                           th:value="${property.id}"></input>
                                                 </div>
                                             </div>
 
@@ -165,12 +165,14 @@
 
                     <div class="modal-body">
                         <div>
-
-                            <label>Ключ</label>
+                            <label>Логин учётной записи VK</label>
                             <input type="text" class="form-control" th:field="*{name}" required="required"></input>
 
-                            <label>Токен</label>
+                            <label>Ключ доступа</label>
                             <input type="text" class="form-control" th:field="*{value}" required="required"></input>
+
+                            <label>ID администрируемой группы VK</label>
+                            <input type="text" class="form-control" th:field="*{groupID}" required="required"></input>
 
                         </div>
                     </div>

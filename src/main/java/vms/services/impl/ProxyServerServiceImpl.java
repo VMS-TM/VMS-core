@@ -48,4 +48,9 @@ public class ProxyServerServiceImpl implements ProxyServerService {
 	public ProxyServer getProxyServerByToken(String token) {
 		return repository.getProxyServerByToken(token);
 	}
+
+	@Override
+	public List<ProxyServer> getProxyServerByDestiny(String destiny) {
+		return repository.findAllByDestiny(destiny);
+	}
 }

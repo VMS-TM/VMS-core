@@ -32,7 +32,7 @@
             <button type="button" class="btn btn-primary">Всего постов <span th:text="${#lists.size(posts)}" class="badge"> </span></button>
         </div>
         <div class=" col-md-9 fixed ">
-            <h2 class="sub-header">Посты со стен пользователей</h2>
+            <h2 class="sub-header">Посты со стен <span th:text="${#lists.size(vkusers)}"></span> пользователей</h2>
 
             <div th:if="${param.warning != null}">
                 <div class="alert alert-danger">

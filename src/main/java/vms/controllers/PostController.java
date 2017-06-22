@@ -50,6 +50,9 @@ public class PostController {
 	@Autowired
 	private SearchUsersPostsService usersPostsService;
 
+	@Autowired
+	private UserFromVkService userFromVkService;
+
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
@@ -275,6 +278,13 @@ public class PostController {
 
 	@RequestMapping(value = "/users/wall", method = RequestMethod.GET)
 	public String usersWallPostPage(ModelMap modelMap) {
+		if(proxyServerService.getProxyServerByDestiny("user").isEmpty()){
+			return "noproxy";
+		}
+		if(userFromVkService.getAllUsersOfVk().isEmpty()){
+			return "nousers";
+		}
+
 		List<Post> postList = postService.getAllPostFromDb();
 		List<Post> result = postList.stream()
 				.filter(post -> "user".equals(post.getFromWhere()))
@@ -283,6 +293,7 @@ public class PostController {
 		prepareView(result);
 		preparationPost(result);
 		modelMap.addAttribute("posts", result);
+		modelMap.addAttribute("vkusers", userFromVkService.getAllUsersOfVk());
 		return "usersposts";
 	}
 

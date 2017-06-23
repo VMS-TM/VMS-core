@@ -16,10 +16,13 @@ public class Query {
 	public Long id;
 
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Post.class)
-	@JoinTable(name = "queryposts",
+	@JoinTable(name = "query_post",
 			joinColumns = {@JoinColumn(name = "post_id")},
 			inverseJoinColumns = {@JoinColumn(name = "query_id")})
 	private Set<Post> posts;
+
+	private String word;
+
 
 	public Set<Post> getPosts() {
 		return posts;
@@ -28,8 +31,6 @@ public class Query {
 	public void setPosts(Set<Post> posts) {
 		this.posts = posts;
 	}
-
-	private String word;
 
 	public String getWord() {
 		return word;

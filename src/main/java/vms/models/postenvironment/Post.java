@@ -55,7 +55,7 @@ public class Post implements Serializable {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Query.class)
-	@JoinTable(name = "queryposts",
+	@JoinTable(name = "query_post",
 			joinColumns = {@JoinColumn(name = "post_id")},
 			inverseJoinColumns = {@JoinColumn(name = "query_id")})
 	private Set<Query> queries;

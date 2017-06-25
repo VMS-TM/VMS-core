@@ -18,4 +18,6 @@ public interface ProxyServerService {
 	ProxyServer getProxyServerByToken(String token);
 
 	void deleteProxyServer(Long id);
+
+	List<ProxyServer> getProxyServerByDestiny(String destiny);
 }

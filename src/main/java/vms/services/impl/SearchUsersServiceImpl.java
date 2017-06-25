@@ -51,10 +51,8 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	private String urlForDatabaseCountries() {
 		String token;
 		StringBuilder builder = new StringBuilder(ConstantsForVkApi.URL);
-		List<ProxyServer> proxyServers = new ArrayList<>();
-		proxyServers.addAll(proxyServerService.proxyServerList());
 
-		token = proxyServers.get(0).getToken();
+		token = proxyServerService.getProxyServerByDestiny("user").get(0).getToken();
 
 		builder.append(ConstantsForVkApi.METHOD_GET_COUNTRIES);
 		builder.append(ConstantsForVkApi.PARAMETERS_FOR_COUNTRIES);
@@ -74,11 +72,10 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 	 */
 	private String urlForDatabaseCities(Long id, String query) {
 		String token;
-		List<ProxyServer> proxyServers = new ArrayList<>();
-		StringBuilder builder = new StringBuilder(ConstantsForVkApi.URL);
-		proxyServers.addAll(proxyServerService.proxyServerList());
 
-		token = proxyServers.get(0).getToken();
+		StringBuilder builder = new StringBuilder(ConstantsForVkApi.URL);
+
+		token = proxyServerService.getProxyServerByDestiny("user").get(0).getToken();
 
 		builder.append(ConstantsForVkApi.METHOD_GET_CITIES);
 		builder.append(ConstantsForVkApi.PARAMETERS_FOR_CITIES);
@@ -131,18 +128,7 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 		int firstElement = 0;
 		int lastElement = 0;
 
-		List<ProxyServer>allProxyServers = proxyServerService.proxyServerList();
-		List<ProxyServer> proxyServerList = new ArrayList<>();
-
-		for (ProxyServer proxyServer: allProxyServers) {
-			if(proxyServer.getDestiny().equalsIgnoreCase("user")){
-				proxyServerList.add(proxyServer);
-			}
-		}
-
-		if (proxyServerList.size() == 0) {
-			return;
-		}
+		List<ProxyServer> proxyServerList = proxyServerService.getProxyServerByDestiny("user");
 
 		/**
 		 * 366 days in year max. Dividing birthdays into two sexes - 732
@@ -248,8 +234,7 @@ public class SearchUsersServiceImpl implements SearchUsersService {
 		List<String> list = new ArrayList<>();
 		StringBuilder builder = new StringBuilder();
 
-		List<ProxyServer> proxyServerList = new ArrayList<>();
-		proxyServerList.addAll(proxyServerService.proxyServerList());
+		List<ProxyServer> proxyServerList = proxyServerService.getProxyServerByDestiny("user");
 
 		/**
 		 * Bypass all days of the year (2 times)

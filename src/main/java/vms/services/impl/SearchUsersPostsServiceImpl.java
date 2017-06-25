@@ -195,9 +195,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 
 		List<UserFromVK> userFromVKList = userFromVkService.getAllUsersOfVk();
 
-		List<ProxyServer> proxyServers = proxyServerService.proxyServerList().stream()
-				.filter(proxyServer -> "user".equals(proxyServer.getDestiny()))
-				.collect(Collectors.toList());
+		List<ProxyServer> proxyServers = proxyServerService.getProxyServerByDestiny("user");
 
 		int requestOnProxy = userFromVKList.size() / proxyServers.size();
 		int remainingRequests = userFromVKList.size() % proxyServers.size();

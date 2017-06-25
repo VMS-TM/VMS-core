@@ -3,14 +3,31 @@
 <head>
     <link href="/css/bootstrap.css" rel="stylesheet">
     </link>
+    <link href="/css/style.css" rel="stylesheet"></link>
 </head>
 
 <body>
-<div class="container">
-    <form class="form-signin" name='loginForm' th:action="@{/login}" method='POST'>
-        <h3>Авторизуйтесь</h3>
-        <input class="form-control" placeholder="Логин" type="text" name="username"/>
-        <input class="form-control" placeholder="Пароль" type="password" name="password"/>
+
+<div class="container login-form">
+    <div th:if="${param.error != null}">
+        <div class="alert alert-danger">
+            <label>Неправильно введён логин или пароль</label>
+        </div>
+    </div>
+
+    <form name='loginForm' th:action="@{/login}" method='POST'>
+
+        <div align="center">
+            <h3>Авторизация</h3>
+        </div>
+        <div>
+            <input class="form-control" placeholder="Логин" required="required" type="text" name="username"/>
+        </div>
+        <br/>
+        <div>
+            <input class="form-control" placeholder="Пароль" required="required" type="password" name="password"/>
+        </div>
+
         <br/>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
     </form>

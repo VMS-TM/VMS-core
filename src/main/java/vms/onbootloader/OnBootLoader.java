@@ -241,11 +241,11 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 	private void loadProxyServers() {
 		ProxyServer firstProxyServer = new ProxyServer("mail@gmail.com", "D3i7&1488",
 				"bb6211359dc3e3eb8f6fe190d36e8a42ad054dd2e146ec845072dcd19377d474caafd648b3712e3254e54",
-				"212.34.38.180", 8080, "user");
+				"185.104.14.188", 8000, "user");
 
 		ProxyServer secondProxyServer = new ProxyServer("+79858838221", "485?frR",
 				"dead6a659bc53060c5f9100288b01c6534501ba9496f5d8f49e2a944ce910f915d4aa7a278c59871e68dd",
-				"136.169.136.88", 53281, "user");
+				"185.104.15.165", 8000, "user");
 
 		ProxyServer thirdProxyServer = new ProxyServer("mail@gmail.ru", "32167666",
 				"53c2207ef83c37171713a6e97560c819af52b44537dbc15c0451b661d5316432384e95fc24f343a88c134",
@@ -310,6 +310,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		Property property = new Property();
 		property.setName("defaultKey");
 		property.setValue("1e001491848059bf21ab1abc48dd5ecb218c758901ed4ba47da5907aca5bee8e0cde0ba00db55d3914ee4");
+		property.setGroupID("148705229");
 		propertyService.addProperty(property);
 
 		log.info("Add 1 default property");

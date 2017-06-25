@@ -11,7 +11,6 @@ import vms.services.absr.PropertyService;
 import java.util.List;
 
 @Service
-@Transactional
 public class PropertyServiceImpl implements PropertyService {
 
 	@Autowired

@@ -2,6 +2,7 @@ package vms.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "properties")
@@ -19,6 +20,11 @@ public class Property {
 	@NotNull
 	@Column(name = "value")
 	private String value;
+
+	@NotNull
+	@Pattern(regexp = "^[0-9]+$")
+	@Column(name = "groupID")
+	private String groupID;
 
 	public Long getId() {
 		return id;
@@ -44,12 +50,21 @@ public class Property {
 		this.value = value;
 	}
 
+	public String getGroupID() {
+		return groupID;
+	}
+
+	public void setGroupID(String groupID) {
+		this.groupID = groupID;
+	}
+
 	public Property() {
 	}
 
-	public Property(String name, String value) {
+	public Property(String name, String value, String groupID) {
 		this.name = name;
 		this.value = value;
+		this.groupID = groupID;
 	}
 
 	@Override
@@ -59,16 +74,16 @@ public class Property {
 
 		Property property = (Property) o;
 
-		if (id != null ? !id.equals(property.id) : property.id != null) return false;
 		if (name != null ? !name.equals(property.name) : property.name != null) return false;
-		return value != null ? value.equals(property.value) : property.value == null;
+		if (value != null ? !value.equals(property.value) : property.value != null) return false;
+		return groupID != null ? groupID.equals(property.groupID) : property.groupID == null;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (name != null ? name.hashCode() : 0);
+		int result = name != null ? name.hashCode() : 0;
 		result = 31 * result + (value != null ? value.hashCode() : 0);
+		result = 31 * result + (groupID != null ? groupID.hashCode() : 0);
 		return result;
 	}
 

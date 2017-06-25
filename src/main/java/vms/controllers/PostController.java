@@ -57,6 +57,7 @@ public class PostController {
 
 	private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(ConstantsForVkApi.POOL_SIZE);
 	private final Map<String, ScheduledFuture<?>> mapSchedule = new ConcurrentHashMap<>();
+	private final Map<String, Map<String, ScheduledFuture<?>>> queryMap = new ConcurrentHashMap<>();
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
@@ -75,6 +76,7 @@ public class PostController {
 		preparationPost(result);
 		model.addAttribute("posts", result);
 		model.addAttribute("AllPosts", result.size());
+		model.addAttribute("mapSchedule", mapSchedule);
 		model.addAttribute("badproxy", badProxy);
 
 		return "posts";
@@ -134,13 +136,14 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/stop"}, method = RequestMethod.POST)
-	public String cancelThread(Model model, @RequestParam(value = "key") String key) {
+	public String cancelThread(Model model,
+							   @RequestParam(value = "key") String key) {
 
 		try {
 			mapSchedule.get(key).cancel(true);
 			mapSchedule.remove(key);
 		} catch (NullPointerException exp) {
-
+			return "redirect:/post/?query";
 		}
 		return "redirect:/post/news";
 	}
@@ -230,8 +233,13 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.POST)
-	public String getNewPosts(Model model, @RequestParam(value = "query") String query) {
-		postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
+	public String getNewPosts(Model model,
+							  @RequestParam(value = "query") String query,
+							  @RequestParam(value = "time") Long time) {
+
+		mapSchedule.put(query, scheduledExecutorService.scheduleAtFixedRate(() -> {
+			postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
+		}, 0, time, TimeUnit.MINUTES));
 
 		List<Post> posts = postService.getAllPostFromDb();
 		List<ProxyServer> proxy = proxyServerService.proxyServerList();
@@ -307,7 +315,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/users/wall", method = RequestMethod.GET)
-	public String usersWallPostPage(ModelMap modelMap) {
+	public String usersWallPostPage(Model model) {
 		List<Post> postList = postService.getAllPostFromDb();
 		List<Post> result = postList.stream()
 				.filter(post -> "user".equals(post.getFromWhere()))
@@ -315,13 +323,18 @@ public class PostController {
 				.collect(Collectors.toList());
 		prepareView(result);
 		preparationPost(result);
-		modelMap.addAttribute("posts", result);
+		model.addAttribute("posts", result);
+		model.addAttribute("mapSchedule", mapSchedule);
 		return "usersposts";
 	}
 
 	@RequestMapping(value = "/users/wall", method = RequestMethod.POST)
-	public String searchUsersWallPosts(ModelMap modelMap, @RequestParam(value = "query") String query) {
-		usersPostsService.getUsersPosts(query);
+	public String searchUsersWallPosts(ModelMap modelMap,
+									   @RequestParam(value = "query") String query,
+									   @RequestParam(value = "time") Long time) {
+		mapSchedule.put(query, scheduledExecutorService.scheduleAtFixedRate(() -> {
+			usersPostsService.getUsersPosts(query);
+		}, 0, time, TimeUnit.MINUTES));
 		return "redirect:/post/users/wall";
 	}
 

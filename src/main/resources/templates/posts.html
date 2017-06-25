@@ -30,6 +30,21 @@
             </ul>
             <button type="button" class="btn btn-primary">Всего постов <span th:text="${AllPosts}"
                                                                              class="badge"> </span></button>
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <th>Запрос</th>
+                    <th>Стоп процесс</th>
+                </tr>
+                <tr th:each="map : ${mapSchedule}">
+                    <td><p th:text="${map.key}"></p></td>
+                    <form th:action="@{/post/stop}" method="post">
+                        <input class="hide-param" name="key" th:value="${map.key}"/>
+                        <td><input type="submit" class="btn btn-danger" value="Завершить"/></td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Посты из групп</h2>
@@ -300,6 +315,19 @@
                         <div>
                             <label>Запрос постов</label>
                             <input class="form-control" required="required" type="text" name="query"/>
+                        </div>
+                        <div>
+                            <label>С какой периодичностью искать</label>
+                            <select id="time" name="time">
+                                <option th:value="1">1 мин</option>
+                                <option th:value="5">5 мин</option>
+                                <option th:value="15">15 мин</option>
+                                <option th:value="30">30 мин</option>
+                                <option th:value="60">1 час</option>
+                                <option th:value="120">2 часа</option>
+                                <option th:value="180">3 часа</option>
+                                <option th:value="240">4 часа</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">

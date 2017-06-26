@@ -141,15 +141,25 @@ public class PostController {
 
 	@RequestMapping(value = {"/stop"}, method = RequestMethod.POST)
 	public String cancelThread(Model model,
-							   @RequestParam(value = "key") String key) {
+							   @RequestParam(value = "key") String key,
+							   @RequestParam(value = "fromwhere") String from) {
 
 		try {
 			mapSchedule.get(key).cancel(true);
 			mapSchedule.remove(key);
 		} catch (NullPointerException exp) {
-			return "redirect:/post/?query";
+
 		}
-		return "redirect:/post/news";
+
+		if ("group".equals(from)) {
+			return "redirect:/post/";
+		} else if ("news".equals(from)) {
+			return "redirect:/post/news";
+		} else if ("user".equals(from)) {
+			return "redirect:/post/users/wall";
+		}
+
+		return home;
 	}
 
 	@RequestMapping(value = {"/news/find"}, method = RequestMethod.POST)
@@ -228,11 +238,20 @@ public class PostController {
 
 	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
 	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
-							  @RequestParam(value = "fromwhere") String from) {
-		postService.deletePost(id);
-		if ("user".equals(from)) {
+								@RequestParam(value = "fromwhere") String from) {
+
+		if (postService.getById(id) != null) {
+			postService.deletePost(id);
+		}
+
+		if ("group".equals(from)) {
+			return "redirect:/post/";
+		} else if ("news".equals(from)) {
+			return "redirect:/post/news";
+		} else if ("user".equals(from)) {
 			return "redirect:/post/users/wall";
 		}
+
 		return home;
 	}
 
@@ -259,9 +278,9 @@ public class PostController {
 			model.addAttribute("posts", result);
 			model.addAttribute("AllPosts", result.size());
 			model.addAttribute("badproxy", badProxy);
-			return "posts";
+			return "redirect:/post/";
 		}
-		return "redirect:/post/req?warning";
+		return "redirect:/post/?warning";
 	}
 
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)

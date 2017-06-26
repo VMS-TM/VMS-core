@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import vms.models.Role;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,23 +13,22 @@ public class Query {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Post.class)
 	@JoinTable(name = "query_post",
 			joinColumns = {@JoinColumn(name = "post_id")},
 			inverseJoinColumns = {@JoinColumn(name = "query_id")})
-	private Set<Post> posts;
+	private List<Post> posts;
 
 	private String word;
 
 
-	public Set<Post> getPosts() {
+	public List<Post> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(Set<Post> posts) {
+	public void setPosts(List<Post> posts) {
 		this.posts = posts;
 	}
 

@@ -52,7 +52,7 @@ public class NewsSearchService {
 				.filter(post -> !(post.getOwnerId() < 0))
 				.collect(Collectors.toList());
 
-		postSearchService.getPostFromList(postsInBD, result, "news");
+		postSearchService.getPostFromList(postsInBD, result, "news", query);
 	}
 
 }

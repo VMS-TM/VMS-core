@@ -6,17 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.ResourceAccessException;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.ProxyServer;
-import vms.models.postenvironment.Photo;
-import vms.models.postenvironment.Post;
-import vms.models.postenvironment.PostResponse;
-import vms.models.postenvironment.RootObject;
+import vms.models.postenvironment.*;
 import vms.models.rawgroup.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import vms.services.absr.PostSearchService;
-import vms.services.absr.ProxyServerService;
-import vms.services.absr.SearchUsersService;
-import vms.services.absr.VkPostService;
+import vms.repositories.QueryRepository;
+import vms.services.absr.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -40,6 +35,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 	@Autowired
 	private VkPostService vkPostService;
+
+	@Autowired
+	private QueryService queryService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PostSearchServiceImpl.class);
 
@@ -99,7 +97,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 									e.printStackTrace();
 								}
 							}
-							getPostFromList(postsInBD, postList, "group");
+							getPostFromList(postsInBD, postList, "group", query);
 						}
 					}));
 					firstElement += lastElement;
@@ -156,8 +154,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 		If yes but some if them no then create a list and add to it only original posts which we don't have in DB.
 	*/
 	@Override
-	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from) {
+	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from, String query) {
 		Date date = new Date();
+		Query word = new Query(query);
 		/**
 		 * 86_400_000 - 24 hours in milliseconds
 		 */
@@ -195,14 +194,18 @@ public class PostSearchServiceImpl implements PostSearchService {
 					.filter(post -> post.getText().length() != 0)
 					.filter(post -> post.getDate().getTime() >= daysAgoDate)
 					.forEach(post -> post.setFromWhere(from));
-			vkPostService.addPosts(result);
+			word.setPosts(result);
+			queryService.addQuery(word);
+//			vkPostService.addPosts(result);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
 			result.stream()
 					.filter(post -> post.getText().length() != 0)
 					.filter(post -> post.getDate().getTime() >= daysAgoDate)
 					.filter(post -> !postsInBD.contains(post))
 					.forEach(post -> post.setFromWhere(from));
-			vkPostService.addPosts(result);
+			word.setPosts(result);
+			queryService.addQuery(word);
+//			vkPostService.addPosts(result);
 		}
 	}
 
@@ -215,7 +218,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 			int randomProxy = new Random().nextInt(proxyServerList.size());
 			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(randomProxy).getIp(), proxyServerList.get(randomProxy).getPort());
 			List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServerList.get(randomProxy).getToken(), groups.get(i).getId(), query);
-			getPostFromList(postsInBD, postList, "group");
+			getPostFromList(postsInBD, postList, "group", query);
 		}));
 	}
 

@@ -116,7 +116,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 	 * @param queries		list of queries
 	 * @param postsFromDB	list of posts from data base
 	 */
-	private void sendRequests(int start, int end, RestTemplate proxyTemplate, List<String> queries, List<Post> postsFromDB) {
+	private void sendRequests(int start, int end, RestTemplate proxyTemplate, List<String> queries, List<Post> postsFromDB, String query) {
 		for (int i = start; i < end; i++) {
 			if (i > 0 && i % 3 == 0) {
 				try {
@@ -137,7 +137,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 
 			List<Post> postList = rootObject.getPostResponse().getPosts();
 
-			postSearchService.getPostFromList(postsFromDB, postList, "user");
+			postSearchService.getPostFromList(postsFromDB, postList, "user", query);
 		}
 	}
 
@@ -147,7 +147,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 	 * @param requestOnProxy    quantity of requests on one proxy
 	 * @param remainingRequests quantity of remaining requests
 	 */
-	private void getListOfNewPosts(List<String> queries, List<ProxyServer> proxyServers, int requestOnProxy, int remainingRequests) {
+	private void getListOfNewPosts(List<String> queries, List<ProxyServer> proxyServers, int requestOnProxy, int remainingRequests, String query) {
 		int firstElement = 0;
 		int lastElement = 0;
 
@@ -158,7 +158,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 		if (proxyServers.size() == 1 || requestOnProxy == 0) {
 			RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServers.get(0).getIp(), proxyServers.get(0).getPort());
 			executorService.submit(new Thread(() -> {
-				sendRequests(0, queries.size(), proxyTemplate, queries, postsFromDB);
+				sendRequests(0, queries.size(), proxyTemplate, queries, postsFromDB, query);
 			}));
 
 			executorService.shutdown();
@@ -175,7 +175,7 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 				final int finish = lastElement;
 
 				executorService.submit(new Thread(() -> {
-					sendRequests(start, finish, proxyTemplate, queries, postsFromDB);
+					sendRequests(start, finish, proxyTemplate, queries, postsFromDB, query);
 				}));
 
 				firstElement += lastElement;
@@ -202,6 +202,6 @@ public class SearchUsersPostsServiceImpl implements SearchUsersPostsService {
 
 		List<String> queries = getListOfQueries(query, requestOnProxy, remainingRequests, userFromVKList, proxyServers);
 
-		getListOfNewPosts(queries, proxyServers, requestOnProxy, remainingRequests);
+		getListOfNewPosts(queries, proxyServers, requestOnProxy, remainingRequests, query);
 	}
 }

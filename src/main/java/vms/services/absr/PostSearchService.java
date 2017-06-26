@@ -12,5 +12,5 @@ public interface PostSearchService {
 
 	List<Post> getPostResponseByGroupName(RestTemplate proxyTemplate, String proxyServer, String nameGroup, String query);
 
-	void getPostFromList(List<Post> postsInBD, List<Post> result, String from);
+	void getPostFromList(List<Post> postsInBD, List<Post> result, String from, String query);
 }

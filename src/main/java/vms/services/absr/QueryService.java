@@ -1,10 +1,25 @@
 package vms.services.absr;
 
 
+import vms.models.postenvironment.Post;
 import vms.models.postenvironment.Query;
+
+import java.util.List;
 
 public interface QueryService {
 
 	void addQuery(Query post);
+
+	void addQuery(List<Query> queries);
+
+	List<Query> getAllQueryFromDb();
+
+	void update(Query query);
+
+	void delete(Query query);
+
+	void deleteQuery(Long id);
+
+
 
 }

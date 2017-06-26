@@ -1,5 +1,7 @@
 package vms.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,11 +21,15 @@ import java.util.List;
 @Controller
 public class GroupController {
 
-	private static List<Group> resp;
 	@Autowired
 	GroupsSearchService groupsSearchService;
+
 	@Autowired
 	GroupRepository groupRepository;
+
+	private static List<Group> resp;
+
+	private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
 
 	@RequestMapping(value = "/showgroups", method = RequestMethod.GET)
 	public String findGroups(Model model) {

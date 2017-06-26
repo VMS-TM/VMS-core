@@ -1,9 +1,12 @@
 package vms.services.impl;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import vms.configs.security.SecurityConfig;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.rawgroup.Group;
 import vms.models.rawgroup.RootObject;
@@ -20,6 +23,8 @@ public class GroupsSearchService {
 
 	@Autowired
 	private PropertySearchService propertySearchService;
+
+	private static final Logger logger = LoggerFactory.getLogger(GroupsSearchService.class);
 
 	final String path = ConstantsForVkApi.URL + ConstantsForVkApi.PARAMETER_GROUP_SEARCH_METHOD;
 

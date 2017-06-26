@@ -1,5 +1,7 @@
 package vms.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.ResourceAccessException;
 import vms.globalVariables.ConstantsForVkApi;
@@ -38,6 +40,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 	@Autowired
 	private VkPostService vkPostService;
+
+	private static final Logger logger = LoggerFactory.getLogger(PostSearchServiceImpl.class);
 
 	/**
 	 * confirm one PostResponse object from any PostResponse

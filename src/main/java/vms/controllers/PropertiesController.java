@@ -1,6 +1,8 @@
 package vms.controllers;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +17,12 @@ import vms.services.absr.PropertyService;
 @Controller
 public class PropertiesController {
 
-	private static final String home = "redirect:/properties";
-
 	@Autowired
 	private PropertyService propertyService;
+
+	private static final Logger logger = LoggerFactory.getLogger(PropertiesController.class);
+
+	private static final String home = "redirect:/properties";
 
 	@RequestMapping(value = {"/properties"}, method = RequestMethod.GET)
 	public String getAllProperty(Model model) {

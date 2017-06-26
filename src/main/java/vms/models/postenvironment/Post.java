@@ -54,18 +54,16 @@ public class Post implements Serializable {
 		this.id = id;
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Query.class)
-	@JoinTable(name = "query_post",
-			joinColumns = {@JoinColumn(name = "post_id")},
-			inverseJoinColumns = {@JoinColumn(name = "query_id")})
-	private Set<Query> queries;
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Query.class)
+	@JoinColumn(name = "query_id", referencedColumnName = "id")
+	private Query query;
 
-	public Set<Query> getQueries() {
-		return queries;
+	public Query getQuery() {
+		return query;
 	}
 
-	public void setQueries(Set<Query> queries) {
-		this.queries = queries;
+	public void setQuery(Query query) {
+		this.query = query;
 	}
 
 	//id of groups(source)

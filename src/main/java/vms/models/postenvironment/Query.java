@@ -13,16 +13,13 @@ public class Query {
 
 	@Id
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
-	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Post.class)
-	@JoinTable(name = "query_post",
-			joinColumns = {@JoinColumn(name = "post_id")},
-			inverseJoinColumns = {@JoinColumn(name = "query_id")})
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "query")
 	private List<Post> posts;
 
 	private String word;
-
 
 	public List<Post> getPosts() {
 		return posts;

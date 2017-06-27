@@ -55,4 +55,9 @@ public class VkPostServiceImpl implements VkPostService {
 	public List<Post> getAllBlackPosts() {
 		return postRepo.findPostsByBlackList(true);
 	}
+
+	@Override
+	public void deleteAllPosts(List<Post> posts) {
+		postRepo.delete(posts);
+	}
 }

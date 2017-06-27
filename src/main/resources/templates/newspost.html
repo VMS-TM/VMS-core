@@ -83,6 +83,13 @@
                     <a class="btn btn-primary" type="button" data-toggle="modal"
                        data-target="#SearchNews">Поиск</a>
                 </div>
+                <div align="right">
+                    <form th:action="@{/post/delete}" th:object="${post}" method="post">
+                        <input class="hide-param" name="deleteAll" th:value="true"/>
+                        <input class="hide-param" name="fromwhere" th:value="news"/>
+                        <td><input type="submit" class="btn btn-danger" value="Удалить все посты"/></td>
+                    </form>
+                </div>
             </ul>
             <div class="tab-content boxShadow3 bg-tab">
 

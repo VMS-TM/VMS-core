@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import vms.models.postenvironment.Query;
 import vms.services.impl.NewsSearchService;
 import vms.services.impl.PostToGroupService;
 import vms.services.absr.*;
@@ -58,6 +59,9 @@ public class PostController {
 
 	@Autowired
 	private UserFromVkService userFromVkService;
+
+	@Autowired
+	private QueryService queryService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
@@ -242,12 +246,20 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
-	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
-								@RequestParam(value = "fromwhere") String from) {
+	public String deletePosts(@RequestParam(value = "deleteAll", required = false) String all,
+							  @RequestParam(value = "idDeletePost", required = false) Long id,
+							  @RequestParam(value = "fromwhere", required = false) String from) {
 
-		if (postService.getById(id) != null) {
-			postService.deletePost(id);
+		if (all == null) {
+			if (postService.getById(id) != null) {
+				postService.deletePost(id);
+			}
+		} else {
+			List<Post> postList = postService.getAllPostFromDb();
+			postService.deleteAllPosts(postList);
 		}
+
+
 
 		if ("group".equals(from)) {
 			return "redirect:/post/";

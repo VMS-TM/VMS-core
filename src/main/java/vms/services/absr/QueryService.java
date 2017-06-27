@@ -12,6 +12,8 @@ public interface QueryService {
 
 	void addQuery(List<Query> queries);
 
+	void deleteAllQuery(List<Query> queries);
+
 	List<Query> getAllQueryFromDb();
 
 	void update(Query query);

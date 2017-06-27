@@ -196,7 +196,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 					.forEach(post -> post.setFromWhere(from));
 			word.setPosts(result);
 			queryService.addQuery(word);
-//			vkPostService.addPosts(result);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
 			result.stream()
 					.filter(post -> post.getText().length() != 0)
@@ -205,7 +204,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 					.forEach(post -> post.setFromWhere(from));
 			word.setPosts(result);
 			queryService.addQuery(word);
-//			vkPostService.addPosts(result);
 		}
 	}
 

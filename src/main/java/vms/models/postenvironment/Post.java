@@ -18,7 +18,11 @@ import java.util.Set;
 public class Post implements Serializable {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Long dbId;
+
+	@Column(name = "vkid")
 	@JsonProperty("id")
 	public Long id;
 
@@ -288,6 +292,13 @@ public class Post implements Serializable {
 		this.attachmentContainers = attachmentContainers;
 	}
 
+	public Long getDbId() {
+		return dbId;
+	}
+
+	public void setDbId(Long dbId) {
+		this.dbId = dbId;
+	}
 
 	public Post() {
 	}

@@ -21,6 +21,8 @@ public class Query {
 
 	private String word;
 
+	private String fromwhere;
+
 	public List<Post> getPosts() {
 		return posts;
 	}
@@ -37,11 +39,24 @@ public class Query {
 		this.word = word;
 	}
 
+	public String getFromwhere() {
+		return fromwhere;
+	}
+
+	public void setFromwhere(String fromwhere) {
+		this.fromwhere = fromwhere;
+	}
+
 	public Query() {
 	}
 
 	public Query(String word) {
 		this.word = word;
+	}
+
+	public Query(String word, String fromwhere) {
+		this.word = word;
+		this.fromwhere = fromwhere;
 	}
 
 	@Override
@@ -68,6 +83,7 @@ public class Query {
 				"id=" + id +
 				", posts=" + posts +
 				", word='" + word + '\'' +
+				", fromwhere='" + fromwhere + '\'' +
 				'}';
 	}
 }

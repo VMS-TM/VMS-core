@@ -37,7 +37,7 @@
                     <th>Стоп процесс</th>
                 </tr>
                 <tr th:each="map : ${mapSchedule}">
-                    <td><p th:text="${map.key}"></p></td>
+                    <td><p th:text="${map.key.word}"></p></td>
                     <form th:action="@{/post/stop}" method="post">
                         <input class="hide-param" name="key" th:value="${map.key}"/>
                         <input class="hide-param" name="fromwhere" th:value="user"/>

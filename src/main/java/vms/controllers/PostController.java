@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import vms.models.postenvironment.Query;
 import vms.services.impl.NewsSearchService;
 import vms.services.impl.PostToGroupService;
 import vms.services.absr.*;
@@ -58,6 +59,9 @@ public class PostController {
 
 	@Autowired
 	private UserFromVkService userFromVkService;
+
+	@Autowired
+	private QueryService queryService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
@@ -133,6 +137,7 @@ public class PostController {
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
 	public String getNews(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
+		List<Query> queryList = queryService.getAllQueryFromDb();
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
@@ -140,6 +145,7 @@ public class PostController {
 		prepareView(result);
 		preparationPost(result);
 		model.addAttribute("posts", result);
+		model.addAttribute("query", queryList);
 		model.addAttribute("mapSchedule", mapSchedule);
 		return "newspost";
 	}

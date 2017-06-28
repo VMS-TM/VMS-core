@@ -163,6 +163,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		Long daysAgoDate = date.getTime() - 86_400_000;
 
 		result.forEach(post -> {
+			post.setWord(query);
 			if (post.getAttachmentContainers() != null) {
 				List<Photo> photos = new ArrayList<>();
 				post.getAttachmentContainers().forEach(container -> {
@@ -184,7 +185,6 @@ public class PostSearchServiceImpl implements PostSearchService {
 						photos.add(photo);
 					}
 				});
-
 				post.setPhotos(photos);
 			}
 		});

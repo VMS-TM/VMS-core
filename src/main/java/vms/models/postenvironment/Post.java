@@ -97,6 +97,8 @@ public class Post implements Serializable {
 	@JsonProperty("signer_id")
 	private int signer_id;
 
+	private String word;
+
 	private boolean blackList;
 
 	public boolean isBlackList() {
@@ -298,6 +300,14 @@ public class Post implements Serializable {
 
 	public void setDbId(Long dbId) {
 		this.dbId = dbId;
+	}
+
+	public String getWord() {
+		return word;
+	}
+
+	public void setWord(String word) {
+		this.word = word;
 	}
 
 	public Post() {

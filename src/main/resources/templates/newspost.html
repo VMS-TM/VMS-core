@@ -231,7 +231,13 @@
                                                                     <input name="nVka" th:text="${post.authorOfpost}"
                                                                            type="text" class="form-control"
                                                                            id="iVka" placeholder=""/>
-
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Найден по запросу</label>
+                                                                    <input type="text" class="form-control" name="word"
+                                                                           th:value="${post.word}" readonly="readonly"></input>
                                                                 </div>
                                                             </div>
                                                         </div>

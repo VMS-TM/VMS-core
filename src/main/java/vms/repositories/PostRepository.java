@@ -8,6 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
-	Post getProxyServerById(Long id);
+	Post getPostById(Long id);
 	List<Post> findPostsByBlackList(boolean blacklist);
 }

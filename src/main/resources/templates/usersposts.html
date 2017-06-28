@@ -83,7 +83,7 @@
                        data-target="#SearchPost">Поиск</a>
                 </div>
                 <div align="right">
-                    <form th:action="@{/post/delete}" th:object="${post}" method="post">
+                    <form th:action="@{/post/deleteAllPosts}" th:object="${post}" method="post">
                         <input class="hide-param" name="deleteAll" th:value="true"/>
                         <input class="hide-param" name="fromwhere" th:value="user"/>
                         <td><input type="submit" class="btn btn-danger" value="Удалить все посты"/></td>
@@ -128,7 +128,7 @@
                             <input class="hide-param" name="info" th:value="${post.text}"/>
                             <td width="50"><input type="submit" class="btn btn-default" value="Запостить"/></td>
                         </form>
-                        <form th:action="@{/post/delete}" th:object="${post}" method="post">
+                        <form th:action="@{/post/deletePost}" th:object="${post}" method="post">
                             <input class="hide-param" name="idDeletePost" th:value="${post.id}"/>
                             <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>

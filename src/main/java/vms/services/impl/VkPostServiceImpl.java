@@ -48,7 +48,7 @@ public class VkPostServiceImpl implements VkPostService {
 
 	@Override
 	public Post getById(Long id) {
-		return postRepo.getProxyServerById(id);
+		return postRepo.getPostById(id);
 	}
 
 	@Override

@@ -160,15 +160,7 @@ public class PostController {
 
 		}
 
-		if ("group".equals(from)) {
-			return "redirect:/post/";
-		} else if ("news".equals(from)) {
-			return "redirect:/post/news";
-		} else if ("user".equals(from)) {
-			return "redirect:/post/users/wall";
-		}
-
-		return home;
+		return redirect(from);
 	}
 
 	@RequestMapping(value = {"/news/find"}, method = RequestMethod.POST)
@@ -245,31 +237,25 @@ public class PostController {
 		}
 	}
 
-	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
-	public String deletePosts(@RequestParam(value = "deleteAll", required = false) String all,
-							  @RequestParam(value = "idDeletePost", required = false) Long id,
-							  @RequestParam(value = "fromwhere", required = false) String from) {
+	@RequestMapping(value = {"/deletePost"}, method = RequestMethod.POST)
+	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
+							  @RequestParam(value = "fromwhere") String from) {
 
-		if (all == null) {
-			if (postService.getById(id) != null) {
-				postService.deletePost(id);
-			}
-		} else {
+
+		if (postService.getById(id) != null) {
+			postService.delete(postService.getById(id));
+		}
+
+		return redirect(from);
+	}
+
+	@RequestMapping(value = {"/deleteAllPosts"}, method = RequestMethod.POST)
+	public String deleteAllPosts(@RequestParam(value = "fromwhere") String from) {
+
 			List<Post> postList = postService.getAllPostFromDb();
 			postService.deleteAllPosts(postList);
-		}
 
-
-
-		if ("group".equals(from)) {
-			return "redirect:/post/";
-		} else if ("news".equals(from)) {
-			return "redirect:/post/news";
-		} else if ("user".equals(from)) {
-			return "redirect:/post/users/wall";
-		}
-
-		return home;
+		return redirect(from);
 	}
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.POST)
@@ -403,4 +389,16 @@ public class PostController {
 			}
 		}
 	}
+
+	private String redirect(String from) {
+		if ("group".equals(from)) {
+			return "redirect:/post/";
+		} else if ("news".equals(from)) {
+			return "redirect:/post/news";
+		} else if ("user".equals(from)) {
+			return "redirect:/post/users/wall";
+		}
+		return home;
+	}
+
 }

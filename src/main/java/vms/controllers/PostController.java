@@ -154,9 +154,11 @@ public class PostController {
 							   @RequestParam(value = "key") String key,
 							   @RequestParam(value = "fromwhere") String from) {
 
+		Query query = queryService.getQuery(key, from);
+
 		try {
-			mapSchedule.get(key).cancel(true);
-			mapSchedule.remove(key);
+			mapSchedule.get(query).cancel(true);
+			mapSchedule.remove(query);
 		} catch (NullPointerException exp) {
 
 		}
@@ -169,11 +171,10 @@ public class PostController {
 						  		@RequestParam(value = "news") String query,
 						  		@RequestParam(value = "time") Long time) {
 
-		Query word = new Query(query, "news");
-
-		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
-			newsSearchService.getAdsFromNews(query);
-		}, 0, time, TimeUnit.MINUTES));
+		Query word = queryService.getQuery(query, "news");
+		if (word == null) {
+			word = new Query(query, "news");
+		}
 
 		List<Post> posts = postService.getAllPostFromDb();
 		List<Post> result = posts.stream()
@@ -182,7 +183,12 @@ public class PostController {
 				.collect(Collectors.toList());
 		prepareView(result);
 		preparationPost(result);
+		word.setPosts(result);
+		queryService.addQuery(word);
 
+		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
+			newsSearchService.getAdsFromNews(query);
+		}, 0, time, TimeUnit.MINUTES));
 		model.addAttribute("posts", result);
 		model.addAttribute("mapSchedule", mapSchedule);
 		return "redirect:/post/news";
@@ -266,10 +272,11 @@ public class PostController {
 							  @RequestParam(value = "query") String query,
 							  @RequestParam(value = "time") Long time) {
 
-		Query word = new Query(query, "group");
-		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
-			postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
-		}, 0, time, TimeUnit.MINUTES));
+
+		Query word = queryService.getQuery(query, "group");
+		if (word == null) {
+			word = new Query(query, "group");
+		}
 
 		List<Post> posts = postService.getAllPostFromDb();
 		List<ProxyServer> proxy = proxyServerService.proxyServerList();
@@ -279,6 +286,11 @@ public class PostController {
 		List<ProxyServer> badProxy = proxy.stream()
 				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
+		word.setPosts(result);
+		queryService.addQuery(word);
+		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
+			postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
+		}, 0, time, TimeUnit.MINUTES));
 		if (result != null) {
 			prepareView(result);
 			preparationPost(result);
@@ -362,7 +374,15 @@ public class PostController {
 	public String searchUsersWallPosts(ModelMap modelMap,
 									   @RequestParam(value = "query") String query,
 									   @RequestParam(value = "time") Long time) {
-		Query word = new Query(query, "user");
+
+		Query word = queryService.getQuery(query, "user");
+
+		if (word == null) {
+			word = new Query(query, "user");
+		}
+
+		queryService.addQuery(word);
+
 		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
 			usersPostsService.getUsersPosts(query);
 		}, 0, time, TimeUnit.MINUTES));

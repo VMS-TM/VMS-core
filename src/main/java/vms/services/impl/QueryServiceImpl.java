@@ -2,7 +2,6 @@ package vms.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vms.models.postenvironment.Post;
 import vms.models.postenvironment.Query;
 import vms.repositories.QueryRepository;
 import vms.services.absr.QueryService;
@@ -40,7 +39,6 @@ public class QueryServiceImpl implements QueryService {
 		queryRepository.delete(id);
 	}
 
-
 	@Override
 	public void addQuery(Query query) {
 		queryRepository.save(query);
@@ -49,5 +47,15 @@ public class QueryServiceImpl implements QueryService {
 	@Override
 	public void deleteAllQuery(List<Query> queries) {
 		queryRepository.delete(queries);
+	}
+
+	@Override
+	public Query getQuery(String query, String from) {
+		return queryRepository.getQueryByWordAndFromwhere(query, from);
+	}
+
+	@Override
+	public Query getById(Long id) {
+		return queryRepository.getQueryById(id);
 	}
 }

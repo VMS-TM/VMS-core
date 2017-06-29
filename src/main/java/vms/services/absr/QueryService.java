@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface QueryService {
 
-	void addQuery(Query post);
+	void addQuery(Query query);
 
 	void addQuery(List<Query> queries);
 
@@ -22,6 +22,8 @@ public interface QueryService {
 
 	void deleteQuery(Long id);
 
+	Query getQuery(String query, String from);
 
+	Query getById(Long id);
 
 }

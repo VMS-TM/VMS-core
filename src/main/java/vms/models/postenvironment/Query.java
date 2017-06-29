@@ -66,14 +66,16 @@ public class Query {
 
 		Query query = (Query) o;
 
-		if (posts != null ? !posts.equals(query.posts) : query.posts != null) return false;
-		return word != null ? word.equals(query.word) : query.word == null;
+		if (id != null ? !id.equals(query.id) : query.id != null) return false;
+		if (word != null ? !word.equals(query.word) : query.word != null) return false;
+		return fromwhere != null ? fromwhere.equals(query.fromwhere) : query.fromwhere == null;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = posts != null ? posts.hashCode() : 0;
+		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (word != null ? word.hashCode() : 0);
+		result = 31 * result + (fromwhere != null ? fromwhere.hashCode() : 0);
 		return result;
 	}
 

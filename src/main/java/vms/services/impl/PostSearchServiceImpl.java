@@ -156,14 +156,22 @@ public class PostSearchServiceImpl implements PostSearchService {
 	@Override
 	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from, String query) {
 		Date date = new Date();
-		Query word = new Query(query);
+		Query word = queryService.getQuery(query, from);
+
+		if (word == null) {
+			word = new Query(query, from);
+		}
+
 		/**
 		 * 86_400_000 - 24 hours in milliseconds
 		 */
 		Long daysAgoDate = date.getTime() - 86_400_000;
 
+		Query finalWord = word;
 		result.forEach(post -> {
 			post.setWord(query);
+			post.setFromWhere(from);
+			post.setQuery(finalWord);
 			if (post.getAttachmentContainers() != null) {
 				List<Photo> photos = new ArrayList<>();
 				post.getAttachmentContainers().forEach(container -> {

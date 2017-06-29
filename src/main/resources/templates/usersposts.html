@@ -37,7 +37,7 @@
                     <th>Стоп процесс</th>
                 </tr>
                 <tr th:each="map : ${mapSchedule}">
-                    <td><p th:text="${map.key}"></p></td>
+                    <td><p th:text="${map.key.word}"></p></td>
                     <form th:action="@{/post/stop}" method="post">
                         <input class="hide-param" name="key" th:value="${map.key}"/>
                         <input class="hide-param" name="fromwhere" th:value="user"/>
@@ -82,6 +82,13 @@
                     <a class="btn btn-primary" type="button" data-toggle="modal"
                        data-target="#SearchPost">Поиск</a>
                 </div>
+                <div align="right">
+                    <form th:action="@{/post/deleteAllPosts}" th:object="${post}" method="post">
+                        <input class="hide-param" name="deleteAll" th:value="true"/>
+                        <input class="hide-param" name="fromwhere" th:value="user"/>
+                        <td><input type="submit" class="btn btn-danger" value="Удалить все посты"/></td>
+                    </form>
+                </div>
             </ul>
             <div class="tab-content boxShadow3 bg-tab">
                 <table class="table table-striped">
@@ -121,7 +128,7 @@
                             <input class="hide-param" name="info" th:value="${post.text}"/>
                             <td width="50"><input type="submit" class="btn btn-default" value="Запостить"/></td>
                         </form>
-                        <form th:action="@{/post/delete}" th:object="${post}" method="post">
+                        <form th:action="@{/post/deletePost}" th:object="${post}" method="post">
                             <input class="hide-param" name="idDeletePost" th:value="${post.id}"/>
                             <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>

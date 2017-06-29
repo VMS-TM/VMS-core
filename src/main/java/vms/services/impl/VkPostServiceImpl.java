@@ -48,11 +48,16 @@ public class VkPostServiceImpl implements VkPostService {
 
 	@Override
 	public Post getById(Long id) {
-		return postRepo.getProxyServerById(id);
+		return postRepo.getPostById(id);
 	}
 
 	@Override
 	public List<Post> getAllBlackPosts() {
 		return postRepo.findPostsByBlackList(true);
+	}
+
+	@Override
+	public void deleteAllPosts(List<Post> posts) {
+		postRepo.delete(posts);
 	}
 }

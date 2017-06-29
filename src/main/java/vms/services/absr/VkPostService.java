@@ -19,6 +19,8 @@ public interface VkPostService {
 
 	void deletePost(Long id);
 
+	void deleteAllPosts(List<Post> posts);
+
 	Post getById(Long id);
 
 	List<Post> getAllBlackPosts();

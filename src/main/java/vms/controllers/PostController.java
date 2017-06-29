@@ -69,8 +69,7 @@ public class PostController {
 
 
 	private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(ConstantsForVkApi.POOL_SIZE);
-	private final Map<String, ScheduledFuture<?>> mapSchedule = new ConcurrentHashMap<>();
-	private final Map<String, Map<String, ScheduledFuture<?>>> queryMap = new ConcurrentHashMap<>();
+	private final Map<Query, ScheduledFuture<?>> mapSchedule = new ConcurrentHashMap<>();
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model) {
@@ -87,9 +86,10 @@ public class PostController {
 
 		prepareView(result);
 		preparationPost(result);
+
 		model.addAttribute("posts", result);
 		model.addAttribute("AllPosts", result.size());
-		model.addAttribute("mapSchedule", mapSchedule);
+		model.addAttribute("mapSchedule", findMap(mapSchedule, "group"));
 		model.addAttribute("badproxy", badProxy);
 
 		return "posts";
@@ -137,16 +137,15 @@ public class PostController {
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
 	public String getNews(Model model) {
 		List<Post> posts = postService.getAllPostFromDb();
-		List<Query> queryList = queryService.getAllQueryFromDb();
 		List<Post> result = posts.stream()
 				.filter(post -> "news".equals(post.getFromWhere()))
 				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
 				.collect(Collectors.toList());
 		prepareView(result);
 		preparationPost(result);
+
 		model.addAttribute("posts", result);
-		model.addAttribute("query", queryList);
-		model.addAttribute("mapSchedule", mapSchedule);
+		model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
 		return "newspost";
 	}
 
@@ -162,15 +161,7 @@ public class PostController {
 
 		}
 
-		if ("group".equals(from)) {
-			return "redirect:/post/";
-		} else if ("news".equals(from)) {
-			return "redirect:/post/news";
-		} else if ("user".equals(from)) {
-			return "redirect:/post/users/wall";
-		}
-
-		return home;
+		return redirect(from);
 	}
 
 	@RequestMapping(value = {"/news/find"}, method = RequestMethod.POST)
@@ -178,7 +169,9 @@ public class PostController {
 						  		@RequestParam(value = "news") String query,
 						  		@RequestParam(value = "time") Long time) {
 
-		mapSchedule.put(query, scheduledExecutorService.scheduleAtFixedRate(() -> {
+		Query word = new Query(query, "news");
+
+		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
 			newsSearchService.getAdsFromNews(query);
 		}, 0, time, TimeUnit.MINUTES));
 
@@ -247,23 +240,25 @@ public class PostController {
 		}
 	}
 
-	@RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
+	@RequestMapping(value = {"/deletePost"}, method = RequestMethod.POST)
 	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
-								@RequestParam(value = "fromwhere") String from) {
+							  @RequestParam(value = "fromwhere") String from) {
+
 
 		if (postService.getById(id) != null) {
-			postService.deletePost(id);
+			postService.delete(postService.getById(id));
 		}
 
-		if ("group".equals(from)) {
-			return "redirect:/post/";
-		} else if ("news".equals(from)) {
-			return "redirect:/post/news";
-		} else if ("user".equals(from)) {
-			return "redirect:/post/users/wall";
-		}
+		return redirect(from);
+	}
 
-		return home;
+	@RequestMapping(value = {"/deleteAllPosts"}, method = RequestMethod.POST)
+	public String deleteAllPosts(@RequestParam(value = "fromwhere") String from) {
+
+			List<Post> postList = postService.getAllPostFromDb();
+			postService.deleteAllPosts(postList);
+
+		return redirect(from);
 	}
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.POST)
@@ -271,7 +266,8 @@ public class PostController {
 							  @RequestParam(value = "query") String query,
 							  @RequestParam(value = "time") Long time) {
 
-		mapSchedule.put(query, scheduledExecutorService.scheduleAtFixedRate(() -> {
+		Query word = new Query(query, "group");
+		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
 			postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
 		}, 0, time, TimeUnit.MINUTES));
 
@@ -356,8 +352,9 @@ public class PostController {
 		if(userFromVkService.getAllUsersOfVk().isEmpty()){
 			return "nousers";
 		}
+
 		modelMap.addAttribute("vkusers", userFromVkService.getAllUsersOfVk());
-		modelMap.addAttribute("mapSchedule", mapSchedule);
+		modelMap.addAttribute("mapSchedule", findMap(mapSchedule, "user"));
 		return "usersposts";
 	}
 
@@ -365,7 +362,8 @@ public class PostController {
 	public String searchUsersWallPosts(ModelMap modelMap,
 									   @RequestParam(value = "query") String query,
 									   @RequestParam(value = "time") Long time) {
-		mapSchedule.put(query, scheduledExecutorService.scheduleAtFixedRate(() -> {
+		Query word = new Query(query, "user");
+		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
 			usersPostsService.getUsersPosts(query);
 		}, 0, time, TimeUnit.MINUTES));
 		return "redirect:/post/users/wall";
@@ -397,4 +395,23 @@ public class PostController {
 			}
 		}
 	}
+
+	private String redirect(String from) {
+		if ("group".equals(from)) {
+			return "redirect:/post/";
+		} else if ("news".equals(from)) {
+			return "redirect:/post/news";
+		} else if ("user".equals(from)) {
+			return "redirect:/post/users/wall";
+		}
+		return home;
+	}
+
+	private Map<Query, ScheduledFuture<?>> findMap(Map<Query, ScheduledFuture<?>> mapSchedule, String from) {
+		 Map<Query, ScheduledFuture<?>>  map = mapSchedule.entrySet()
+				.stream().filter(query -> from.equals(query.getKey().getFromwhere()))
+				.collect(Collectors.toMap(query -> query.getKey(),  ScheduledFutureEntry -> ScheduledFutureEntry.getValue()));
+		 return map;
+	}
+
 }

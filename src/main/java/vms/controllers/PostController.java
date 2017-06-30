@@ -2,30 +2,25 @@ package vms.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestParam;
-import vms.VmsApplication;
-import vms.globalVariables.ConstantsForVkApi;
-import vms.models.ProxyServer;
-import vms.models.postenvironment.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import vms.globalVariables.ConstantsForVkApi;
+import vms.models.ProxyServer;
+import vms.models.postenvironment.Post;
 import vms.models.postenvironment.Query;
+import vms.services.absr.*;
 import vms.services.impl.NewsSearchService;
 import vms.services.impl.PostToGroupService;
-import vms.services.absr.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
@@ -72,27 +67,39 @@ public class PostController {
 	private final Map<Query, ScheduledFuture<?>> mapSchedule = new ConcurrentHashMap<>();
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
-	public String getPostsFromDb(Model model) {
-		List<Post> posts = postService.getAllPostFromDb();
+	public String getPostsFromDb(Model model,
+								 @RequestParam(value = "key", required = false) String key,
+								 @RequestParam(value = "fromwhere", required = false) String from) {
+
 		List<ProxyServer> proxy = proxyServerService.proxyServerList();
-
-		List<Post> result = posts.stream()
-				.filter(post -> "group".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-
 		List<ProxyServer> badProxy = proxy.stream()
 				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
 				.collect(Collectors.toList());
 
-		prepareView(result);
-		preparationPost(result);
+		if (key != null && from != null) {
+			Query query = queryService.getQuery(key, from);
+			model.addAttribute("posts", query.getPosts());
+			model.addAttribute("AllPosts", query.getPosts().size());
+			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
+			model.addAttribute("badproxy", badProxy);
+			return "posts";
+		} else {
+			List<Post> posts = postService.getAllPostFromDb();
 
-		model.addAttribute("posts", result);
-		model.addAttribute("AllPosts", result.size());
-		model.addAttribute("mapSchedule", findMap(mapSchedule, "group"));
-		model.addAttribute("badproxy", badProxy);
+			List<Post> result = posts.stream()
+					.filter(post -> "group".equals(post.getFromWhere()))
+					.collect(Collectors.toList());
 
-		return "posts";
+			prepareView(result);
+			preparationPost(result);
+
+			model.addAttribute("posts", result);
+			model.addAttribute("AllPosts", result.size());
+			model.addAttribute("mapSchedule", findMap(mapSchedule, "group"));
+			model.addAttribute("badproxy", badProxy);
+
+			return "posts";
+		}
 	}
 
 	@RequestMapping(value = {"/add"}, method = RequestMethod.POST)
@@ -135,18 +142,35 @@ public class PostController {
 
 
 	@RequestMapping(value = {"/news"}, method = RequestMethod.GET)
-	public String getNews(Model model) {
-		List<Post> posts = postService.getAllPostFromDb();
-		List<Post> result = posts.stream()
-				.filter(post -> "news".equals(post.getFromWhere()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
-				.collect(Collectors.toList());
-		prepareView(result);
-		preparationPost(result);
+	public String getNews(Model model,
+						  @RequestParam(value = "key", required = false) String key,
+						  @RequestParam(value = "fromwhere", required = false) String from) {
 
-		model.addAttribute("posts", result);
-		model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
-		return "newspost";
+		List<ProxyServer> proxy = proxyServerService.proxyServerList();
+		List<ProxyServer> badProxy = proxy.stream()
+				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
+				.collect(Collectors.toList());
+
+		if (key != null && from != null) {
+			Query query = queryService.getQuery(key, from);
+			model.addAttribute("posts", query.getPosts());
+			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
+			model.addAttribute("badproxy", badProxy);
+			return "newspost";
+		} else {
+			List<Post> posts = postService.getAllPostFromDb();
+			List<Post> result = posts.stream()
+					.filter(post -> "news".equals(post.getFromWhere()))
+					.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
+					.collect(Collectors.toList());
+			prepareView(result);
+			preparationPost(result);
+
+			model.addAttribute("posts", result);
+			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
+			model.addAttribute("badproxy", badProxy);
+			return "newspost";
+		}
 	}
 
 	@RequestMapping(value = {"/stop"}, method = RequestMethod.POST)
@@ -168,8 +192,8 @@ public class PostController {
 
 	@RequestMapping(value = {"/news/find"}, method = RequestMethod.POST)
 	public String getNews(Model model,
-						  		@RequestParam(value = "news") String query,
-						  		@RequestParam(value = "time") Long time) {
+						  @RequestParam(value = "news") String query,
+						  @RequestParam(value = "time") Long time) {
 
 		Query word = queryService.getQuery(query, "news");
 		if (word == null) {
@@ -261,8 +285,8 @@ public class PostController {
 	@RequestMapping(value = {"/deleteAllPosts"}, method = RequestMethod.POST)
 	public String deleteAllPosts(@RequestParam(value = "fromwhere") String from) {
 
-			List<Post> postList = postService.getAllPostFromDb();
-			postService.deleteAllPosts(postList);
+		List<Post> postList = postService.getAllPostFromDb();
+		postService.deleteAllPosts(postList);
 
 		return redirect(from);
 	}
@@ -357,11 +381,14 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/users/wall", method = RequestMethod.GET)
-	public String usersWallPostPage(ModelMap modelMap) {
-		if(proxyServerService.getProxyServerByDestiny("user").isEmpty()){
+	public String usersWallPostPage(ModelMap modelMap,
+									@RequestParam(value = "key", required = false) String key,
+									@RequestParam(value = "fromwhere", required = false) String from) {
+
+		if (proxyServerService.getProxyServerByDestiny("user").isEmpty()) {
 			return "noproxy";
 		}
-		if(userFromVkService.getAllUsersOfVk().isEmpty()){
+		if (userFromVkService.getAllUsersOfVk().isEmpty()) {
 			return "nousers";
 		}
 
@@ -428,10 +455,10 @@ public class PostController {
 	}
 
 	private Map<Query, ScheduledFuture<?>> findMap(Map<Query, ScheduledFuture<?>> mapSchedule, String from) {
-		 Map<Query, ScheduledFuture<?>>  map = mapSchedule.entrySet()
+		Map<Query, ScheduledFuture<?>> map = mapSchedule.entrySet()
 				.stream().filter(query -> from.equals(query.getKey().getFromwhere()))
-				.collect(Collectors.toMap(query -> query.getKey(),  ScheduledFutureEntry -> ScheduledFutureEntry.getValue()));
-		 return map;
+				.collect(Collectors.toMap(query -> query.getKey(), ScheduledFutureEntry -> ScheduledFutureEntry.getValue()));
+		return map;
 	}
 
 }

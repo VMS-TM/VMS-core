@@ -33,11 +33,15 @@
             <table class="table table-striped">
                 <tbody>
                 <tr>
-                    <th>Запрос</th>
+                    <th>Показать по запросу</th>
                     <th>Стоп процесс</th>
                 </tr>
                 <tr th:each="map : ${mapSchedule}">
-                    <td><p th:text="${map.key.word}"></p></td>
+                    <form th:action="@{/post/news}" method="get">
+                        <input class="hide-param" name="key" th:value="${map.key.word}"/>
+                        <input class="hide-param" name="fromwhere" th:value="news"/>
+                        <td><input type="submit" class="btn btn-info" th:value="${map.key.word}"/></td>
+                    </form>
                     <form th:action="@{/post/stop}" method="post">
                         <input class="hide-param" name="key" th:value="${map.key.word}"/>
                         <input class="hide-param" name="fromwhere" th:value="news"/>

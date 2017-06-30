@@ -40,4 +40,9 @@ public class PropertyServiceImpl implements PropertyService {
 	public void updateProperty(Property property) {
 		propertyRepo.save(property);
 	}
+
+	@Override
+	public Property getPropertyById(Long id) {
+		return propertyRepo.getPropertyById(id);
+	}
 }

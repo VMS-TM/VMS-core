@@ -9,6 +9,8 @@ public interface PropertyService {
 
 	Property getPropertyByName(String name);
 
+	Property getPropertyById(Long id);
+
 	List<Property> getAllProperties();
 
 	void addProperty(Property Property);
@@ -16,5 +18,7 @@ public interface PropertyService {
 	void deleteProperty(Property property);
 
 	void updateProperty(Property property);
+
+
 
 }

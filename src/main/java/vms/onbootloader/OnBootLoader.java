@@ -260,16 +260,16 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 				"91.218.84.4", 3128, "group");
 
 
-		proxyServerService.addProxyServer(firstProxyServer);
-		log.info("Saved proxy server with ip:" + firstProxyServer.getIp());
-		proxyServerService.addProxyServer(secondProxyServer);
-		log.info("Saved proxy server with ip:" + secondProxyServer.getIp());
-		proxyServerService.addProxyServer(thirdProxyServer);
-		log.info("Saved proxy server with ip:" + thirdProxyServer.getIp());
-		proxyServerService.addProxyServer(fourthProxyServer);
-		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
-		proxyServerService.addProxyServer(fifthProxyServer);
-		log.info("Saved proxy server with ip:" + fifthProxyServer.getIp());
+//		proxyServerService.addProxyServer(firstProxyServer);
+//		log.info("Saved proxy server with ip:" + firstProxyServer.getIp());
+//		proxyServerService.addProxyServer(secondProxyServer);
+//		log.info("Saved proxy server with ip:" + secondProxyServer.getIp());
+//		proxyServerService.addProxyServer(thirdProxyServer);
+//		log.info("Saved proxy server with ip:" + thirdProxyServer.getIp());
+//		proxyServerService.addProxyServer(fourthProxyServer);
+//		log.info("Saved proxy server with ip:" + fourthProxyServer.getIp());
+//		proxyServerService.addProxyServer(fifthProxyServer);
+//		log.info("Saved proxy server with ip:" + fifthProxyServer.getIp());
 	}
 
 	private void loadUsersFromVK() {
@@ -309,11 +309,19 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 		Property property = new Property();
 		property.setName("defaultKey");
-		property.setValue("1e001491848059bf21ab1abc48dd5ecb218c758901ed4ba47da5907aca5bee8e0cde0ba00db55d3914ee4");
+		property.setValue("5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88");
 		property.setGroupID("148705229");
 		propertyService.addProperty(property);
-
 		log.info("Add 1 default property");
+
+		Property propertySecond = new Property();
+		propertySecond.setName("hey");
+		propertySecond.setValue("f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4");
+		propertySecond.setGroupID("148705229");
+
+		propertyService.addProperty(propertySecond);
+		log.info("Add 2  properties");
+
 
 	}
 }

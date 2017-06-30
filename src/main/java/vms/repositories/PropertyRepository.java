@@ -4,5 +4,6 @@ import vms.models.Property;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PropertyRepository extends CrudRepository<Property, Long> {
-	public Property getPropertyByName(String name);
+	Property getPropertyByName(String name);
+	Property getPropertyById(Long id);
 }

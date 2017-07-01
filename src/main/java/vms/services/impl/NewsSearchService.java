@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
+import vms.models.Property;
 import vms.models.postenvironment.Post;
 import vms.models.postenvironment.RootObject;
 import vms.services.absr.PostSearchService;
+import vms.services.absr.PropertyService;
 import vms.services.absr.VkPostService;
 
 import java.util.List;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 public class NewsSearchService {
 
 	@Autowired
-	private PropertySearchService propertySearchService;
+	private PropertyService propertyService;
 
 	@Autowired
 	private VkPostService vkPostService;
@@ -45,8 +47,9 @@ public class NewsSearchService {
 
 		RestTemplate restTemplate = new RestTemplate();
 		List<Post> postsInBD = vkPostService.getAllPostFromDb();
+		Property property = propertyService.getPropertyById(1L);
 
-		RootObject rootObject = restTemplate.getForObject(UriForAdsFromNews(query, propertySearchService.getValue("defaultKey")), RootObject.class);
+		RootObject rootObject = restTemplate.getForObject(UriForAdsFromNews(query, property.getValue()), RootObject.class);
 		List<Post> posts = rootObject.getPostResponse().getPosts();
 		List<Post> result = posts.stream()
 				.filter(post -> !(post.getOwnerId() < 0))

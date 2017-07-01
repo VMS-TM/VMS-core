@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.ResourceAccessException;
 import vms.globalVariables.ConstantsForVkApi;
+import vms.models.Property;
 import vms.models.ProxyServer;
 import vms.models.postenvironment.*;
 import vms.models.rawgroup.Group;
@@ -26,6 +27,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostSearchServiceImpl implements PostSearchService {
+
+	@Autowired
+	private PropertyService propertyService;
 
 	@Autowired
 	private ProxyServerService proxyServerService;
@@ -56,40 +60,114 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 
 		List<Post> postsInBD = vkPostService.getAllPostFromDb();
+
 		List<ProxyServer> allProxyServers = proxyServerService.proxyServerList();
-		List<ProxyServer> proxyServerList = new ArrayList<>();
 
-		for (ProxyServer proxyServer : allProxyServers) {
-			if (proxyServer.getDestiny().equalsIgnoreCase("group")) {
-				proxyServerList.add(proxyServer);
+		List<ProxyServer> proxyServerList = null;
+		ExecutorService executorService = null;
+
+		if (allProxyServers.size() != 0) {
+			proxyServerList = new ArrayList<>();
+
+			for (ProxyServer proxyServer : allProxyServers) {
+				if (proxyServer.getDestiny().equalsIgnoreCase("group")) {
+					proxyServerList.add(proxyServer);
+				}
 			}
-		}
+			executorService = Executors.newFixedThreadPool(proxyServerList.size());
 
-		ExecutorService executorService = Executors.newFixedThreadPool(proxyServerList.size());
-
-		if (groups.size() > 1) {
-			int requestOnProxy = groups.size() / proxyServerList.size();
-			int remainingRequests = groups.size() % proxyServerList.size();
+			if (groups.size() > 1) {
+				int requestOnProxy = groups.size() / proxyServerList.size();
+				int remainingRequests = groups.size() % proxyServerList.size();
 			/*
 				If we have proxy > groups
 			 */
-			if (requestOnProxy < 1) {
-				for (int i = 0; i < groups.size(); i++) {
-					searchingThread(executorService, proxyServerList, postsInBD, groups, query, i);
+				if (requestOnProxy < 1) {
+					for (int i = 0; i < groups.size(); i++) {
+						searchingThread(executorService, proxyServerList, postsInBD, groups, query, i);
+					}
+				} else {
+					for (ProxyServer proxyServer : proxyServerList) {
+						RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
+						lastElement += requestOnProxy;
+						if (remainingRequests > 0) {
+							remainingRequests--;
+							lastElement += 1;
+						}
+						final int start = firstElement;
+						final int finish = lastElement;
+						executorService.submit(new Thread(() -> {
+							for (int i = start; i < finish; i++) {
+								List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
+								if (i % 3 == 0) {
+									try {
+										Thread.sleep(1000);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+								}
+								getPostFromList(postsInBD, postList, "group", query);
+							}
+						}));
+						firstElement += lastElement;
+						counterProxy++;
+					}
 				}
 			} else {
-				for (ProxyServer proxyServer : proxyServerList) {
-					RestTemplate proxyTemplate = searchUsersService.getRestTemplate(proxyServerList.get(counterProxy).getIp(), proxyServerList.get(counterProxy).getPort());
+				searchingThread(executorService, proxyServerList, postsInBD, groups, query, 0);
+			}
+		}
+
+		if (propertyService.getAllProperties().size() == 1) {
+			Property property = propertyService.getPropertyById(1L);
+			int count = 0;
+			RestTemplate restTemplate = new RestTemplate();
+			List<Post> postList = null;
+			for (Group group : groups) {
+				postList = getPostResponseByGroupNameWithoutProxy(restTemplate, property.getValue(), group.getId(), query);
+				if (count % 3 == 0) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				getPostFromList(postsInBD, postList, "group", query);
+				count++;
+			}
+		} else {
+			List<Property> propertyList = propertyService.getAllProperties();
+			int randomProperty = new Random().nextInt(propertyList.size());
+
+			int requestOnProxy = groups.size() / propertyList.size();
+			int remainingRequests = groups.size() % propertyList.size();
+			int count = 0;
+
+			if (requestOnProxy < 1) {
+				RestTemplate restTemplate = new RestTemplate();
+				List<Post> postList = null;
+				for (Group group : groups) {
+					postList = getPostResponseByGroupNameWithoutProxy(restTemplate, propertyList.get(randomProperty).getValue(), group.getId(), query);
+					if (count % 3 == 0) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					getPostFromList(postsInBD, postList, "group", query);
+					count++;
+				}
+			} else {
+				for (Property property : propertyList) {
+					RestTemplate proxyTemplate = new RestTemplate();
 					lastElement += requestOnProxy;
 					if (remainingRequests > 0) {
 						remainingRequests--;
 						lastElement += 1;
 					}
-					final int start = firstElement;
-					final int finish = lastElement;
-					executorService.submit(new Thread(() -> {
-						for (int i = start; i < finish; i++) {
-							List<Post> postList = getPostResponseByGroupName(proxyTemplate, proxyServer.getToken(), groups.get(i).getId(), query);
+					for (int i = firstElement; i < lastElement; i++) {
+							List<Post> postList = getPostResponseByGroupNameWithoutProxy(proxyTemplate, property.getValue(), groups.get(i).getId(), query);
 							if (i % 3 == 0) {
 								try {
 									Thread.sleep(1000);
@@ -98,14 +176,11 @@ public class PostSearchServiceImpl implements PostSearchService {
 								}
 							}
 							getPostFromList(postsInBD, postList, "group", query);
-						}
-					}));
+					}
 					firstElement += lastElement;
 					counterProxy++;
 				}
 			}
-		} else {
-			searchingThread(executorService, proxyServerList, postsInBD, groups, query, 0);
 		}
 	}
 
@@ -135,6 +210,27 @@ public class PostSearchServiceImpl implements PostSearchService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<Post> getPostResponseByGroupNameWithoutProxy(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
+
+		RootObject rootObject = null;
+		try {
+			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, nameGroup, query), RootObject.class);
+		} catch (ResourceAccessException exp) {
+
+		}
+		/*
+			Check if proxy works as normal mode
+		 */
+		if (rootObject.getPostResponse() != null) {
+			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
+			return rootObject.getPostResponse().getPosts();
+		}
+		return null;
+
+	}
+
 
 	private String getUriQueryWall(String proxyServer, String ownerId, String query) {
 		StringBuilder sb = new StringBuilder(ConstantsForVkApi.URL);

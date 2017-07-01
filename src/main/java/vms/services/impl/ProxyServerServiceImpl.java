@@ -53,4 +53,9 @@ public class ProxyServerServiceImpl implements ProxyServerService {
 	public List<ProxyServer> getProxyServerByDestiny(String destiny) {
 		return repository.findAllByDestiny(destiny);
 	}
+
+	@Override
+	public List<ProxyServer> findBadProxy(Boolean work) {
+		return repository.findAllByWork(work);
+	}
 }

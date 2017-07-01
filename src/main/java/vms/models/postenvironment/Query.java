@@ -16,7 +16,7 @@ public class Query {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
 
-	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "query")
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "query", orphanRemoval = true)
 	private List<Post> posts;
 
 	private String word;

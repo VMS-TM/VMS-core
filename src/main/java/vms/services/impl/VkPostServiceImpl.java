@@ -60,4 +60,14 @@ public class VkPostServiceImpl implements VkPostService {
 	public void deleteAllPosts(List<Post> posts) {
 		postRepo.delete(posts);
 	}
+
+	@Override
+	public List<Post> findAllFrom(String from) {
+		return postRepo.findAllByFromWhere(from);
+	}
+
+	@Override
+	public List<Post> findPostsBlackListAndFrom(boolean blacklist, String from) {
+		return postRepo.findAllByBlackListAndFromWhere(blacklist, from);
+	}
 }

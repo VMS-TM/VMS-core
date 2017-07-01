@@ -20,4 +20,6 @@ public interface ProxyServerService {
 	void deleteProxyServer(Long id);
 
 	List<ProxyServer> getProxyServerByDestiny(String destiny);
+
+	List<ProxyServer> findBadProxy(Boolean work);
 }

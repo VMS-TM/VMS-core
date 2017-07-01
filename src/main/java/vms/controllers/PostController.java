@@ -71,30 +71,21 @@ public class PostController {
 								 @RequestParam(value = "key", required = false) String key,
 								 @RequestParam(value = "fromwhere", required = false) String from) {
 
-		List<ProxyServer> proxy = proxyServerService.proxyServerList();
-		List<ProxyServer> badProxy = proxy.stream()
-				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
-				.collect(Collectors.toList());
+		List<ProxyServer> badProxy = proxyServerService.findBadProxy(false);
 
 		if (key != null && from != null) {
 			Query query = queryService.getQuery(key, from);
 			model.addAttribute("posts", query.getPosts());
-			model.addAttribute("AllPosts", query.getPosts().size());
 			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
 			model.addAttribute("badproxy", badProxy);
 			return "posts";
 		} else {
-			List<Post> posts = postService.getAllPostFromDb();
-
-			List<Post> result = posts.stream()
-					.filter(post -> "group".equals(post.getFromWhere()))
-					.collect(Collectors.toList());
+			List<Post> result = postService.findAllFrom("group");
 
 			prepareView(result);
 			preparationPost(result);
 
 			model.addAttribute("posts", result);
-			model.addAttribute("AllPosts", result.size());
 			model.addAttribute("mapSchedule", findMap(mapSchedule, "group"));
 			model.addAttribute("badproxy", badProxy);
 
@@ -146,11 +137,7 @@ public class PostController {
 						  @RequestParam(value = "key", required = false) String key,
 						  @RequestParam(value = "fromwhere", required = false) String from) {
 
-		List<ProxyServer> proxy = proxyServerService.proxyServerList();
-		List<ProxyServer> badProxy = proxy.stream()
-				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
-				.collect(Collectors.toList());
-
+		List<ProxyServer> badProxy = proxyServerService.findBadProxy(false);
 		if (key != null && from != null) {
 			Query query = queryService.getQuery(key, from);
 			model.addAttribute("posts", query.getPosts());
@@ -158,14 +145,9 @@ public class PostController {
 			model.addAttribute("badproxy", badProxy);
 			return "newspost";
 		} else {
-			List<Post> posts = postService.getAllPostFromDb();
-			List<Post> result = posts.stream()
-					.filter(post -> "news".equals(post.getFromWhere()))
-					.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
-					.collect(Collectors.toList());
+			List<Post> result = postService.findPostsBlackListAndFrom(false, "news");
 			prepareView(result);
 			preparationPost(result);
-
 			model.addAttribute("posts", result);
 			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
 			model.addAttribute("badproxy", badProxy);
@@ -201,10 +183,7 @@ public class PostController {
 		}
 
 		List<Post> posts = postService.getAllPostFromDb();
-		List<Post> result = posts.stream()
-				.filter(post -> "news".equals(post.getFromWhere()))
-				.filter(post -> Boolean.FALSE.equals(post.isBlackList()))
-				.collect(Collectors.toList());
+		List<Post> result = postService.findPostsBlackListAndFrom(false, "news");
 		prepareView(result);
 		preparationPost(result);
 		word.setPosts(result);
@@ -275,8 +254,17 @@ public class PostController {
 							  @RequestParam(value = "fromwhere") String from) {
 
 
-		if (postService.getById(id) != null) {
-			postService.delete(postService.getById(id));
+		List<Query> queryList = queryService.findAllByFrom(from);
+		Post post = postService.getById(id);
+		if (queryList.size() != 0) {
+			queryList.forEach(query -> {
+				List<Post> postList = query.getPosts();
+				if (postList.contains(post)) {
+					postList.remove(post);
+					query.setPosts(postList);
+					queryService.addQuery(query);
+				}
+			});
 		}
 
 		return redirect(from);
@@ -285,8 +273,8 @@ public class PostController {
 	@RequestMapping(value = {"/deleteAllPosts"}, method = RequestMethod.POST)
 	public String deleteAllPosts(@RequestParam(value = "fromwhere") String from) {
 
-		List<Post> postList = postService.getAllPostFromDb();
-		postService.deleteAllPosts(postList);
+		List<Query> queryList = queryService.getAllQueryFromDb();
+		queryService.deleteAllQuery(queryList);
 
 		return redirect(from);
 	}
@@ -302,14 +290,8 @@ public class PostController {
 			word = new Query(query, "group");
 		}
 
-		List<Post> posts = postService.getAllPostFromDb();
-		List<ProxyServer> proxy = proxyServerService.proxyServerList();
-		List<Post> result = posts.stream()
-				.filter(post -> "group".equals(post.getFromWhere()))
-				.collect(Collectors.toList());
-		List<ProxyServer> badProxy = proxy.stream()
-				.filter(proxyServer -> Boolean.FALSE.equals(proxyServer.getWork()))
-				.collect(Collectors.toList());
+		List<Post> result = postService.findAllFrom("group");
+		List<ProxyServer> badProxy = proxyServerService.findBadProxy(false);
 		word.setPosts(result);
 		queryService.addQuery(word);
 		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
@@ -319,7 +301,6 @@ public class PostController {
 			prepareView(result);
 			preparationPost(result);
 			model.addAttribute("posts", result);
-			model.addAttribute("AllPosts", result.size());
 			model.addAttribute("badproxy", badProxy);
 			return "redirect:/post/";
 		}

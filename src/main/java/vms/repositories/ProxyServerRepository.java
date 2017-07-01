@@ -11,4 +11,6 @@ public interface ProxyServerRepository extends CrudRepository<ProxyServer, Long>
 	ProxyServer getProxyServerByToken(String token);
 
 	List<ProxyServer> findAllByDestiny(String destiny);
+
+	List<ProxyServer> findAllByWork(Boolean work);
 }

@@ -26,4 +26,6 @@ public interface QueryService {
 
 	Query getById(Long id);
 
+	List<Query> findAllByFrom(String from);
+
 }

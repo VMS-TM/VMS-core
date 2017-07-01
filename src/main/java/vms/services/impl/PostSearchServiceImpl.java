@@ -313,8 +313,8 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 
 	/*
-		If we have  one group or less then proxy
-	*/
+			If we have  one group or less then proxy
+		*/
 	private void searchingThread(ExecutorService executorService, List<ProxyServer> proxyServerList, List<Post> postsInBD, List<Group> groups, String query, Integer i) {
 		executorService.submit(new Thread(() -> {
 			int randomProxy = new Random().nextInt(proxyServerList.size());

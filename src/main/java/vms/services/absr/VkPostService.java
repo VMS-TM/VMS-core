@@ -23,6 +23,8 @@ public interface VkPostService {
 
 	Post getById(Long id);
 
+	Post getByIdAndFrom(Long id, String from);
+
 	List<Post> getAllBlackPosts();
 
 	List<Post> findAllFrom(String from);

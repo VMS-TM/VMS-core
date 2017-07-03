@@ -46,11 +46,11 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		loadGroups();
+//		loadGroups();
 		loadUsers();
-		loadProxyServers();
-		loadUsersFromVK();
-		loadProperty();
+//		loadProxyServers();
+//		loadUsersFromVK();
+//		loadProperty();
 	}
 
 	private void loadGroups() {

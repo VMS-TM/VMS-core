@@ -70,4 +70,9 @@ public class VkPostServiceImpl implements VkPostService {
 	public List<Post> findPostsBlackListAndFrom(boolean blacklist, String from) {
 		return postRepo.findAllByBlackListAndFromWhere(blacklist, from);
 	}
+
+	@Override
+	public Post getByIdAndFrom(Long id, String from) {
+		return postRepo.getPostByIdAndFromWhere(id, from);
+	}
 }

@@ -9,6 +9,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.postenvironment.Post;
+import vms.services.absr.PropertyService;
 
 import java.util.Objects;
 
@@ -16,7 +17,10 @@ import java.util.Objects;
 public class PostToGroupService {
 
 	@Autowired
-	PropertySearchService propertySearchService;
+	private PropertySearchService propertySearchService;
+
+	@Autowired
+	private PropertyService propertyService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PostToGroupService.class);
 
@@ -91,7 +95,7 @@ public class PostToGroupService {
 			map.add("attachments", getPhoto(post));
 		}
 
-		map.add("access_token", propertySearchService.getValue("defaultKey"));
+		map.add("access_token", propertyService.getPropertyById(1L).getValue());
 		map.add("v", "5.65");
 		String result = restTemplate.postForObject(uri, map, String.class);
 

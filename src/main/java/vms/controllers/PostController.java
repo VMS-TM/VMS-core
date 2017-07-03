@@ -218,7 +218,7 @@ public class PostController {
 
 		}
 		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
-		if (postService.getById(id).isHavePhoto()) {
+		if (postService.getByIdAndFrom(id, ).isHavePhoto()) {
 			editedPost.setHavePhoto(true);
 			editedPost.setPhotos(postService.getById(id).getPhotos());
 		}

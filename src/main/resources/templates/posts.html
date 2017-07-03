@@ -40,7 +40,7 @@
                 <tr th:each="map : ${mapSchedule}">
                     <form th:action="@{/post/}" method="get">
                         <input class="hide-param" name="key" th:value="${map.key.word}"/>
-                        <input class="hide-param" name="fromwhere" th:value="news"/>
+                        <input class="hide-param" name="fromwhere" th:value="group"/>
                         <td><input type="submit" class="btn btn-info" th:value="${map.key.word}"/></td>
                     </form>
                     <form th:action="@{/post/stop}" method="post">

@@ -75,10 +75,14 @@ public class PostController {
 
 		if (key != null && from != null) {
 			Query query = queryService.getQuery(key, from);
-			model.addAttribute("posts", query.getPosts());
+
+			if (query != null) {
+				model.addAttribute("posts", query.getPosts());
+			}
+
 			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
 			model.addAttribute("badproxy", badProxy);
-			return "posts";
+			return "redirect:/post/";
 		} else {
 			List<Post> result = postService.findAllFrom("group");
 
@@ -140,7 +144,11 @@ public class PostController {
 		List<ProxyServer> badProxy = proxyServerService.findBadProxy(false);
 		if (key != null && from != null) {
 			Query query = queryService.getQuery(key, from);
-			model.addAttribute("posts", query.getPosts());
+
+			if (query != null) {
+				model.addAttribute("posts", query.getPosts());
+			}
+
 			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
 			model.addAttribute("badproxy", badProxy);
 			return "newspost";
@@ -200,6 +208,7 @@ public class PostController {
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)
 	public String updatePosts(Model model,
 							  @RequestParam(value = "id") Long id,
+							  @RequestParam(value = "dbId") Long dbId,
 							  @RequestParam(value = "title") String title,
 							  @RequestParam(value = "owner") String owner,
 							  @RequestParam(value = "district") String district,
@@ -217,10 +226,10 @@ public class PostController {
 		} catch (ParseException e) {
 
 		}
-		Post editedPost = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
-		if (postService.getByIdAndFrom(id, ).isHavePhoto()) {
+		Post editedPost = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
 			editedPost.setHavePhoto(true);
-			editedPost.setPhotos(postService.getById(id).getPhotos());
+			editedPost.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
 		}
 		if ("news".equals(from)) {
 			try {
@@ -251,11 +260,12 @@ public class PostController {
 
 	@RequestMapping(value = {"/deletePost"}, method = RequestMethod.POST)
 	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
-							  @RequestParam(value = "fromwhere") String from) {
+							  @RequestParam(value = "fromwhere") String from,
+							  @RequestParam(value = "dbId", required = false) Long dbId) {
 
 
 		List<Query> queryList = queryService.findAllByFrom(from);
-		Post post = postService.getById(id);
+		Post post = postService.getByIdAndFrom(id, from);
 		if (queryList.size() != 0) {
 			queryList.forEach(query -> {
 				List<Post> postList = query.getPosts();
@@ -309,6 +319,7 @@ public class PostController {
 
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
 	public String doPostToGroup(@RequestParam(value = "id") Long id,
+								@RequestParam(value = "dbId") Long dbId,
 								@RequestParam(value = "title") String title,
 								@RequestParam(value = "owner") String owner,
 								@RequestParam(value = "district") String district,
@@ -328,10 +339,10 @@ public class PostController {
 		} catch (ParseException e) {
 
 		}
-		Post postToGroup = new Post(id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
-		if (postService.getById(id).isHavePhoto()) {
+		Post postToGroup = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
 			postToGroup.setHavePhoto(true);
-			postToGroup.setPhotos(postService.getById(id).getPhotos());
+			postToGroup.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
 		}
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 		if ("news".equals(from)) {

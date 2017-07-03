@@ -39,7 +39,7 @@ public class Post implements Serializable {
 		this.from_id = from_id;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "post")
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
 	private List<Photo> photos = new ArrayList<>();
 
 	public List<Photo> getPhotos() {
@@ -314,6 +314,21 @@ public class Post implements Serializable {
 	}
 
 	public Post(Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, Date date) {
+		this.id = id;
+		this.headling = title;
+		this.nameOfPerson = owner;
+		this.area = district;
+		this.priceOfFlat = price;
+		this.textOnView = textOnView;
+		this.phoneNumber = contact;
+		this.metroAndAddress = adress;
+		this.text = info;
+		this.fromWhere = from;
+		this.date = date;
+	}
+
+	public Post(Long dbId, Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, Date date) {
+		this.dbId = dbId;
 		this.id = id;
 		this.headling = title;
 		this.nameOfPerson = owner;

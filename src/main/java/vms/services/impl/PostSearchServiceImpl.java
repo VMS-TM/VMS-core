@@ -264,7 +264,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 		Long daysAgoDate = date.getTime() - 86_400_000;
 
 		Query finalWord = word;
-		result.forEach(post -> {
+		result.stream()
+				.filter(post -> post.getDate().getTime() >= daysAgoDate)
+				.forEach(post -> {
 			post.setWord(query);
 			post.setFromWhere(from);
 			post.setQuery(finalWord);
@@ -295,17 +297,13 @@ public class PostSearchServiceImpl implements PostSearchService {
 
 		if (!postsInBD.containsAll(result)) {
 			result.stream()
-					.filter(post -> post.getText().length() != 0)
-					.filter(post -> post.getDate().getTime() >= daysAgoDate)
-					.forEach(post -> post.setFromWhere(from));
+					.filter(post -> post.getText().length() != 0);
 			word.setPosts(result);
 			queryService.addQuery(word);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
 			result.stream()
 					.filter(post -> post.getText().length() != 0)
-					.filter(post -> post.getDate().getTime() >= daysAgoDate)
-					.filter(post -> !postsInBD.contains(post))
-					.forEach(post -> post.setFromWhere(from));
+					.filter(post -> !postsInBD.contains(post));
 			word.setPosts(result);
 			queryService.addQuery(word);
 		}

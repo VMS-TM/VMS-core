@@ -80,9 +80,9 @@ public class PostController {
 				model.addAttribute("posts", query.getPosts());
 			}
 
-			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
+			model.addAttribute("mapSchedule", findMap(mapSchedule, "group"));
 			model.addAttribute("badproxy", badProxy);
-			return "redirect:/post/";
+			return "posts";
 		} else {
 			List<Post> result = postService.findAllFrom("group");
 

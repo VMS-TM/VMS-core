@@ -120,6 +120,7 @@
                         <td width="100" th:text="${#dates.format(post.date, 'yyyy-MM-dd HH:mm:ss')}">Дата</td>
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
                             <input type="hidden" name="id" th:value="${post.id}"/>
+                            <input type="hidden" name="dbId" th:value="${post.dbId}"/>
                             <input type="hidden" name="date" th:value="${post.date}"/>
                             <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
                             <input type="hidden" name="saveInDataBase" th:value="${post.savedInDb}"/>
@@ -161,6 +162,7 @@
                                                     <div class="tab-pane active" th:id="'home' + ${post.id}">
                                                         <div class="row">
                                                             <input type="hidden" name="id" th:value="${post.id}"/>
+                                                            <input type="hidden" name="dbId" th:value="${post.dbId}"/>
                                                             <input type="hidden" name="date" th:value="${post.date}"/>
                                                             <input type="hidden" name="fromwhere"
                                                                    th:value="${post.fromWhere}"/>

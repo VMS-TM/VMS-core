@@ -207,6 +207,7 @@ public class PostController {
 
 	@RequestMapping(value = {"/update"}, method = RequestMethod.POST)
 	public String updatePosts(Model model,
+							  @RequestParam(value = "query") String key,
 							  @RequestParam(value = "id") Long id,
 							  @RequestParam(value = "dbId") Long dbId,
 							  @RequestParam(value = "title") String title,
@@ -226,7 +227,9 @@ public class PostController {
 		} catch (ParseException e) {
 
 		}
+		Query query = queryService.getQuery(key, from);
 		Post editedPost = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+		List<Post> postSet = query.getPosts();
 		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
 			editedPost.setHavePhoto(true);
 			editedPost.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
@@ -234,7 +237,9 @@ public class PostController {
 		if ("news".equals(from)) {
 			try {
 				editedPost.setSavedInDb(true);
-				postService.update(editedPost);
+				postSet.remove(postService.getByIdAndFrom(dbId, from));
+				postSet.add(editedPost);
+				queryService.update(query);
 			} catch (DataIntegrityViolationException exp) {
 				exp.printStackTrace();
 			}
@@ -242,7 +247,9 @@ public class PostController {
 		} else if ("user".equals(from)) {
 			try {
 				editedPost.setSavedInDb(true);
-				postService.update(editedPost);
+				postSet.remove(postService.getByIdAndFrom(dbId, from));
+				postSet.add(editedPost);
+				queryService.update(query);
 			} catch (DataIntegrityViolationException exp) {
 				exp.printStackTrace();
 			}
@@ -250,7 +257,9 @@ public class PostController {
 		} else {
 			try {
 				editedPost.setSavedInDb(true);
-				postService.update(editedPost);
+				postSet.remove(postService.getByIdAndFrom(dbId, from));
+				postSet.add(editedPost);
+				queryService.update(query);
 			} catch (DataIntegrityViolationException exp) {
 				exp.printStackTrace();
 			}
@@ -265,7 +274,7 @@ public class PostController {
 
 
 		List<Query> queryList = queryService.findAllByFrom(from);
-		Post post = postService.getByIdAndFrom(id, from);
+		Post post = postService.getByIdAndFrom(dbId, from);
 		if (queryList.size() != 0) {
 			queryList.forEach(query -> {
 				List<Post> postList = query.getPosts();

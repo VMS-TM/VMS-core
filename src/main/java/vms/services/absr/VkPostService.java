@@ -3,6 +3,7 @@ package vms.services.absr;
 import vms.models.postenvironment.Post;
 
 import java.util.List;
+import java.util.Set;
 
 public interface VkPostService {
 	//adding to DataBase

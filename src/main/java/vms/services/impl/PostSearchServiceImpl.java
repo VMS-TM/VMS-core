@@ -266,43 +266,41 @@ public class PostSearchServiceImpl implements PostSearchService {
 		Query finalWord = word;
 		result.stream()
 				.filter(post -> post.getDate().getTime() >= daysAgoDate)
+				.filter(post -> post.getText().length() != 0)
 				.forEach(post -> {
-			post.setWord(query);
-			post.setFromWhere(from);
-			post.setQuery(finalWord);
-			if (post.getAttachmentContainers() != null) {
-				List<Photo> photos = new ArrayList<>();
-				post.getAttachmentContainers().forEach(container -> {
-					if (container.getType().equals("photo")) {
-						Photo photo = new Photo();
-						photo.setPost(post);
-						photo.setPostIdInVk(container.getPhoto().getId());
-						photo.setOwnerIdInVk(container.getPhoto().getOwnerId());
-						if (container.getPhoto().getPhoto604() != null) {
-							photo.setReferenceOnPost(container.getPhoto().getPhoto604());
-							post.setHavePhoto(true);
-						} else if (container.getPhoto().getPhoto75() != null) {
-							photo.setReferenceOnPost(container.getPhoto().getPhoto75());
-							post.setHavePhoto(true);
-						} else if (container.getPhoto().getPhoto130() != null) {
-							photo.setReferenceOnPost(container.getPhoto().getPhoto130());
-							post.setHavePhoto(true);
-						}
-						photos.add(photo);
+					post.setWord(query);
+					post.setFromWhere(from);
+					post.setQuery(finalWord);
+					if (post.getAttachmentContainers() != null) {
+						List<Photo> photos = new ArrayList<>();
+						post.getAttachmentContainers().forEach(container -> {
+							if (container.getType().equals("photo")) {
+								Photo photo = new Photo();
+								photo.setPost(post);
+								photo.setPostIdInVk(container.getPhoto().getId());
+								photo.setOwnerIdInVk(container.getPhoto().getOwnerId());
+								if (container.getPhoto().getPhoto604() != null) {
+									photo.setReferenceOnPost(container.getPhoto().getPhoto604());
+									post.setHavePhoto(true);
+								} else if (container.getPhoto().getPhoto75() != null) {
+									photo.setReferenceOnPost(container.getPhoto().getPhoto75());
+									post.setHavePhoto(true);
+								} else if (container.getPhoto().getPhoto130() != null) {
+									photo.setReferenceOnPost(container.getPhoto().getPhoto130());
+									post.setHavePhoto(true);
+								}
+								photos.add(photo);
+							}
+						});
+						post.setPhotos(photos);
 					}
 				});
-				post.setPhotos(photos);
-			}
-		});
 
 		if (!postsInBD.containsAll(result)) {
-			result.stream()
-					.filter(post -> post.getText().length() != 0);
 			word.setPosts(result);
 			queryService.addQuery(word);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
 			result.stream()
-					.filter(post -> post.getText().length() != 0)
 					.filter(post -> !postsInBD.contains(post));
 			word.setPosts(result);
 			queryService.addQuery(word);

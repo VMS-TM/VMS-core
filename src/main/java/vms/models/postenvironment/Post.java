@@ -22,7 +22,7 @@ public class Post implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long dbId;
 
-	@Column(name = "vkid")
+	@Column(name = "vkid", length = 1024)
 	@JsonProperty("id")
 	public Long id;
 
@@ -71,7 +71,7 @@ public class Post implements Serializable {
 	}
 
 	//id of groups(source)
-	@Column(name = "owner_id")
+	@Column(name = "owner_id", length = 1024)
 	@JsonProperty("owner_id")
 	private int owner_id;
 
@@ -79,7 +79,7 @@ public class Post implements Serializable {
 	@JsonProperty("date")
 	private Date date;
 
-	@Column(name = "post_id")
+	@Column(name = "post_id", length = 1024)
 	@JsonProperty("post_id")
 	private int post_id;
 

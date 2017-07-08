@@ -12,7 +12,7 @@ import java.util.Set;
 public class Query {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", length = 1024)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
 

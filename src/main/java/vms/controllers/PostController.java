@@ -190,7 +190,6 @@ public class PostController {
 			word = new Query(query, "news");
 		}
 
-		List<Post> posts = postService.getAllPostFromDb();
 		List<Post> result = postService.findPostsBlackListAndFrom(false, "news");
 		prepareView(result);
 		preparationPost(result);
@@ -234,36 +233,20 @@ public class PostController {
 			editedPost.setHavePhoto(true);
 			editedPost.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
 		}
-		if ("news".equals(from)) {
-			try {
-				editedPost.setSavedInDb(true);
-				postSet.remove(postService.getByIdAndFrom(dbId, from));
-				postSet.add(editedPost);
-				queryService.update(query);
-			} catch (DataIntegrityViolationException exp) {
-				exp.printStackTrace();
-			}
-			return "redirect:/post/news";
-		} else if ("user".equals(from)) {
-			try {
-				editedPost.setSavedInDb(true);
-				postSet.remove(postService.getByIdAndFrom(dbId, from));
-				postSet.add(editedPost);
-				queryService.update(query);
-			} catch (DataIntegrityViolationException exp) {
-				exp.printStackTrace();
-			}
-			return "redirect:/post/users/wall";
-		} else {
-			try {
-				editedPost.setSavedInDb(true);
-				postSet.remove(postService.getByIdAndFrom(dbId, from));
-				postSet.add(editedPost);
-				queryService.update(query);
-			} catch (DataIntegrityViolationException exp) {
-				exp.printStackTrace();
-			}
-			return home;
+
+		updatePost(dbId, from, query, editedPost, postSet);
+
+		return redirect(from);
+	}
+
+	private void updatePost(Long dbId, String from, Query query, Post editedPost, List<Post> postSet) {
+		try {
+			editedPost.setSavedInDb(true);
+			postSet.remove(postService.getByIdAndFrom(dbId, from));
+			postSet.add(editedPost);
+			queryService.update(query);
+		} catch (DataIntegrityViolationException exp) {
+			exp.printStackTrace();
 		}
 	}
 

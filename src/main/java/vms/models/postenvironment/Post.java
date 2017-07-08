@@ -313,7 +313,7 @@ public class Post implements Serializable {
 	public Post() {
 	}
 
-	public Post(Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, Date date) {
+	public Post(Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, Date date, String word) {
 		this.id = id;
 		this.headling = title;
 		this.nameOfPerson = owner;
@@ -325,9 +325,10 @@ public class Post implements Serializable {
 		this.text = info;
 		this.fromWhere = from;
 		this.date = date;
+		this.word = word;
 	}
 
-	public Post(Long dbId, Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, Date date) {
+	public Post(Long dbId, Long id, String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, Date date, String word) {
 		this.dbId = dbId;
 		this.id = id;
 		this.headling = title;
@@ -340,9 +341,10 @@ public class Post implements Serializable {
 		this.text = info;
 		this.fromWhere = from;
 		this.date = date;
+		this.word = word;
 	}
 
-	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from) {
+	public Post(String title, String owner, String district, String price, String textOnView, String adress, String contact, String info, String from, String word) {
 		this.headling = title;
 		this.nameOfPerson = owner;
 		this.area = district;
@@ -352,6 +354,7 @@ public class Post implements Serializable {
 		this.metroAndAddress = adress;
 		this.text = info;
 		this.fromWhere = from;
+		this.word = word;
 	}
 
 	public Post(int from_id, int owner_id, Date date, int post_id, String text) {

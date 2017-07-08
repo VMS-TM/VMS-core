@@ -219,15 +219,9 @@ public class PostController {
 							  @RequestParam(value = "info") String info,
 							  @RequestParam(value = "date") String date,
 							  @RequestParam(value = "fromwhere") String from) throws ParseException {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date dateOfPost = null;
-		try {
-			dateOfPost = format.parse(date);
-		} catch (ParseException e) {
-
-		}
+		Date dateOfPost = getDate(date);
 		Query query = queryService.getQuery(key, from);
-		Post editedPost = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+		Post editedPost = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost, key);
 		List<Post> postSet = query.getPosts();
 		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
 			editedPost.setHavePhoto(true);
@@ -237,6 +231,17 @@ public class PostController {
 		updatePost(dbId, from, query, editedPost, postSet);
 
 		return redirect(from);
+	}
+
+	private Date getDate(String date) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date dateOfPost = null;
+		try {
+			dateOfPost = format.parse(date);
+		} catch (ParseException e) {
+
+		}
+		return dateOfPost;
 	}
 
 	private void updatePost(Long dbId, String from, Query query, Post editedPost, List<Post> postSet) {
@@ -312,6 +317,7 @@ public class PostController {
 	@RequestMapping(value = {"/addPost"}, method = RequestMethod.POST)
 	public String doPostToGroup(@RequestParam(value = "id") Long id,
 								@RequestParam(value = "dbId") Long dbId,
+								@RequestParam(value = "query") String key,
 								@RequestParam(value = "title") String title,
 								@RequestParam(value = "owner") String owner,
 								@RequestParam(value = "district") String district,
@@ -324,18 +330,14 @@ public class PostController {
 								@RequestParam("saveInDataBase") boolean save,
 								@RequestParam(value = "fromwhere") String from) throws ParseException {
 
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date dateOfPost = null;
-		try {
-			dateOfPost = format.parse(date);
-		} catch (ParseException e) {
-
-		}
-		Post postToGroup = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost);
+		Date dateOfPost = getDate(date);
+		Query query = queryService.getQuery(key, from);
+		Post postToGroup = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost, key);
 		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
 			postToGroup.setHavePhoto(true);
 			postToGroup.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
 		}
+		List<Post> postSet = query.getPosts();
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 		if ("news".equals(from)) {
 			if (result == null || result.contains("error_code")) {
@@ -343,7 +345,8 @@ public class PostController {
 			}
 			postToGroup.setSavedInDb(save);
 			postToGroup.setPostedToGroup(true);
-			postService.update(postToGroup);
+			postSet.add(postToGroup);
+			queryService.update(query);
 			return "redirect:/post/news/?postInGroupSuccess";
 		} else if ("user".equals(from)) {
 			if (result == null || result.contains("error_code")) {
@@ -351,7 +354,8 @@ public class PostController {
 			}
 			postToGroup.setSavedInDb(save);
 			postToGroup.setPostedToGroup(true);
-			postService.update(postToGroup);
+			postSet.add(postToGroup);
+			queryService.update(query);
 			return "redirect:/post/users/wall?postInGroupSuccess";
 		} else {
 			if (result == null || result.contains("error_code")) {
@@ -359,7 +363,8 @@ public class PostController {
 			}
 			postToGroup.setSavedInDb(save);
 			postToGroup.setPostedToGroup(true);
-			postService.update(postToGroup);
+			postSet.add(postToGroup);
+			queryService.update(query);
 			return "redirect:/post/?postInGroupSuccess";
 		}
 	}
@@ -401,15 +406,14 @@ public class PostController {
 	}
 
 
-	void prepareView(List<Post> posts) {
-		Collections.sort(posts, Comparator.comparing(Post::getDate).reversed());
+	private void prepareView(List<Post> posts) {
+		posts.sort(Comparator.comparing(Post::getDate).reversed());
 		posts.forEach(post -> post.setOwnerId(Math.abs(post.getOwnerId())));
 	}
 
-	void preparationPost(List<Post> posts) {
-		for (Iterator<Post> iter = posts.listIterator(); iter.hasNext(); ) {
-			Post postCurrent = iter.next();
-			if (postCurrent.isSavedInDb() != true) {
+	private void preparationPost(List<Post> posts) {
+		for (Post postCurrent : posts) {
+			if (!postCurrent.isSavedInDb()) {
 				Pattern phoneNumber = Pattern.compile("(((8|\\+7)-?)?\\(?\\d{3}\\)?-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1}-?\\d{1})|(^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$)|(((8|\\+7) ?)?\\(?\\d{3}\\)? ?\\d{3}-?\\d{2}-?\\d{2})");
 				Pattern rent = Pattern.compile("(?<=сдаётся по | Стоимость |стоимость |Стоимость в месяц |стоимость в месяц |аренды в месяц |в месяц |Сдается за |cдается за|Залог |залог  |Стоимость аренды |cтоимость аренды |Аренда |аренда |Цена |цена |стоит |Стоит | ВСЕГО за| всего за ).*(\\d|\\d.p|\\d p|\\d.руб|\\d руб|\\d руб.|\\d рублей|\\d.рублей|\\d т.р.|\\d т. р.|\\d.\u20BD).(?=\\s)");
 				Pattern metroAndAddress = Pattern.compile("(?<=ул.|Улица |улица |Квартира |М. |м. |м.|м |квартира |районе |Районе |метро |Метро |Адрес |Адрес: |адрес |адрес: |адресу ).*(\\W+)(?=\\D+)");
@@ -439,10 +443,9 @@ public class PostController {
 	}
 
 	private Map<Query, ScheduledFuture<?>> findMap(Map<Query, ScheduledFuture<?>> mapSchedule, String from) {
-		Map<Query, ScheduledFuture<?>> map = mapSchedule.entrySet()
+		return mapSchedule.entrySet()
 				.stream().filter(query -> from.equals(query.getKey().getFromwhere()))
-				.collect(Collectors.toMap(query -> query.getKey(), ScheduledFutureEntry -> ScheduledFutureEntry.getValue()));
-		return map;
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
 }

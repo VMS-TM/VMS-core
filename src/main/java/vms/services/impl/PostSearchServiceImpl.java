@@ -17,10 +17,7 @@ import vms.services.absr.*;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -297,12 +294,14 @@ public class PostSearchServiceImpl implements PostSearchService {
 				});
 
 		if (!postsInBD.containsAll(result)) {
-			word.setPosts(result);
+			Set<Post> postSet = new HashSet<Post>(result);
+			word.setPosts(postSet);
 			queryService.addQuery(word);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
 			result.stream()
 					.filter(post -> !postsInBD.contains(post));
-			word.setPosts(result);
+			Set<Post> postSet = new HashSet<Post>(result);
+			word.setPosts(postSet);
 			queryService.addQuery(word);
 		}
 	}

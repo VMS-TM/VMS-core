@@ -193,7 +193,8 @@ public class PostController {
 		List<Post> result = postService.findPostsBlackListAndFrom(false, "news");
 		prepareView(result);
 		preparationPost(result);
-		word.setPosts(result);
+		Set<Post> postSet = new HashSet<Post>(result);
+		word.setPosts(postSet);
 		queryService.addQuery(word);
 
 		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
@@ -222,37 +223,12 @@ public class PostController {
 		Date dateOfPost = getDate(date);
 		Query query = queryService.getQuery(key, from);
 		Post editedPost = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost, key);
-		List<Post> postSet = query.getPosts();
-		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
-			editedPost.setHavePhoto(true);
-			editedPost.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
-		}
+		Set<Post> postSet = query.getPosts();
+		hasPhoto(dbId, from, editedPost);
 
 		updatePost(dbId, from, query, editedPost, postSet);
 
 		return redirect(from);
-	}
-
-	private Date getDate(String date) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date dateOfPost = null;
-		try {
-			dateOfPost = format.parse(date);
-		} catch (ParseException e) {
-
-		}
-		return dateOfPost;
-	}
-
-	private void updatePost(Long dbId, String from, Query query, Post editedPost, List<Post> postSet) {
-		try {
-			editedPost.setSavedInDb(true);
-			postSet.remove(postService.getByIdAndFrom(dbId, from));
-			postSet.add(editedPost);
-			queryService.update(query);
-		} catch (DataIntegrityViolationException exp) {
-			exp.printStackTrace();
-		}
 	}
 
 	@RequestMapping(value = {"/deletePost"}, method = RequestMethod.POST)
@@ -265,13 +241,15 @@ public class PostController {
 		Post post = postService.getByIdAndFrom(dbId, from);
 		if (queryList.size() != 0) {
 			queryList.forEach(query -> {
-				List<Post> postList = query.getPosts();
+				Set<Post> postList = query.getPosts();
 				if (postList.contains(post)) {
 					postList.remove(post);
 					query.setPosts(postList);
 					queryService.addQuery(query);
 				}
 			});
+		} else {
+			postService.delete(post);
 		}
 
 		return redirect(from);
@@ -299,7 +277,8 @@ public class PostController {
 
 		List<Post> result = postService.findAllFrom("group");
 		List<ProxyServer> badProxy = proxyServerService.findBadProxy(false);
-		word.setPosts(result);
+		Set<Post> postSet = new HashSet<Post>(result);
+		word.setPosts(postSet);
 		queryService.addQuery(word);
 		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
 			postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
@@ -333,11 +312,8 @@ public class PostController {
 		Date dateOfPost = getDate(date);
 		Query query = queryService.getQuery(key, from);
 		Post postToGroup = new Post(dbId, id, title, owner, district, price, textOnView, adress, contact, info, from, dateOfPost, key);
-		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
-			postToGroup.setHavePhoto(true);
-			postToGroup.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
-		}
-		List<Post> postSet = query.getPosts();
+		hasPhoto(dbId, from, postToGroup);
+		Set<Post> postSet = query.getPosts();
 		String result = postToGroupService.postToGroup(ConstantsForVkApi.ID_GROUP, postToGroup);
 		if ("news".equals(from)) {
 			if (result == null || result.contains("error_code")) {
@@ -346,7 +322,8 @@ public class PostController {
 			postToGroup.setSavedInDb(save);
 			postToGroup.setPostedToGroup(true);
 			postSet.add(postToGroup);
-			queryService.update(query);
+			query.setPosts(postSet);
+			queryService.addQuery(query);
 			return "redirect:/post/news/?postInGroupSuccess";
 		} else if ("user".equals(from)) {
 			if (result == null || result.contains("error_code")) {
@@ -355,7 +332,8 @@ public class PostController {
 			postToGroup.setSavedInDb(save);
 			postToGroup.setPostedToGroup(true);
 			postSet.add(postToGroup);
-			queryService.update(query);
+			query.setPosts(postSet);
+			queryService.addQuery(query);
 			return "redirect:/post/users/wall?postInGroupSuccess";
 		} else {
 			if (result == null || result.contains("error_code")) {
@@ -364,7 +342,8 @@ public class PostController {
 			postToGroup.setSavedInDb(save);
 			postToGroup.setPostedToGroup(true);
 			postSet.add(postToGroup);
-			queryService.update(query);
+			query.setPosts(postSet);
+			queryService.addQuery(query);
 			return "redirect:/post/?postInGroupSuccess";
 		}
 	}
@@ -405,11 +384,11 @@ public class PostController {
 		return "redirect:/post/users/wall";
 	}
 
-
 	private void prepareView(List<Post> posts) {
 		posts.sort(Comparator.comparing(Post::getDate).reversed());
 		posts.forEach(post -> post.setOwnerId(Math.abs(post.getOwnerId())));
 	}
+
 
 	private void preparationPost(List<Post> posts) {
 		for (Post postCurrent : posts) {
@@ -446,6 +425,47 @@ public class PostController {
 		return mapSchedule.entrySet()
 				.stream().filter(query -> from.equals(query.getKey().getFromwhere()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+	}
+
+	private void hasPhoto(Long dbId, String from, Post editedPost) {
+		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
+			editedPost.setHavePhoto(true);
+			editedPost.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
+		}
+	}
+
+	private Date getDate(String date) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date dateOfPost = null;
+		try {
+			dateOfPost = format.parse(date);
+		} catch (ParseException e) {
+
+		}
+		return dateOfPost;
+	}
+
+	private void updatePost(Long dbId, String from, Query query, Post editedPost, Set<Post> postSet) {
+		try {
+			editedPost.setSavedInDb(true);
+
+			postSet.forEach(post -> post.setDbId(editedPost.getDbId()));
+
+//			List<Post> newList = fruits.stream()
+//					.map(f -> new Fruit(f.getId(), f.getName() + "s", f.getCountry())
+//							.collect(Collectors.toList())
+//
+//			int indexInList = postSet.indexOf(postService.getByIdAndFrom(dbId, from));
+//			postSet.get(indexInList).setPo
+			postSet.add(editedPost);
+
+
+
+			query.setPosts(postSet);
+			queryService.addQuery(query);
+		} catch (DataIntegrityViolationException exp) {
+			exp.printStackTrace();
+		}
 	}
 
 }

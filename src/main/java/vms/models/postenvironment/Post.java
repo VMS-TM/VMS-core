@@ -18,7 +18,7 @@ import java.util.Set;
 public class Post implements Serializable {
 
 	@Id
-	@Column(name = "Id")
+	@Column(name = "Id", length = 1024)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long dbId;
 
@@ -27,7 +27,7 @@ public class Post implements Serializable {
 	public Long id;
 
 	//id of users
-	@Column(name = "from_id")
+	@Column(name = "from_id", length = 1024)
 	@JsonProperty("from_id")
 	private int from_id;
 

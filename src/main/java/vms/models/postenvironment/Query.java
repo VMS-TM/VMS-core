@@ -17,17 +17,17 @@ public class Query {
 	public Long id;
 
 	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "query", orphanRemoval = true)
-	private List<Post> posts;
+	private Set<Post> posts;
 
 	private String word;
 
 	private String fromwhere;
 
-	public List<Post> getPosts() {
+	public Set<Post> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(List<Post> posts) {
+	public void setPosts(Set<Post> posts) {
 		this.posts = posts;
 	}
 

@@ -8,7 +8,7 @@ import java.util.List;
 public class Photo {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", length = 1024)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 

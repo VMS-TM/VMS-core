@@ -121,6 +121,7 @@
                         <form th:action="@{/post/addPost}" th:object="${post}" method="post">
                             <input type="hidden" name="id" th:value="${post.id}"/>
                             <input type="hidden" name="dbId" th:value="${post.dbId}"/>
+                            <input type="hidden" name="query" th:value="${post.word}"/>
                             <input type="hidden" name="date" th:value="${post.date}"/>
                             <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
                             <input type="hidden" name="saveInDataBase" th:value="${post.savedInDb}"/>
@@ -136,6 +137,7 @@
                         </form>
                         <form th:action="@{/post/deletePost}" th:object="${post}" method="post">
                             <input class="hide-param" name="idDeletePost" th:value="${post.id}"/>
+                            <input type="hidden" name="dbId" th:value="${post.dbId}"/>
                             <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
                             <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
                         </form>

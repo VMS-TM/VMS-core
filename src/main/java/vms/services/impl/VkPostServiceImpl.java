@@ -75,4 +75,9 @@ public class VkPostServiceImpl implements VkPostService {
 	public Post getByIdAndFrom(Long dbId, String from) {
 		return postRepo.getPostByDbIdAndFromWhere(dbId, from);
 	}
+
+	@Override
+	public List<Post> getParticualPosts(String from) {
+		return postRepo.findAllByFromWhere(from);
+	}
 }

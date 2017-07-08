@@ -31,4 +31,6 @@ public interface VkPostService {
 	List<Post> findAllFrom(String from);
 
 	List<Post> findPostsBlackListAndFrom(boolean blacklist, String from);
+
+	List<Post> getParticualPosts(String from);
 }

@@ -248,8 +248,9 @@ public class PostController {
 					queryService.addQuery(query);
 				}
 			});
-		} else {
-			postService.delete(post);
+			if (post != null) {
+				postService.delete(post);
+			}
 		}
 
 		return redirect(from);
@@ -259,7 +260,16 @@ public class PostController {
 	public String deleteAllPosts(@RequestParam(value = "fromwhere") String from) {
 
 		List<Query> queryList = queryService.getAllQueryFromDb();
-		queryService.deleteAllQuery(queryList);
+
+		if (queryList != null) {
+			queryService.deleteAllQuery(queryList);
+		}
+
+		List<Post> postList = postService.getParticualPosts(from);
+
+		if (postList != null) {
+			postService.deleteAllPosts(postList);
+		}
 
 		return redirect(from);
 	}
@@ -448,21 +458,10 @@ public class PostController {
 	private void updatePost(Long dbId, String from, Query query, Post editedPost, Set<Post> postSet) {
 		try {
 			editedPost.setSavedInDb(true);
-
-			postSet.forEach(post -> post.setDbId(editedPost.getDbId()));
-
-//			List<Post> newList = fruits.stream()
-//					.map(f -> new Fruit(f.getId(), f.getName() + "s", f.getCountry())
-//							.collect(Collectors.toList())
-//
-//			int indexInList = postSet.indexOf(postService.getByIdAndFrom(dbId, from));
-//			postSet.get(indexInList).setPo
+			postSet.remove(postService.getByIdAndFrom(dbId, from));
 			postSet.add(editedPost);
-
-
-
 			query.setPosts(postSet);
-			queryService.addQuery(query);
+			queryService.update(query);
 		} catch (DataIntegrityViolationException exp) {
 			exp.printStackTrace();
 		}

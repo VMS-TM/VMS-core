@@ -32,9 +32,13 @@ public class Group {
 	@Column(name = "screen_name")
 	private String screen_name;
 
-	public String getScreenName() { return this.screen_name; }
+	public String getScreen_name() {
+		return screen_name;
+	}
 
-	public void setScreenName(String screen_name) { this.screen_name = screen_name; }
+	public void setScreen_name(String screen_name) {
+		this.screen_name = screen_name;
+	}
 
 	@Transient
 	@JsonProperty("is_closed")
@@ -80,9 +84,13 @@ public class Group {
 	@Column(name = "members_count")
 	private int members_count;
 
-	public int getMembersCount() { return this.members_count; }
+	public int getMembers_count() {
+		return members_count;
+	}
 
-	public void setMembersCount(int members_count) { this.members_count = members_count; }
+	public void setMembers_count(int members_count) {
+		this.members_count = members_count;
+	}
 
 	@Transient
 	@JsonProperty("photo_50")

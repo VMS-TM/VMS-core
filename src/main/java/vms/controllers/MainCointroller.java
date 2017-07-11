@@ -66,7 +66,7 @@ public class MainCointroller {
 		Group group = new Group();
 		group.setId(id);
 		group.setName(name);
-		group.setScreenName(screen_name);
+		group.setScreen_name(screen_name);
 
 		groupService.saveGroup(group);
 

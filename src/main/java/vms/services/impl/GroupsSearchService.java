@@ -49,7 +49,7 @@ public class GroupsSearchService {
 
 
 			for (Group r : rootObject.getGroup()) {
-				if (r.getMembersCount() >= count && r.getIsClosed() == 0) {
+				if (r.getMembers_count() >= count && r.getIsClosed() == 0) {
 					items.add(r);
 				}
 			}

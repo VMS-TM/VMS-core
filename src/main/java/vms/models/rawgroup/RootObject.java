@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 
 public class RootObject {
+
 	@JsonProperty("response")
 	private ArrayList<Group> group;
 
@@ -27,4 +28,5 @@ public class RootObject {
 	public void setExecuteErrors(ArrayList<ExecuteError> execute_errors) {
 		this.execute_errors = execute_errors;
 	}
+
 }

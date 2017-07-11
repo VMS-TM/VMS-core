@@ -61,7 +61,7 @@ public class MainCointroller {
 
 
 	@RequestMapping(value = "main/edit", method = RequestMethod.POST)
-	public String saveUser(@RequestParam("id") String id, @RequestParam("name") String name,
+	public String saveUser(@RequestParam("id") Long id, @RequestParam("name") String name,
 						   @RequestParam("screen_name") String screen_name) throws Exception {
 		Group group = new Group();
 		group.setId(id);
@@ -78,11 +78,14 @@ public class MainCointroller {
 	public String saveProduct(Model model, @RequestParam("groupIdOrName") String groupIdOrName, HttpServletRequest request) {
 
 
-		if (groupsSearchService.validate(groupIdOrName) != null) {
-			groupService.saveGroup(groupsSearchService.validate(groupIdOrName));
+		Group validateGroup = groupsSearchService.validate(groupIdOrName);
+
+		if (validateGroup != null) {
+			groupService.saveGroup(validateGroup);
 		} else {
-			request.getSession().setAttribute("flag", new Boolean(true));
+			request.getSession().setAttribute("flag", Boolean.TRUE);
 		}
+
 		return "redirect:/main";
 	}
 

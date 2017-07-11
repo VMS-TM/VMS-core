@@ -45,7 +45,7 @@ public class ConstantsForVkApi {
 	public final static String PARAMETER_GROUP_SEARCH_METHOD = "execute";
 	public final static String PARAMETER_GROUP_SEARCH_QUERY_ONE = "%22,%22offset%22:0,%20%22count%22:%20500%7D);%0Aif(hyi1.items.length%3E0)%0A%7B%0Avar%20nya1=API.groups.getById(%7B%22group_ids%22:%20hyi1.items@.id,%20%22fields%22:%22members_count%22%7D);%0Avar%20hyi2%20=%20API.groups.search(%7B%22q%22:%20%22";
 	public final static String PARAMETER_GROUP_SEARCH_QUERY_TWO = "%22,%20%22offset%22:500,%22count%22:%20500%7D);%0Aif(hyi2.items.length%20%3E0%20)%0A%7B%0Avar%20nya2%20=%20API.groups.getById(%7B%22group_ids%22:%20hyi2.items@.id,%20%22fields%22:%22members_count%22%7D);return+nya1+%2B+nya2%3B%7D%0Areturn%20nya1;%0A%7D%0Areturn%200;&v=5.64&access_token=f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4";
-	public final static String PARAMETER_GROUP_GET_ID = "groups.getById?group_id=";
+	public final static String PARAMETER_GROUP_GET_ID = "groups.getById?group_ids=";
 	public final static String PARAMETER_GROUP_GET_ID_QUERY = "&fields=members_count&v=5.64";
 
 

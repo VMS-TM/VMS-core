@@ -10,11 +10,13 @@ import vms.configs.security.SecurityConfig;
 import vms.globalVariables.ConstantsForVkApi;
 import vms.models.rawgroup.Group;
 import vms.models.rawgroup.RootObject;
+import vms.services.absr.PropertyService;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -22,7 +24,7 @@ import java.util.List;
 public class GroupsSearchService {
 
 	@Autowired
-	private PropertySearchService propertySearchService;
+	private PropertyService propertyService;
 
 	private static final Logger logger = LoggerFactory.getLogger(GroupsSearchService.class);
 
@@ -84,9 +86,7 @@ public class GroupsSearchService {
 		String[] firstSplit = first.split("[,;:.!?\\s]+");
 		String[] secondSplit = second.split("[,;:.!?\\s]+");
 
-		for (String query1 : firstSplit) {
-			resultQuery.add(query1);
-		}
+		Collections.addAll(resultQuery, firstSplit);
 
 		for (String query1 : firstSplit) {
 			for (String query2 : secondSplit) {
@@ -97,46 +97,32 @@ public class GroupsSearchService {
 		return resultQuery;
 	}
 
-	private URI getUriForValidate(String query) {
+	private String getUriForValidate(String query) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(ConstantsForVkApi.URL)
 				.append(ConstantsForVkApi.PARAMETER_GROUP_GET_ID)
 				.append(query)
 				.append(ConstantsForVkApi.PARAMETER_GROUP_GET_ID_QUERY)
-				.append(ConstantsForVkApi.TOKEN)
-				.append(propertySearchService.getValue("defaultKey"));
+				.append(ConstantsForVkApi.TOKEN);
 
-		URI uri = null;
-		try {
-			uri = new URI(sb.toString());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+		if (propertyService.getPropertyById(1L) != null) {
+			sb.append(propertyService.getPropertyById(1L).getValue());
 		}
 
-		return uri;
+
+		return sb.toString();
 	}
 
 	public Group validate(String query) {
 
-		Group group = null;
 		RestTemplate restTemplate = new RestTemplate();
-		String result = restTemplate.getForObject(getUriForValidate(query), String.class);
+		RootObject result = restTemplate.getForObject(getUriForValidate(query), RootObject.class);
 
-		if (result.contains("\"error_code\":100") || result.contains("\"deactivated\":\"deleted\"") || result.contains("\"members_count\":0")) {
-			return group;
-		} else {
-			ObjectMapper objectMapper = new ObjectMapper();
-			RootObject rootObject = null;
-
-			try {
-				rootObject = objectMapper.readValue(result, RootObject.class);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			return group = rootObject.getGroup().get(0);
+		if (result.getGroup() != null) {
+			return result.getGroup().get(0);
 		}
 
+		return null;
 	}
 
 }

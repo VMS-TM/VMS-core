@@ -10,9 +10,9 @@ public interface PostSearchService {
 
 	void getPostResponseByGroupsList(List<Group> groups, String query);
 
-	List<Post> getPostResponseByGroupName(RestTemplate proxyTemplate, String proxyServer, String nameGroup, String query);
+	List<Post> getPostResponseByGroupName(RestTemplate proxyTemplate, String token, Long id, String query);
 
-	List<Post> getPostResponseByGroupNameWithoutProxy(RestTemplate proxyTemplate, String token, String nameGroup, String query);
+	List<Post> getPostResponseByGroupNameWithoutProxy(RestTemplate proxyTemplate, String token, Long id, String query);
 
 	void getPostFromList(List<Post> postsInBD, List<Post> result, String from, String query);
 }

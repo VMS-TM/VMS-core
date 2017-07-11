@@ -182,11 +182,11 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	@Override
-	public List<Post> getPostResponseByGroupName(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
+	public List<Post> getPostResponseByGroupName(RestTemplate proxyTemplate, String token, Long id, String query) {
 		RootObject rootObject = null;
 		ProxyServer proxyServer = proxyServerService.getProxyServerByToken(token);
 		try {
-			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, nameGroup, query), RootObject.class);
+			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, id, query), RootObject.class);
 		} catch (ResourceAccessException exp) {
 			/*
 				Check proxy if it still works, ping to host
@@ -209,11 +209,11 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	@Override
-	public List<Post> getPostResponseByGroupNameWithoutProxy(RestTemplate proxyTemplate, String token, String nameGroup, String query) {
+	public List<Post> getPostResponseByGroupNameWithoutProxy(RestTemplate proxyTemplate, String token, Long id, String query) {
 
 		RootObject rootObject = null;
 		try {
-			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, nameGroup, query), RootObject.class);
+			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, id, query), RootObject.class);
 		} catch (ResourceAccessException exp) {
 
 		}
@@ -229,7 +229,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 
-	private String getUriQueryWall(String proxyServer, String ownerId, String query) {
+	private String getUriQueryWall(String proxyServer, Long ownerId, String query) {
 		StringBuilder sb = new StringBuilder(ConstantsForVkApi.URL);
 		sb.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH)
 				.append(ownerId)

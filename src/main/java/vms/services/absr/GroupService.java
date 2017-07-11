@@ -12,5 +12,7 @@ public interface GroupService {
 
 	void saveGroup(Group user);
 
+	void saveGroups(List<Group> groups);
+
 	void deleteGroupById(String id);
 }

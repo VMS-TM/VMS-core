@@ -1,7 +1,7 @@
 $("#myModal").on('show.bs.modal', function (e) {
-    var groupId = $(e.relatedTarget).data('group-id');
+    var groupId = $(e.relatedTarget).data('groups-id');
 
-    var cols = $('#group-' + groupId + ' td');
+    var cols = $('#groups-' + groupId + ' td');
     var id = $(cols[1]).text();
     var name = $(cols[2]).text();
     var screen_name = $(cols[3]).text();
@@ -19,15 +19,15 @@ $("#myModal").on('hidden.bs.modal', function () {
 
 
 // после загрузки страницы
-$(function() {
-    $("#checkbox_check").click(function(){
-        $("input[type=checkbox]").each(function(){
+$(function () {
+    $("#checkbox_check").click(function () {
+        $("input[type=checkbox]").each(function () {
             $(this).prop('checked', true);
         });
     });
 
-    $("#checkbox_cancel").click(function(){
-        $("input[type=checkbox]").each(function(){
+    $("#checkbox_cancel").click(function () {
+        $("input[type=checkbox]").each(function () {
             $(this).prop('checked', false);
         });
     });

@@ -9,9 +9,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
-import vms.controllers.UsersSearchController;
-import vms.models.Role;
-
+import vms.models.security.Role;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +25,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 	private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationSuccessHandler.class);
 
-	//Вызывается когда пользователь удачно аутентифицировался
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
 		handle(httpServletRequest, httpServletResponse, authentication);
@@ -36,7 +33,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 		String targetUrl = determineTargetUrl(authentication);
-		//Проверяет, не был ли уже отправлен ответ с сервера
 		if (response.isCommitted()) {
 			System.out.println("Response has already been committed. Unable to redirect to" + targetUrl);
 		}
@@ -53,18 +49,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		} else if (authorities.contains(new Role("USER"))) {
 			return "/user";
 		} else {
-			//.......
 			return "/access_denied";
 		}
 	}
 
 	protected void clearAuthenticationAttributes(HttpServletRequest request) {
-		//Возвращает сессию. Если текущего сеанса нет, то метод не будет создавать новый
 		HttpSession session = request.getSession(false);
 		if (session == null) {
 			return;
 		}
-		//Отключает кеширование исключительных ситуаций
 		session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 	}
 

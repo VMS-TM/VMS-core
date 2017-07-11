@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    </link>
+    <link href="/css/style.css" rel="stylesheet">
+    </link>
+    <title>Proxy properties</title>
+</head>
+<body>
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="/main">VMS Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Выйти</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Группы в БД</a></li>
+                <li><a href="/post/news">Посты</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+                <!--<li><a href="/city/search">Поиск пользователей</a></li>-->
+                <li><a href="/post/blacklisturl">Чёрные списки</a></li>
+                <li><a href="/properties">Настройки</a></li>
+            </ul>
+        </div>
+        <div class=" col-md-9 fixed ">
+            <h2 class="sub-header">Настройки</h2>
+
+            <div th:if="${result} == true">
+                <div class="alert alert-success">
+                    <label>Настройки были успешно сохранены.</label>
+                </div>
+            </div>
+
+            <div th:if="${result} == false">
+                <div class="alert alert-danger">
+                    <label>Пожалуйста, выберите какие - либо настройки.</label>
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs">
+                <li><a href="/properties">Основные</a></li>
+                <!--<li class="dropdown">-->
+                <!--<a class="dropdown-toggle" data-toggle="dropdown">Прокси-->
+                <!--<span class="caret"></span>-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu">-->
+                <!--<li><a href="/properties/proxy">Для поиска по людям</a></li>-->
+                <!--<li><a href="/properties/prgroupsroup">Для поиска по группам</a></li>-->
+                <!--</ul>-->
+                <!--</li>-->
+                <li class="active"><a href="/properties/extra">Доп. настройки</a></li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div>
+                        <form th:action="@{/properties/extra}" method="post">
+                            <input type="checkbox" id="deleteSmilesAndTags" th:name="options" th:value="1"/>
+                            <label for="deleteSmilesAndTags">Удалить смайлы и теги групп в тексте постов в базе
+                                данных.</label>
+                            <div align="right">
+                                <button class="btn btn-primary dark-button-primary" type="submit">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal fade" id="add-modal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form role="form" action="/properties/proxy/add" method="post">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Adding proxy server</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div>
+
+                            <label>Login (number of phone or email)</label>
+                            <input type="text" class="form-control" name="login" required="required"></input>
+
+                            <label>Password </label>
+                            <input type="text" class="form-control" name="password" required="required"></input>
+
+                            <label>Token (only digits and letters)</label>
+                            <input type="text" class="form-control" name="token" required="required"></input>
+
+                            <label>IP (example:255.255.255.255)</label>
+                            <input type="text" class="form-control" name="ip" required="required"
+                                   pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"></input>
+
+                            <label>Port (max value: 65535)</label>
+                            <input type="text" class="form-control" name="port" required="required"
+                                   pattern="\d{1,5}"></input>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary dark-button-primary" value="Add"/>
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript" th:src="@{/js/jquery-3.2.1.js}"></script>
+<script type="application/javascript" th:src="@{/js/bootstrap.js}"></script>
+
+</body>
+</html>

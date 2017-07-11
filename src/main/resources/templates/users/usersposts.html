@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <link href="/css/bootstrap.css" rel="stylesheet"></link>
+    <link href="/css/style.css" rel="stylesheet"></link>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div>
+        <a class="navbar-brand" href="/main">VMS Project</a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Выйти</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 colxxx sidebar">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="/main">Группы в БД</a></li>
+                <li><a href="/post/news">Посты</a></li>
+                <li><a href="/showgroups">Поиск групп</a></li>
+                <!--<li><a href="/city/search">Поиск пользователей</a></li>-->
+                <li><a href="/post/blacklisturl">Чёрные списки</a></li>
+                <li><a href="/properties">Настройки</a></li>
+            </ul>
+            <!--<button type="button" class="btn btn-primary">Всего постов <span th:text="${#lists.size(posts)}" class="badge"> </span></button>-->
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <th>Запрос</th>
+                    <th>Стоп процесс</th>
+                </tr>
+                <tr th:each="map : ${mapSchedule}">
+                    <form th:action="@{/post/news}" method="get">
+                        <input class="hide-param" name="key" th:value="${map.key.word}"/>
+                        <input class="hide-param" name="fromwhere" th:value="news"/>
+                        <td><input type="submit" class="btn btn-info" th:value="${map.key.word}"/></td>
+                    </form>
+                    <form th:action="@{/post/stop}" method="post">
+                        <input class="hide-param" name="key" th:value="${map.key.word}"/>
+                        <input class="hide-param" name="fromwhere" th:value="user"/>
+                        <td><input type="submit" class="btn btn-danger" value="Завершить"/></td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class=" col-md-9 fixed ">
+            <h2 class="sub-header">Посты со стен <span th:text="${#lists.size(vkusers)}"></span> пользователей</h2>
+
+            <div th:if="${param.warning != null}">
+                <div class="alert alert-danger">
+                    <label>Проверьте Proxy Servers</label>
+                </div>
+            </div>
+
+            <div th:if="${param.postInGroupDanger != null}">
+                <div class="alert alert-danger">
+                    <label>Произошла ошибка при отправке поста в группу.</label>
+                </div>
+            </div>
+
+            <div th:if="${param.postInGroupSuccess != null}">
+                <div class="alert alert-success">
+                    <label>Пост был успешно отправлен в группу.</label>
+                </div>
+            </div>
+
+            <th:block th:each="proxy : ${badproxy}">
+                <div class="alert alert-danger">
+                    <label th:text="'Проверьте прокси под логином - ' + ${proxy.login}">Пост был успешно отправлен в
+                        группу.</label>
+                </div>
+            </th:block>
+
+            <ul class="nav nav-tabs">
+                <li><a href="/post/news">Объявления</a></li>
+                <li><a href="/post/">Посты из групп</a></li>
+                <li class="active"><a href="/post/users/wall">Со стен пользователей</a></li>
+                <div align="right">
+                    <a class="btn btn-primary" type="button" data-toggle="modal"
+                       data-target="#SearchPost">Поиск</a>
+                </div>
+                <div align="right">
+                    <form th:action="@{/post/deleteAllPosts}" th:object="${post}" method="post">
+                        <input class="hide-param" name="deleteAll" th:value="true"/>
+                        <input class="hide-param" name="fromwhere" th:value="user"/>
+                        <td><input type="submit" class="btn btn-danger" value="Удалить все посты"/></td>
+                    </form>
+                </div>
+            </ul>
+            <div class="tab-content boxShadow3 bg-tab">
+                <table class="table table-striped">
+                    <thead></thead>
+                    <tbody>
+                    <tr>
+                        <th>Содержание</th>
+                        <th>Статус</th>
+                        <th>Начало поста</th>
+                        <th>Дата</th>
+                        <th>В группу</th>
+                        <th>Удаление</th>
+                    </tr>
+                    <tr th:each="post : ${posts}"
+                        th:if="${post.fromWhere}=='user'">
+                        <td width="10"><a class="btn btn-default" type="button"
+                                          data-toggle="modal" th:attr="data-target='#'+${post.id}">инфо</a></td>
+                        <td><span th:if="${post.savedInDb} == true" class="glyphicon glyphicon-info-sign"></span> <span
+                                th:if="${post.havePhoto} == true"
+                                class="glyphicon glyphicon-picture"></span> <span th:if="${post.postedToGroup} == true"
+                                                                                  class="glyphicon glyphicon-ok-sign"></span>
+                        </td>
+                        <td><p class="beginingOfPost" th:text="${post.text}"></p></td>
+                        <td width="100" th:text="${#dates.format(post.date, 'yyyy-MM-dd HH:mm:ss')}">Дата</td>
+                        <form th:action="@{/post/addPost}" th:object="${post}" method="post">
+                            <input type="hidden" name="id" th:value="${post.id}"/>
+                            <input type="hidden" name="date" th:value="${post.date}"/>
+                            <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
+                            <input type="hidden" name="saveInDataBase" th:value="${post.savedInDb}"/>
+                            <input class="hide-param" name="title" th:value="${post.headling}"/>
+                            <input class="hide-param" name="owner" th:value="${post.nameOfPerson}"/>
+                            <input class="hide-param" name="district" th:value="${post.area}"/>
+                            <input class="hide-param" name="price" th:value="${post.priceOfFlat}"/>
+                            <input class="hide-param" name="textOnView" th:value="${post.textOnView}"/>
+                            <input class="hide-param" name="adress" th:value="${post.metroAndAddress}"/>
+                            <input class="hide-param" name="contact" th:value="${post.phoneNumber}"/>
+                            <input class="hide-param" name="info" th:value="${post.text}"/>
+                            <td width="50"><input type="submit" class="btn btn-default" value="Запостить"/></td>
+                        </form>
+                        <form th:action="@{/post/deletePost}" th:object="${post}" method="post">
+                            <input class="hide-param" name="idDeletePost" th:value="${post.id}"/>
+                            <input type="hidden" name="fromwhere" th:value="${post.fromWhere}"/>
+                            <td><input type="submit" class="btn btn-danger" value="Удалить"/></td>
+                        </form>
+                        <div class="container">
+                            <div class="modal fade" th:id="${post.id}">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <form role="form" th:action="@{/post/update}" th:object="${post}" method="post">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title" align="center"
+                                                    th:text="'Пост номер ' + ${post.id}"></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active"><a th:href="'#home' + ${post.id}"
+                                                                          data-toggle="tab">Общие</a></li>
+                                                    <li><a th:href="'#photo' + ${post.id}" data-toggle="tab">Фото</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active in" th:id="'home' + ${post.id}">
+                                                        <div class="row">
+                                                            <input type="hidden" name="id" th:value="${post.id}"/>
+                                                            <input type="hidden" name="date" th:value="${post.date}"/>
+                                                            <input type="hidden" name="fromwhere"
+                                                                   th:value="${post.fromWhere}"/>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="iTitle">Заголовок</label>
+                                                                    <input th:value="${post.headling}" name="title"
+                                                                           type="text" class="form-control"
+                                                                           id="iTitle" placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iOwner">Собственник</label>
+                                                                    <input name="owner" th:value="${post.nameOfPerson}"
+                                                                           type="text" class="form-control"
+                                                                           id="iOwner" placeholder=""
+                                                                           value="Собственник"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iDistrict">Район</label>
+                                                                    <input name="district" th:value="${post.area}"
+                                                                           type="text"
+                                                                           class="form-control" id="iDistrict"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iPrice">Стоимость</label>
+                                                                    <input name="price" type="text"
+                                                                           th:value="${post.priceOfFlat}"
+                                                                           class="form-control" id="iPrice"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="iLol">Text</label>
+                                                                    <input name="textOnView"
+                                                                           th:value="${post.textOnView}"
+                                                                           type="text" class="form-control"
+                                                                           id="iLol" placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iAdress">Адрес</label>
+                                                                    <input name="adress" type="text"
+                                                                           th:value="${post.metroAndAddress}"
+                                                                           class="form-control" id="iAdress"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iContact">Контакты</label>
+                                                                    <input name="contact" type="text"
+                                                                           th:value="${post.phoneNumber}"
+                                                                           class="form-control" id="iContact"
+                                                                           placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="iInfo">Доп. инфо:</label>
+                                                                    <textarea name="info" class="form-control"
+                                                                              th:text="${post.text}" rows="3"
+                                                                              id="iInfo"></textarea>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iVkh"><a name="vkh"
+                                                                                         th:href="@{'https://vk.com/public' + ${post.ownerId} + '?w=wall-' + ${post.ownerId} + '_' + ${post.id}}"
+                                                                                         target="_blank">Ссылка
+                                                                        поста в ВК</a></label>
+                                                                    <input name="nVkh" type="text" class="form-control"
+                                                                           id="iVkh" placeholder=""/>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="iVka"><a name="vka"
+                                                                                         th:href="@{'https://vk.com/id' + ${post.from_id}}"
+                                                                                         target="_blank">Ссылка
+                                                                        на автора поста в ВК</a></label>
+                                                                    <input name="nVka" th:text="${post.authorOfpost}"
+                                                                           type="text" class="form-control"
+                                                                           id="iVka" placeholder=""/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="tab-pane fade" th:id="'photo' + ${post.id}">
+                                                        <div th:each="photo: ${post.photos}">
+                                                            <img th:src="${photo.referenceOnPost}"></img>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <input type="submit" class="btn btn-primary"
+                                                       value="Сохранить изменения"/>
+                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                       value="${_csrf.token}"/>
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Закрыть
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal fade" id="SearchPost">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form role="form" action="/post/users/wall" method="post">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Запрос постов пользователей</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label>Запрос постов</label>
+                            <input class="form-control" required="required" type="text" name="query"/>
+                        </div>
+                        <div>
+                            <label>С какой периодичностью искать</label>
+                            <select id="time" name="time">
+                                <option th:value="1">1 мин</option>
+                                <option th:value="5">5 мин</option>
+                                <option th:value="15">15 мин</option>
+                                <option th:value="30">30 мин</option>
+                                <option th:value="60">1 час</option>
+                                <option th:value="120">2 часа</option>
+                                <option th:value="180">3 часа</option>
+                                <option th:value="240">4 часа</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Найти"/>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/modal.js"></script>
+<script src="/js/status.js"></script>
+</body>
+</html>

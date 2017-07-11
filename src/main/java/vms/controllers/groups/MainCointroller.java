@@ -14,6 +14,7 @@ import vms.services.absr.groups.GroupService;
 import vms.services.impl.groups.GroupsSearchService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 @Controller
@@ -54,7 +55,7 @@ public class MainCointroller {
 	}
 
 	@RequestMapping("groups/{id}")
-	public String showProduct(@PathVariable String id, Model model) {
+	public String showProduct(@PathVariable Long id, Model model) {
 		model.addAttribute("groups", groupService.getGroupById(id));
 		return "showgroups";
 	}
@@ -78,7 +79,13 @@ public class MainCointroller {
 	public String saveProduct(Model model, @RequestParam("groupIdOrName") String groupIdOrName, HttpServletRequest request) {
 
 
-		Group validateGroup = groupsSearchService.validate(groupIdOrName);
+		Group validateGroup = null;
+
+		try {
+			validateGroup = groupsSearchService.validate(groupIdOrName);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		if (validateGroup != null) {
 			groupService.saveGroup(validateGroup);
@@ -91,7 +98,7 @@ public class MainCointroller {
 
 
 	@RequestMapping("main/delete/{id}")
-	public String delete(@PathVariable String id) {
+	public String delete(@PathVariable Long id) {
 		groupService.deleteGroupById(id);
 		return "redirect:/main";
 	}

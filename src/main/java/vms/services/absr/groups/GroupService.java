@@ -8,11 +8,11 @@ public interface GroupService {
 
 	List<Group> listAllVkGroups();
 
-	Group getGroupById(String id);
+	Group getGroupById(Long id);
 
 	void saveGroup(Group user);
 
 	void saveGroups(List<Group> groups);
 
-	void deleteGroupById(String id);
+	void deleteGroupById(Long id);
 }

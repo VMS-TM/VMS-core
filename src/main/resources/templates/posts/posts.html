@@ -91,7 +91,7 @@
                 <div align="right">
                     <form th:action="@{/post/deleteAllPosts}" th:object="${post}" method="post">
                         <input class="hide-param" name="deleteAll" th:value="true"/>
-                        <input class="hide-param" name="fromwhere" th:value="group"/>
+                        <input class="hide-param" name="fromwhere" th:value="groups"/>
                         <td><input type="submit" class="btn btn-danger" value="Удалить все посты"/></td>
                     </form>
                 </div>

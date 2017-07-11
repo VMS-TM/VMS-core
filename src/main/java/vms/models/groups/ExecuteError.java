@@ -4,10 +4,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 
 public class ExecuteError {
+
 	@JsonProperty("method")
 	private String method;
+
 	@JsonProperty("error_code")
 	private int error_code;
+
 	@JsonProperty("error_msg")
 	private String error_msg;
 

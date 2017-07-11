@@ -112,13 +112,22 @@ public class GroupsSearchService {
 		return sb.toString();
 	}
 
-	public Group validate(String query) {
+	public Group validate(String query) throws IOException {
 
 		RestTemplate restTemplate = new RestTemplate();
-		RootObject result = restTemplate.getForObject(getUriForValidate(query), RootObject.class);
+		RootObject rootObject = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+		String result = restTemplate.getForObject(getUriForValidate(query), String.class);
 
-		if (result.getGroup() != null) {
-			return result.getGroup().get(0);
+		rootObject = objectMapper.readValue(result, RootObject.class);
+
+		if (rootObject.getError() != null) {
+			logger.debug(rootObject.getError().getErrorMsg());
+			return null;
+		}
+
+		if (rootObject.getGroup() != null) {
+			return rootObject.getGroup().get(0);
 		}
 
 		return null;

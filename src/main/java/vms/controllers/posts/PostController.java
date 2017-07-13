@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/post")
 public class PostController {
 
+
 	@Autowired
 	private VkPostService postService;
 
@@ -70,7 +71,12 @@ public class PostController {
 
 
 	private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(ConstantsForVkApi.POOL_SIZE);
+
 	private final Map<Query, ScheduledFuture<?>> mapSchedule = new ConcurrentHashMap<>();
+
+	private static final int DELETE_THREADS = 1;
+
+	private final ScheduledExecutorService deleteOldPosts = Executors.newScheduledThreadPool(DELETE_THREADS);
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
 	public String getPostsFromDb(Model model,
@@ -83,14 +89,14 @@ public class PostController {
 			Query query = queryService.getQuery(key, from);
 
 			if (query != null) {
-				model.addAttribute("posts", query.getPosts());
+				model.addAttribute("posts", query.getPosts().stream().filter(post -> Boolean.FALSE.equals(post.isBlackList())).collect(Collectors.toList()));
 			}
 
 			model.addAttribute("mapSchedule", findMap(mapSchedule, "groups"));
 			model.addAttribute("badproxy", badProxy);
 			return "posts/posts";
 		} else {
-			List<Post> result = postService.findAllFrom("groups");
+			List<Post> result = postService.findPostsBlackListAndFrom(false, "groups");
 
 			prepareView(result);
 			preparationPost(result);
@@ -152,7 +158,7 @@ public class PostController {
 			Query query = queryService.getQuery(key, from);
 
 			if (query != null) {
-				model.addAttribute("posts", query.getPosts());
+				model.addAttribute("posts", query.getPosts().stream().filter(post -> Boolean.FALSE.equals(post.isBlackList())).collect(Collectors.toList()));
 			}
 
 			model.addAttribute("mapSchedule", findMap(mapSchedule, "news"));
@@ -238,10 +244,8 @@ public class PostController {
 	}
 
 	@RequestMapping(value = {"/deletePost"}, method = RequestMethod.POST)
-	public String deletePosts(@RequestParam(value = "idDeletePost") Long id,
-							  @RequestParam(value = "fromwhere") String from,
+	public String deletePosts(@RequestParam(value = "fromwhere") String from,
 							  @RequestParam(value = "dbId", required = false) Long dbId) {
-
 
 		List<Query> queryList = queryService.findAllByFrom(from);
 		Post post = postService.getByIdAndFrom(dbId, from);
@@ -249,15 +253,18 @@ public class PostController {
 			queryList.forEach(query -> {
 				Set<Post> postList = query.getPosts();
 				if (postList.contains(post)) {
-					postList.remove(post);
+					post.setBlackList(true);
 					query.setPosts(postList);
 					queryService.addQuery(query);
 				}
 			});
 			if (post != null) {
-				postService.delete(post);
+				post.setBlackList(true);
+				postService.addPost(post);
 			}
 		}
+
+		deleteBlackListPosts(from);
 
 		return redirect(from);
 	}
@@ -277,6 +284,8 @@ public class PostController {
 			postService.deleteAllPosts(postList);
 		}
 
+		deleteBlackListPosts(from);
+
 		return redirect(from);
 	}
 
@@ -285,15 +294,14 @@ public class PostController {
 							  @RequestParam(value = "query") String query,
 							  @RequestParam(value = "time") Long time) {
 
-
 		Query word = queryService.getQuery(query, "groups");
 		if (word == null) {
 			word = new Query(query, "groups");
 		}
 
-		List<Post> result = postService.findAllFrom("groups");
+		List<Post> result = postService.findPostsBlackListAndFrom(false, "groups");
 		List<ProxyServer> badProxy = proxyServerService.findBadProxy(false);
-		Set<Post> postSet = new HashSet<Post>(result);
+		Set<Post> postSet = new HashSet<>(result);
 		word.setPosts(postSet);
 		queryService.addQuery(word);
 		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
@@ -444,20 +452,18 @@ public class PostController {
 	}
 
 	private void hasPhoto(Long dbId, String from, Post editedPost) {
-		if (postService.getByIdAndFrom(dbId, from).isHavePhoto()) {
+
+		Post post = postService.getByIdAndFrom(dbId, from);
+		if (post != null && post.isHavePhoto()) {
 			editedPost.setHavePhoto(true);
-			editedPost.setPhotos(postService.getByIdAndFrom(dbId, from).getPhotos());
+			editedPost.setPhotos(post.getPhotos());
 		}
 	}
 
-	private Date getDate(String date) {
+	private Date getDate(String date) throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date dateOfPost = null;
-		try {
-			dateOfPost = format.parse(date);
-		} catch (ParseException e) {
-
-		}
+		dateOfPost = format.parse(date);
 		return dateOfPost;
 	}
 
@@ -471,6 +477,31 @@ public class PostController {
 		} catch (DataIntegrityViolationException exp) {
 			exp.printStackTrace();
 		}
+	}
+
+	private void deleteBlackListPosts(String from) {
+
+		scheduledExecutorService.scheduleAtFixedRate(() -> {
+
+			List<Post> posts = postService.findPostsBlackListAndFrom(true, from);
+
+			if (posts != null) {
+				postService.delete(posts);
+			}
+
+			List<Query> queryList = queryService.findAllByFrom(from);
+
+			if (queryList != null) {
+
+				queryList.forEach(query -> {
+					List<Post> queryPostList = query.getPosts().stream().filter(post -> Boolean.FALSE.equals(post.isBlackList())).collect(Collectors.toList());
+
+					postService.delete(queryPostList);
+				});
+
+			}
+
+		}, 0, 24, TimeUnit.HOURS);
 	}
 
 }

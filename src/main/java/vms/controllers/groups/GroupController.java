@@ -42,7 +42,7 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "findgroups", method = RequestMethod.POST)
-	public String saveUser(Model model, @RequestParam("memberscount") String count, @RequestParam("first") String first, @RequestParam("second") String second) throws Exception {
+	public String saveUser(Model model, @RequestParam("memberscount") String count, @RequestParam("first") String first, @RequestParam(value = "second", required = false) String second) throws Exception {
 
 		resp = groupsSearchService.getGroupsByGroupName(first, second, Integer.parseInt(count));
 		model.addAttribute("groups", resp);

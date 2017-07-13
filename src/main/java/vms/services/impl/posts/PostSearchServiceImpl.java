@@ -27,11 +27,13 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 
 @Service
 public class PostSearchServiceImpl implements PostSearchService {
 
+	public static final int TWENTY_FOUR_HOURS = 86_400_000;
 	@Autowired
 	private PropertyService propertyService;
 
@@ -206,7 +208,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		/*
 			Check if proxy works as normal mode
 		 */
-		if (rootObject.getPostResponse() != null) {
+		if (rootObject != null && rootObject.getPostResponse() != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
 			proxyServer.setWork(true);
 			proxyServerService.addProxyServer(proxyServer);
@@ -216,18 +218,14 @@ public class PostSearchServiceImpl implements PostSearchService {
 	}
 
 	@Override
-	public List<Post> getPostResponseByGroupNameWithoutProxy(RestTemplate proxyTemplate, String token, Long id, String query) {
+	public List<Post> getPostResponseByGroupNameWithoutProxy(RestTemplate proxyTemplate, String token, Long id, String query) throws ResourceAccessException {
 
 		RootObject rootObject = null;
-		try {
-			rootObject = proxyTemplate.getForObject(getUriQueryWall(token, id, query), RootObject.class);
-		} catch (ResourceAccessException exp) {
-
-		}
+		rootObject = proxyTemplate.getForObject(getUriQueryWall(token, id, query), RootObject.class);
 		/*
 			Check if proxy works as normal mode
 		 */
-		if (rootObject.getPostResponse() != null) {
+		if (rootObject != null && rootObject.getPostResponse() != null) {
 			rootObject.getPostResponse().getPosts().removeIf(post -> post.getMarkedAsAds() == 1);
 			return rootObject.getPostResponse().getPosts();
 		}
@@ -257,6 +255,9 @@ public class PostSearchServiceImpl implements PostSearchService {
 	public void getPostFromList(List<Post> postsInBD, List<Post> result, String from, String query) {
 		Date date = new Date();
 		Query word = queryService.getQuery(query, from);
+		List<Post> posts = vkPostService.findPostsBlackListAndFrom(true, from);
+		List<Post> queryPostList = word.getPosts().stream().filter(post -> Boolean.FALSE.equals(post.isBlackList())).collect(Collectors.toList());
+
 
 		if (word == null) {
 			word = new Query(query, from);
@@ -265,7 +266,7 @@ public class PostSearchServiceImpl implements PostSearchService {
 		/**
 		 * 86_400_000 - 24 hours in milliseconds
 		 */
-		Long daysAgoDate = date.getTime() - 86_400_000;
+		Long daysAgoDate = date.getTime() - TWENTY_FOUR_HOURS;
 
 		Query finalWord = word;
 		result.stream()
@@ -300,14 +301,14 @@ public class PostSearchServiceImpl implements PostSearchService {
 					}
 				});
 
-		if (!postsInBD.containsAll(result)) {
-			Set<Post> postSet = new HashSet<Post>(result);
+		if ((!posts.containsAll(result)) && ((!queryPostList.containsAll(result))) && (!postsInBD.containsAll(result))) {
+			Set<Post> postSet = new HashSet<>(result);
 			word.setPosts(postSet);
 			queryService.addQuery(word);
 		} else if (postsInBD.containsAll(result) && result.size() != 0) {
 			result.stream()
 					.filter(post -> !postsInBD.contains(post));
-			Set<Post> postSet = new HashSet<Post>(result);
+			Set<Post> postSet = new HashSet<>(result);
 			word.setPosts(postSet);
 			queryService.addQuery(word);
 		}

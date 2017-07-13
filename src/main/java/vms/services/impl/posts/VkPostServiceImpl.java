@@ -37,6 +37,11 @@ public class VkPostServiceImpl implements VkPostService {
 	}
 
 	@Override
+	public void delete(List<Post> post) {
+		postRepo.delete(post);
+	}
+
+	@Override
 	public void addPost(Post post) {
 		postRepo.save(post);
 	}

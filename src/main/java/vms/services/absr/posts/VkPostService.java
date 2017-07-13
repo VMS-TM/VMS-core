@@ -15,6 +15,8 @@ public interface VkPostService {
 
 	void delete(Post post);
 
+	void delete(List<Post> post);
+
 	void addPost(Post post);
 
 	void deletePost(Long id);

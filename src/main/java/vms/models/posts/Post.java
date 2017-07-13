@@ -100,7 +100,7 @@ public class Post implements Serializable {
 	@Column(length = 1024)
 	private String word;
 
-	@Column(length = 1024)
+
 	private boolean blackList;
 
 	public boolean isBlackList() {

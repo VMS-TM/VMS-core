@@ -27,50 +27,44 @@ public class GroupsSearchService {
 
 	private static final Logger logger = LoggerFactory.getLogger(GroupsSearchService.class);
 
-	final String path = ConstantsForVkApi.URL + ConstantsForVkApi.PARAMETER_GROUP_SEARCH_METHOD;
-
-	public List<Group> getGroupsByGroupName(String first, String second, long count) {
+	public List<Group> getGroupsByGroupName(String first, String second, long count) throws IOException {
 
 		RestTemplate restTemplate = new RestTemplate();
-		List<Group> items = new ArrayList<Group>();
+		List<Group> items = new ArrayList<>();
 
-		for (String query : parseQuery(first, second)) {
-			String result = restTemplate.getForObject(getUri(path, query), String.class);
+		String path = ConstantsForVkApi.URL + ConstantsForVkApi.PARAMETER_GROUPS_SEARCH_METHOD;
+		String result = restTemplate.getForObject(getUri(first), String.class);
 
-			ObjectMapper objectMapper = new ObjectMapper();
-			RootObject rootObject = null;
+		ObjectMapper objectMapper = new ObjectMapper();
 
-			try {
-				rootObject = objectMapper.readValue(result, RootObject.class);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		RootObject rootObject = objectMapper.readValue(result, RootObject.class);
 
-
+		if (rootObject != null) {
 			for (Group r : rootObject.getGroup()) {
 				if (r.getMembers_count() >= count && r.getIsClosed() == 0) {
 					items.add(r);
 				}
 			}
 		}
+
+
 		return items;
 
 
 	}
 
-	private URI getUri(String path, String query) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(ConstantsForVkApi.URL)
-				.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH_EXE)
-				.append(query)
+	private URI getUri(String query){
+		StringBuilder sb =  new StringBuilder();
+		sb.append(ConstantsForVkApi.PARAMETER_GROUPS_METHOD_EXECUTE)
+				.append(query.replaceAll("\\p{P}",""))
 				.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH_QUERY_ONE)
-				.append(query)
+				.append(query.replaceAll("\\p{P}",""))
 				.append(ConstantsForVkApi.PARAMETER_GROUP_SEARCH_QUERY_TWO);
 
 
 		URI uri = null;
 		try {
-			uri = new URI(sb.toString().replaceAll(" ", "+"));
+			uri = new URI(sb.toString().replaceAll(" ","+"));
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -79,9 +73,25 @@ public class GroupsSearchService {
 		return uri;
 	}
 
+
+	private String getUriTwo(String path, String query) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(path)
+				.append(ConstantsForVkApi.PARAMETER_GROUPS_QUERY)
+				.append(query)
+				.append(ConstantsForVkApi.PARAMETER_GROUPS_COUNT)
+				.append(ConstantsForVkApi.TOKEN);
+
+		if (propertyService.getPropertyById(1L) != null) {
+			sb.append(propertyService.getPropertyById(1L).getValue());
+		}
+
+		return sb.toString();
+	}
+
 	private List<String> parseQuery(String first, String second) {
 
-		List<String> resultQuery = new ArrayList<String>();
+		List<String> resultQuery = new ArrayList<>();
 		String[] firstSplit = first.split("[,;:.!?\\s]+");
 		String[] secondSplit = second.split("[,;:.!?\\s]+");
 

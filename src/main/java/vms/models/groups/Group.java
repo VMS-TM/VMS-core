@@ -1,15 +1,18 @@
 package vms.models.groups;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "groups")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Group {
 
 	@Id
 	@JsonProperty("id")
+	@Column(name = "id")
 	private Long id;
 
 	public Long getId() {
@@ -150,5 +153,26 @@ public class Group {
 
 	public void setPhoto200(String photo_200) {
 		this.photo_200 = photo_200;
+	}
+
+	public Group() {
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Group group = (Group) o;
+
+		if (name != null ? !name.equals(group.name) : group.name != null) return false;
+		return screen_name != null ? screen_name.equals(group.screen_name) : group.screen_name == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (screen_name != null ? screen_name.hashCode() : 0);
+		return result;
 	}
 }

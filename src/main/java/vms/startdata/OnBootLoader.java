@@ -53,7 +53,7 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 		loadUsers();
 //		loadProxyServers();
 //		loadUsersFromVK();
-//		loadProperty();
+		loadProperty();
 	}
 
 	private void loadGroups() {
@@ -311,19 +311,19 @@ public class OnBootLoader implements ApplicationListener<ContextRefreshedEvent> 
 	private void loadProperty() {
 
 		Property property = new Property();
-		property.setName("defaultKey");
-		property.setValue("5d866b1300b52bd30eacd405e05a3ed90673f31f349072cf16a616ee02e8ad1a22c3eccdfe21e1f40dc88");
+		property.setName("1");
+		property.setValue("5677d81dc28dc7a62301f4545f716cfba838793c02d57785d1128783522d434ccb883c653425e2ac3b9da");
 		property.setGroupID("148705229");
 		propertyService.addProperty(property);
 		log.info("Add 1 default property");
 
-		Property propertySecond = new Property();
-		propertySecond.setName("hey");
-		propertySecond.setValue("f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4");
-		propertySecond.setGroupID("148705229");
-
-		propertyService.addProperty(propertySecond);
-		log.info("Add 2  properties");
+//		Property propertySecond = new Property();
+//		propertySecond.setName("hey");
+//		propertySecond.setValue("f0874a39a169ec6e0b35749c71cdcecc7da034205785e5d622c173454ff95b4532cbf6bf20bf924f365e4");
+//		propertySecond.setGroupID("148705229");
+//
+//		propertyService.addProperty(propertySecond);
+//		log.info("Add 2  properties");
 
 
 	}

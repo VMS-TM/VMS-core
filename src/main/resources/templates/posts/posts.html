@@ -84,16 +84,29 @@
                 <li><a href="/post/news">Объявления</a></li>
                 <li class="active"><a href="/post/">Посты из групп</a></li>
                 <!--<li><a hrepostspost/users/wall">Со стен пользователей</a></li>-->
+
                 <div align="right">
                     <a class="btn btn-primary" type="button" data-toggle="modal"
                        data-target="#SearchPost">Поиск</a>
                 </div>
-                <div align="right">
-                    <form th:action="@{/post/deleteAllPosts}" th:object="${post}" method="post">
-                        <input class="hide-param" name="deleteAll" th:value="true"/>
-                        <input class="hide-param" name="fromwhere" th:value="groups"/>
-                        <td><input type="submit" class="btn btn-danger" value="Удалить все посты"/></td>
-                    </form>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form th:action="@{/post/deleteAllQuery}" th:object="${post}" method="post">
+                                <input class="hide-param" name="fromwhere" th:value="groups"/>
+                                <td><input type="submit" class="btn btn-danger" value="Удалить все запросы"/></td>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <form th:action="@{/post/deleteAllPosts}" th:object="${post}" method="post">
+                                <input class="hide-param" name="deleteAll" th:value="true"/>
+                                <input class="hide-param" name="fromwhere" th:value="groups"/>
+                                <td><input type="submit" class="btn btn-danger" value="Удалить все посты"/></td>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
             </ul>
             <div class="tab-content boxShadow3 bg-tab">

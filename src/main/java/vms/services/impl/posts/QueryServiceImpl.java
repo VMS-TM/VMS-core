@@ -55,6 +55,11 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
+	public List<Query> getAllQuery(String query, String from) {
+		return queryRepository.findAllByWordAndFromwhere(query, from);
+	}
+
+	@Override
 	public Query getById(Long id) {
 		return queryRepository.getQueryById(id);
 	}

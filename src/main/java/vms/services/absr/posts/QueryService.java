@@ -23,6 +23,8 @@ public interface QueryService {
 
 	Query getQuery(String query, String from);
 
+	List<Query> getAllQuery(String query, String from);
+
 	Query getById(Long id);
 
 	List<Query> findAllByFrom(String from);

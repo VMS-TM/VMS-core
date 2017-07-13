@@ -198,9 +198,11 @@ public class PostController {
 						  @RequestParam(value = "time") Long time) {
 
 		Query word = queryService.getQuery(query, "news");
+
 		if (word == null) {
 			word = new Query(query, "news");
 		}
+
 
 		List<Post> result = postService.findPostsBlackListAndFrom(false, "news");
 		prepareView(result);
@@ -272,12 +274,6 @@ public class PostController {
 	@RequestMapping(value = {"/deleteAllPosts"}, method = RequestMethod.POST)
 	public String deleteAllPosts(@RequestParam(value = "fromwhere") String from) {
 
-		List<Query> queryList = queryService.getAllQueryFromDb();
-
-		if (queryList != null) {
-			queryService.deleteAllQuery(queryList);
-		}
-
 		List<Post> postList = postService.getParticualPosts(from);
 
 		if (postList != null) {
@@ -288,6 +284,30 @@ public class PostController {
 
 		return redirect(from);
 	}
+
+	@RequestMapping(value = {"/deleteAllQuery"}, method = RequestMethod.POST)
+	public String deleteAllQuery(@RequestParam(value = "fromwhere") String from) {
+
+		List<Query> queryList = queryService.getAllQueryFromDb();
+
+		if (queryList != null) {
+
+			queryList.forEach(query -> {
+
+				mapSchedule.get(query).cancel(true);
+				mapSchedule.remove(query);
+
+			});
+
+			queryService.deleteAllQuery(queryList);
+		}
+
+
+		deleteBlackListPosts(from);
+
+		return redirect(from);
+	}
+
 
 	@RequestMapping(value = {"/req"}, method = RequestMethod.POST)
 	public String getNewPosts(Model model,

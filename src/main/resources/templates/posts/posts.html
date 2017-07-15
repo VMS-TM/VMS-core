@@ -55,6 +55,12 @@
         <div class=" col-md-9 fixed ">
             <h2 class="sub-header">Посты из групп</h2>
 
+            <div th:if="${param.wordExist != null}">
+                <div class="alert alert-danger">
+                    <label>Такой запрос уже существует</label>
+                </div>
+            </div>
+
             <div th:if="${param.warning != null}">
                 <div class="alert alert-danger">
                     <label>Проверьте Proxy Servers</label>

@@ -182,11 +182,9 @@ public class PostController {
 
 		Query query = queryService.getQuery(key, from);
 
-		try {
+		if (query != null && mapSchedule.get(query) != null) {
 			mapSchedule.get(query).cancel(true);
 			mapSchedule.remove(query);
-		} catch (NullPointerException exp) {
-
 		}
 
 		return redirect(from);
@@ -199,21 +197,26 @@ public class PostController {
 
 		Query word = queryService.getQuery(query, "news");
 
-		if (word == null) {
-			word = new Query(query, "news");
-		}
-
-
 		List<Post> result = postService.findPostsBlackListAndFrom(false, "news");
 		prepareView(result);
 		preparationPost(result);
 		Set<Post> postSet = new HashSet<>(result);
-		word.setPosts(postSet);
-		queryService.addQuery(word);
 
-		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
-			newsSearchService.getAdsFromNews(query);
-		}, 0, time, TimeUnit.MINUTES));
+		if (word == null) {
+			word = new Query(query, "news");
+			word.setPosts(postSet);
+			queryService.addQuery(word);
+
+			mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
+				newsSearchService.getAdsFromNews(query);
+			}, 0, time, TimeUnit.MINUTES));
+
+		} else {
+			return "redirect:/post/news?wordExist";
+
+		}
+
+
 		model.addAttribute("posts", result);
 		model.addAttribute("mapSchedule", mapSchedule);
 		return "redirect:/post/news";
@@ -294,8 +297,10 @@ public class PostController {
 
 			queryList.forEach(query -> {
 
-				mapSchedule.get(query).cancel(true);
-				mapSchedule.remove(query);
+				if (mapSchedule.get(query) != null) {
+					mapSchedule.get(query).cancel(true);
+					mapSchedule.remove(query);
+				}
 
 			});
 
@@ -315,18 +320,23 @@ public class PostController {
 							  @RequestParam(value = "time") Long time) {
 
 		Query word = queryService.getQuery(query, "groups");
-		if (word == null) {
-			word = new Query(query, "groups");
-		}
-
 		List<Post> result = postService.findPostsBlackListAndFrom(false, "groups");
 		List<ProxyServer> badProxy = proxyServerService.findBadProxy(false);
 		Set<Post> postSet = new HashSet<>(result);
-		word.setPosts(postSet);
-		queryService.addQuery(word);
-		mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
-			postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
-		}, 0, time, TimeUnit.MINUTES));
+
+
+		if (word == null) {
+			word = new Query(query, "groups");
+
+			word.setPosts(postSet);
+			queryService.addQuery(word);
+			mapSchedule.put(word, scheduledExecutorService.scheduleAtFixedRate(() -> {
+				postSearchServiceImpl.getPostResponseByGroupsList(groupService.listAllVkGroups(), query);
+			}, 0, time, TimeUnit.MINUTES));
+		} else {
+			 return "redirect:/post/?wordExist";
+		}
+
 		if (result != null) {
 			prepareView(result);
 			preparationPost(result);
@@ -334,6 +344,7 @@ public class PostController {
 			model.addAttribute("badproxy", badProxy);
 			return "redirect:/post/";
 		}
+
 		return "redirect:/post/?warning";
 	}
 
